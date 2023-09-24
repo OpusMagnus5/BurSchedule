@@ -1,6 +1,11 @@
 package pl.bodzioch.damian.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +20,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class BurClient {
 
     private static final String BUR_URL = "https://uslugirozwojowe.parp.gov.pl/api";
@@ -25,26 +30,17 @@ public class BurClient {
     private static final String GET_SCHEDULE_PATH = BUR_URL + "/usluga/1/harmonogram";
 
     private final AuthorisationRequestDTO authorisationRequestDTO;
+    private final RestTemplate restTemplate;
 
 
-    public BurClient(@Value("${bur.username}") String username, @Value("${bur.keyAuthorisation}") String keyAuthorisation) {
+    public BurClient(@Value("${bur.username}") String username, @Value("${bur.keyAuthorisation}") String keyAuthorisation,
+                     RestTemplateBuilder restTemplateBuilder) {
         this.authorisationRequestDTO = AuthorisationRequestDTO.builder()
                 .nazwaUzytkownika(username)
                 .kluczAutoryzacyjny(keyAuthorisation)
                 .build();
-    }
+        this.restTemplate = restTemplateBuilder.build();
 
-    private AuthorisationResponseDTO authorize() {
-        return new RestTemplate().postForObject(AUTHORIZATION_PATH, authorisationRequestDTO, AuthorisationResponseDTO.class);
-    }
-
-    private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(int serviceId, int page) {
-        Map<String, String> urlVariables = Map.of("id", Integer.toString(serviceId));
-        URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
-                .queryParam("strona", page)
-                .build(urlVariables);
-
-        return new RestTemplate().getForObject(uri, ListOfServiceScheduleEntriesDTO.class);
     }
 
     public List<ScheduleEntry> getScheduleForService(int serviceId) {
@@ -66,4 +62,25 @@ public class BurClient {
                 .map(BurMapper::map)
                 .toList();
     }
+
+    private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(int serviceId, int page) {
+        String jwtToken = authorize().getToken();
+
+        Map<String, String> urlVariables = Map.of("id", Integer.toString(serviceId));
+        URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
+                .queryParam("strona", page)
+                .build(urlVariables);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", "Bearer " + jwtToken);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(httpHeaders);
+
+        return new RestTemplate().exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+    }
+
+    private AuthorisationResponseDTO authorize() {
+        return new RestTemplate().postForObject(AUTHORIZATION_PATH, authorisationRequestDTO, AuthorisationResponseDTO.class);
+    }
+
+
 }
