@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class BurMapper {
 
     public static ScheduleEntry map(ServiceScheduleDTO dto) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         return ScheduleEntry.builder()
                 .subject(dto.getTemat())
