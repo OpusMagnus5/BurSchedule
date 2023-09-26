@@ -7,11 +7,8 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class CustomClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
@@ -20,13 +17,7 @@ public class CustomClientHttpRequestInterceptor implements ClientHttpRequestInte
     public ClientHttpResponse intercept(@Nonnull HttpRequest request, @Nonnull byte[] body, ClientHttpRequestExecution execution) throws IOException {
 
         logRequestDetails(request, body);
-        ClientHttpResponse response = execution.execute(request, body);
-        if (response.getStatusCode().isError()) {
-            InputStreamReader inputStream = new InputStreamReader(response.getBody(), StandardCharsets.UTF_8);
-            String responseBody = new BufferedReader(inputStream).lines().collect(Collectors.joining());
-            log.warn("Response body: {}", responseBody);
-        }
-        return response;
+        return execution.execute(request, body);
     }
 
     private void logRequestDetails(HttpRequest request, byte[] body) {

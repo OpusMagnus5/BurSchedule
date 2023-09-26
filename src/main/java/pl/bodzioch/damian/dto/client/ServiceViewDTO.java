@@ -1,13 +1,11 @@
-package pl.bodzioch.damian.model;
+package pl.bodzioch.damian.dto.client;
 
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Builder
-@Getter
-public class Service {
+public class ServiceViewDTO {
 
     private long id;
     private String status;
