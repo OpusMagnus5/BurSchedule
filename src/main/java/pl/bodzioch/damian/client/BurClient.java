@@ -27,7 +27,8 @@ public class BurClient {
 
     private static final String BUR_URL = "https://uslugirozwojowe.parp.gov.pl/api";
     private static final String AUTHORIZATION_PATH = BUR_URL + "/autoryzacja/logowanie";
-    private static final String GET_SCHEDULE_PATH = BUR_URL + "/usluga/1/harmonogram";
+    private static final String GET_SCHEDULE_PATH = BUR_URL + "/usluga/{id}/harmonogram";
+    private static final String GET_SERVICES_PATH = BUR_URL + "/usluga";
 
     private final AuthorisationRequestDTO authorisationRequestDTO;
     private final RestTemplate restTemplate;
@@ -43,7 +44,7 @@ public class BurClient {
 
     }
 
-    public List<ScheduleEntry> getScheduleForService(int serviceId) {
+    public List<ScheduleEntry> getScheduleForService(long serviceId) {
         int page = 1;
         int downloadedElements = 0;
         List<ListOfServiceScheduleEntriesDTO> responses = new ArrayList<>();
@@ -63,19 +64,42 @@ public class BurClient {
                 .toList();
     }
 
-    private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(int serviceId, int page) {
+    public void getServices(int serviceId) {
+
+    }
+
+    private void getPageOfServices(String params, long paramId, int page) {
         String jwtToken = authorize().getToken();
 
-        Map<String, String> urlVariables = Map.of("id", Integer.toString(serviceId));
+        URI uri = UriComponentsBuilder.fromHttpUrl(GET_SERVICES_PATH)
+                .queryParam(params, paramId)
+                .queryParam("strona", page)
+                .build()
+                .toUri();
+
+        HttpEntity<Object> requestEntity = getHeaders(jwtToken);
+
+
+    }
+
+    private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(long serviceId, int page) {
+        String jwtToken = authorize().getToken();
+
+        Map<String, String> urlVariables = Map.of("id", Long.toString(serviceId));
         URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
                 .queryParam("strona", page)
                 .build(urlVariables);
 
+        HttpEntity<Object> requestEntity = getHeaders(jwtToken);
+
+        return new RestTemplate().exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+    }
+
+    private  HttpEntity<Object> getHeaders(String jwtToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + jwtToken);
         HttpEntity<Object> requestEntity = new HttpEntity<>(httpHeaders);
-
-        return new RestTemplate().exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+        return requestEntity;
     }
 
     private AuthorisationResponseDTO authorize() {

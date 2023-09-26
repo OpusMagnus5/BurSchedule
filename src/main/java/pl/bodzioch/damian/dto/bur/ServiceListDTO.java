@@ -1,18 +1,16 @@
 package pl.bodzioch.damian.dto.bur;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
-public class ListOfServiceScheduleEntriesDTO implements Serializable {
+public class ServiceListDTO {
 
     private int strona;
     private int elementyNaStrone;
     private long wszystkieElementy;
-    private List<ServiceScheduleDTO> lista;
+    private List<ServiceDTO> lista;
 }

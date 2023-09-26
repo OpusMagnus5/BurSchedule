@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Setter
 public class ServiceScheduleDTO implements Serializable {
 
-    private int id;
+    private long id;
     private String temat;
     private String godzinaRozpoczecia;
     private String godzinaZakonczenia;

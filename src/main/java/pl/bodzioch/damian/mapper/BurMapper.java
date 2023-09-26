@@ -1,7 +1,9 @@
 package pl.bodzioch.damian.mapper;
 
+import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.Service;
 
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -17,6 +19,25 @@ public class BurMapper {
                 .date(ZonedDateTime.parse(dto.getData()).toLocalDate())
                 .startTime(LocalTime.parse(dto.getGodzinaRozpoczecia(), formatter))
                 .endTime(LocalTime.parse(dto.getGodzinaRozpoczecia(), formatter))
+                .build();
+    }
+
+    public static Service map(ServiceDTO dto) {
+        return Service.builder()
+                .id(dto.getId())
+                .status(dto.getStatus())
+                .number(dto.getNumer())
+                .title(dto.getTytul())
+                .dateBeginningOfService(ZonedDateTime.parse(dto.getDataRozpoczeciaUslugi()).toLocalDate())
+                .dateCompletionOfService(ZonedDateTime.parse(dto.getDataZakonczeniaUslugi()).toLocalDate())
+                .numberOfHours(dto.getLiczbaGodzin())
+                .serviceProviderId(dto.getDostawcaUslug().getId())
+                .serviceProviderName(dto.getDostawcaUslug().getNazwa())
+                .location(dto.getAdres().getNazwaMiejscowosci())
+                .street(dto.getAdres().getNazwaUlicy())
+                .postcode(dto.getAdres().getKodPocztowy())
+                .buildingNumber(dto.getAdres().getNumerBudynku())
+                .localeNumber(dto.getAdres().getNumerLokalu())
                 .build();
     }
 }
