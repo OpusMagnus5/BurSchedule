@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import pl.bodzioch.damian.exception.CipherException;
 import pl.bodzioch.damian.exception.HttpClientException;
 import pl.bodzioch.damian.exception.HttpServerException;
 import pl.bodzioch.damian.model.ApiError;
-
-import java.util.Optional;
 
 @RestControllerAdvice
 public class CustomControllerAdvice {
@@ -32,7 +31,7 @@ public class CustomControllerAdvice {
                 .message(messageSource.getMessage("general.error", new Object[]{}, LocaleContextHolder.getLocale()))
                 .build();
 
-        return ResponseEntity.of(Optional.of(apiError));
+        return ResponseEntity.ofNullable(apiError);
     }
 
     @ExceptionHandler({HttpServerException.class})
@@ -42,6 +41,16 @@ public class CustomControllerAdvice {
                 .message(messageSource.getMessage("general.error", new Object[]{}, LocaleContextHolder.getLocale()))
                 .build();
 
-        return ResponseEntity.of(Optional.of(apiError));
+        return ResponseEntity.ofNullable(apiError);
+    }
+
+    @ExceptionHandler({CipherException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ApiError> handleCipherException(Exception ex, WebRequest webRequest) {
+        ApiError apiError = ApiError.builder()
+                .message(messageSource.getMessage("general.error", new Object[]{}, LocaleContextHolder.getLocale()))
+                .build();
+
+        return ResponseEntity.ofNullable(apiError);
     }
 }

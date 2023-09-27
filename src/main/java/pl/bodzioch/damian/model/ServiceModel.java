@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Builder
 @Getter
-public class Service {
+public class ServiceModel {
 
     private long id;
     private String status;
