@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Builder
 @Getter
@@ -23,4 +24,28 @@ public class ServiceModel {
     private String postcode;
     private String buildingNumber;
     private String localeNumber;
+
+    public Optional<Integer> getNumberOfHours() {
+        return Optional.ofNullable(numberOfHours);
+    }
+
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
+    }
+
+    public Optional<String> getStreet() {
+        return Optional.ofNullable(street);
+    }
+
+    public Optional<String> getPostcode() {
+        return Optional.ofNullable(postcode);
+    }
+
+    public Optional<String> getBuildingNumber() {
+        return Optional.ofNullable(buildingNumber);
+    }
+
+    public Optional<String> getLocaleNumber() {
+        return Optional.ofNullable(localeNumber);
+    }
 }
