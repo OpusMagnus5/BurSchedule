@@ -14,6 +14,7 @@ import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dto.bur.*;
 import pl.bodzioch.damian.mapper.BurMapper;
 import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.ServiceModel;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class BurClientImpl implements BurClient {
 
     }
 
+    @Override
     public List<ScheduleEntry> getScheduleForService(long serviceId) {
         int page = 1;
         int downloadedElements = 0;
@@ -65,15 +67,17 @@ public class BurClientImpl implements BurClient {
                 .toList();
     }
 
-    public List<pl.bodzioch.damian.model.Service> getServicesById(long serviceId) {
+    @Override
+    public List<ServiceModel> getServicesById(long serviceId) {
         return getServicesBy(serviceId, "id");
     }
 
-    public List<pl.bodzioch.damian.model.Service> getServicesByNip(long nip) {
+    @Override
+    public List<ServiceModel> getServicesByNip(long nip) {
         return getServicesBy(nip, NIP_PARAM);
     }
 
-    private List<pl.bodzioch.damian.model.Service> getServicesBy(long paramValue, String paramName) {
+    private List<ServiceModel> getServicesBy(long paramValue, String paramName) {
         int page = 1;
         int downloadedElements = 0;
         List<ServiceListDTO> responses = new ArrayList<>();

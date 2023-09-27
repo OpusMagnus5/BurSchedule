@@ -3,7 +3,7 @@ package pl.bodzioch.damian.mapper;
 import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.Service;
+import pl.bodzioch.damian.model.ServiceModel;
 
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -22,8 +22,8 @@ public class BurMapper {
                 .build();
     }
 
-    public static Service map(ServiceDTO dto) {
-        return Service.builder()
+    public static ServiceModel map(ServiceDTO dto) {  //TODO dodac opcionale
+        return ServiceModel.builder()
                 .id(dto.getId())
                 .status(dto.getStatus())
                 .number(dto.getNumer())

@@ -36,7 +36,7 @@ public class App {
     @Bean
     public LocaleResolver localeResolver() {
         FixedLocaleResolver resolver = new FixedLocaleResolver();
-        resolver.setDefaultLocale(Locale.of("PL"));
+        resolver.setDefaultLocale(Locale.forLanguageTag("pl"));
         return resolver;
     }
 
