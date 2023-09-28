@@ -22,14 +22,14 @@ public class ClientMapper {
                 .title(serviceModel.getTitle())
                 .dateBeginningOfService(serviceModel.getDateBeginningOfService())
                 .dateCompletionOfService(serviceModel.getDateCompletionOfService())
-                .numberOfHours(serviceModel.getNumberOfHours())
+                .numberOfHours(serviceModel.getNumberOfHours().orElse(null))
                 .serviceProviderId(securityService.encryptMessage(Long.toString(serviceModel.getServiceProviderId())))
                 .serviceProviderName(serviceModel.getServiceProviderName())
-                .location(serviceModel.getLocation())
-                .street(serviceModel.getStreet())
-                .postcode(serviceModel.getPostcode())
-                .buildingNumber(serviceModel.getBuildingNumber())
-                .localeNumber(serviceModel.getLocaleNumber())
+                .location(serviceModel.getLocation().orElse(null))
+                .street(serviceModel.getStreet().orElse(null))
+                .postcode(serviceModel.getPostcode().orElse(null))
+                .buildingNumber(serviceModel.getBuildingNumber().orElse(null))
+                .localeNumber(serviceModel.getLocaleNumber().orElse(null))
                 .build();
 
     }
