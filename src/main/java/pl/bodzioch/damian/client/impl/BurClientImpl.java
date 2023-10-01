@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.bodzioch.damian.client.BurClient;
@@ -31,6 +32,8 @@ public class BurClientImpl implements BurClient {
     private static final String GET_SERVICES_PATH = BUR_URL + "/usluga";
     private static final String PAGE_PARAM = "strona";
     private static final String NIP_PARAM = "nipDostawcyUslug";
+
+    private String jwtToken;
 
     private final AuthorisationRequestDTO authorisationRequestDTO;
     private final RestTemplate restTemplate;
@@ -98,8 +101,6 @@ public class BurClientImpl implements BurClient {
     }
 
     private ServiceListDTO getPageOfServices(String params, long paramValue, int page) {
-        String jwtToken = authorize().getToken();
-
         URI uri = UriComponentsBuilder.fromHttpUrl(GET_SERVICES_PATH)
                 .queryParam(params, paramValue)
                 .queryParam(PAGE_PARAM, page)
@@ -108,20 +109,27 @@ public class BurClientImpl implements BurClient {
 
         HttpEntity<Object> requestEntity = getHeaders(jwtToken);
 
-        return restTemplate.exchange(uri,HttpMethod.GET, requestEntity, ServiceListDTO.class).getBody();
+        try {
+            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ServiceListDTO.class).getBody();
+        } catch (HttpClientErrorException.Unauthorized e) {
+            authorize();
+            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ServiceListDTO.class).getBody();
+        }
     }
 
     private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(long serviceId, int page) {
-        String jwtToken = authorize().getToken();
-
         Map<String, String> urlVariables = Map.of("id", Long.toString(serviceId));
         URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
                 .queryParam(PAGE_PARAM, page)
                 .build(urlVariables);
-
         HttpEntity<Object> requestEntity = getHeaders(jwtToken);
 
-        return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+        try {
+            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+        } catch (HttpClientErrorException.Unauthorized e) {
+            authorize();
+            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+        }
     }
 
     private  HttpEntity<Object> getHeaders(String jwtToken) {
@@ -131,8 +139,9 @@ public class BurClientImpl implements BurClient {
         return requestEntity;
     }
 
-    private AuthorisationResponseDTO authorize() {
-        return restTemplate.postForObject(AUTHORIZATION_PATH, authorisationRequestDTO, AuthorisationResponseDTO.class);
+    private void authorize() {
+        AuthorisationResponseDTO response = restTemplate.postForObject(AUTHORIZATION_PATH, authorisationRequestDTO, AuthorisationResponseDTO.class);
+        jwtToken = response.getToken();
     }
 
 
