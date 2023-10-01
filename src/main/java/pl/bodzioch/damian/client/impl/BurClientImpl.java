@@ -71,7 +71,7 @@ public class BurClientImpl implements BurClient {
     }
 
     @Override
-    public List<ServiceModel> getServicesById(long serviceId) {
+    public List<ServiceModel> getServiceById(long serviceId) {
         return getServicesBy(serviceId, "id");
     }
 
@@ -107,13 +107,12 @@ public class BurClientImpl implements BurClient {
                 .build()
                 .toUri();
 
-        HttpEntity<Object> requestEntity = getHeaders(jwtToken);
+        HttpEntity<Object> requestEntity = getHeaders();
 
         try {
             return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ServiceListDTO.class).getBody();
         } catch (HttpClientErrorException.Unauthorized e) {
-            authorize();
-            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ServiceListDTO.class).getBody();
+            return restTemplate.exchange(uri, HttpMethod.GET, getHeadersWithAuth(), ServiceListDTO.class).getBody();
         }
     }
 
@@ -122,26 +121,25 @@ public class BurClientImpl implements BurClient {
         URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
                 .queryParam(PAGE_PARAM, page)
                 .build(urlVariables);
-        HttpEntity<Object> requestEntity = getHeaders(jwtToken);
+        HttpEntity<Object> requestEntity = getHeaders();
 
         try {
             return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
         } catch (HttpClientErrorException.Unauthorized e) {
-            authorize();
-            return restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListOfServiceScheduleEntriesDTO.class).getBody();
+            return restTemplate.exchange(uri, HttpMethod.GET, getHeadersWithAuth(), ListOfServiceScheduleEntriesDTO.class).getBody();
         }
     }
 
-    private  HttpEntity<Object> getHeaders(String jwtToken) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", "Bearer " + jwtToken);
-        HttpEntity<Object> requestEntity = new HttpEntity<>(httpHeaders);
-        return requestEntity;
+    private HttpEntity<Object> getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwtToken);
+        return new HttpEntity<>(headers);
     }
 
-    private void authorize() {
+    private HttpEntity<Object> getHeadersWithAuth() {
         AuthorisationResponseDTO response = restTemplate.postForObject(AUTHORIZATION_PATH, authorisationRequestDTO, AuthorisationResponseDTO.class);
         jwtToken = response.getToken();
+        return getHeaders();
     }
 
 
