@@ -1,23 +1,24 @@
 package pl.bodzioch.damian.mapper;
 
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import pl.bodzioch.damian.dto.client.ServiceViewDTO;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.service.SecurityService;
 
 @Component
+@AllArgsConstructor
 public class ClientMapper {
 
     private final SecurityService securityService;
-
-    public ClientMapper(SecurityService securityService) {
-        this.securityService = securityService;
-    }
+    private final MessageSource messageSource;
 
     public ServiceViewDTO map(ServiceModel serviceModel) {
         return ServiceViewDTO.builder()
                 .id(securityService.encryptMessage(Long.toString(serviceModel.getId())))
-                .status(serviceModel.getStatus())
+                .status(mapStatus(serviceModel.getStatus().getCode()))
                 .number(serviceModel.getNumber())
                 .title(serviceModel.getTitle())
                 .dateBeginningOfService(serviceModel.getDateBeginningOfService())
@@ -32,5 +33,9 @@ public class ClientMapper {
                 .localeNumber(serviceModel.getLocaleNumber())
                 .build();
 
+    }
+
+    private String mapStatus(String statusCode) {
+        return messageSource.getMessage("service.status." + statusCode, null, LocaleContextHolder.getLocale());
     }
 }

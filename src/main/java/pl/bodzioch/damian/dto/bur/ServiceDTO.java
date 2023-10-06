@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class ServiceDTO implements Serializable {
 
     private long id;
-    private String status;
+    private ServiceStatusDTO status;
     private String numer;
     private String tytul;
     private String dataRozpoczeciaUslugi;

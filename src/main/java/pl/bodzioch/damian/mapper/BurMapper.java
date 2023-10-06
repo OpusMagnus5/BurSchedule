@@ -4,10 +4,12 @@ import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
 import pl.bodzioch.damian.model.ServiceModel;
+import pl.bodzioch.damian.model.ServiceStatus;
 
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class BurMapper {
 
@@ -25,7 +27,7 @@ public class BurMapper {
     public static ServiceModel map(ServiceDTO dto) {  //TODO dodac opcionale
         return ServiceModel.builder()
                 .id(dto.getId())
-                .status(dto.getStatus())
+                .status(mapServiceStatus(dto.getStatus().getCode()))
                 .number(dto.getNumer())
                 .title(dto.getTytul())
                 .dateBeginningOfService(ZonedDateTime.parse(dto.getDataRozpoczeciaUslugi()).toLocalDate())
@@ -39,5 +41,12 @@ public class BurMapper {
                 .buildingNumber(dto.getAdres().getNumerBudynku())
                 .localeNumber(dto.getAdres().getNumerLokalu())
                 .build();
+    }
+
+    private static ServiceStatus mapServiceStatus(String serviceCode) {
+        return Arrays.stream(ServiceStatus.values())
+                .filter(e -> serviceCode.equals(e.getCode()))
+                .findAny()
+                .orElseThrow(IllegalStateException::new);
     }
 }

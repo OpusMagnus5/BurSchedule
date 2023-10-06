@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class ServiceModel {
 
     private long id;
-    private String status;
+    private ServiceStatus status;
     private String number;
     private String title;
     private LocalDate dateBeginningOfService;
