@@ -10,7 +10,7 @@ public enum ServiceStatus {
     SUSPENDED("suspended"),
     COMPLETED("completed"),
     BLOCKED("blocked"),
-    NOT_COMPLETE("not_complete");
+    NOT_COMPLETE("not.complete");
 
     private final String code;
 

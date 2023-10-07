@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -18,4 +19,8 @@ public class ServiceDTO implements Serializable {
     private int liczbaGodzin;
     private ServiceProviderDTO dostawcaUslug;
     private AddressDTO adres;
+
+    public Optional<AddressDTO> getAdres() {
+        return Optional.ofNullable(adres);
+    }
 }

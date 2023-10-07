@@ -10,7 +10,7 @@ public enum ServiceStatusDTO {
     ZAWIESZONA("suspended"),
     ZREALIZOWANA("completed"),
     ZABLOKOWANA("blocked"),
-    NIEZREALIZOWANA("not_complete");
+    NIEZREALIZOWANA("not.complete");
 
     private final String code;
 

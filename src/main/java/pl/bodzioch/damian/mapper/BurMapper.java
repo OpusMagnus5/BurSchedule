@@ -1,5 +1,6 @@
 package pl.bodzioch.damian.mapper;
 
+import pl.bodzioch.damian.dto.bur.AddressDTO;
 import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
@@ -35,11 +36,11 @@ public class BurMapper {
                 .numberOfHours(dto.getLiczbaGodzin())
                 .serviceProviderId(dto.getDostawcaUslug().getId())
                 .serviceProviderName(dto.getDostawcaUslug().getNazwa())
-                .location(dto.getAdres().getNazwaMiejscowosci())
-                .street(dto.getAdres().getNazwaUlicy())
-                .postcode(dto.getAdres().getKodPocztowy())
-                .buildingNumber(dto.getAdres().getNumerBudynku())
-                .localeNumber(dto.getAdres().getNumerLokalu())
+                .location(dto.getAdres().map(AddressDTO::getNazwaMiejscowosci).orElse(null))
+                .street(dto.getAdres().map(AddressDTO::getNazwaUlicy).orElse(null))
+                .postcode(dto.getAdres().map(AddressDTO::getKodPocztowy).orElse(null))
+                .buildingNumber(dto.getAdres().map(AddressDTO::getNumerBudynku).orElse(null))
+                .localeNumber(dto.getAdres().map(AddressDTO::getNumerLokalu).orElse(null))
                 .build();
     }
 

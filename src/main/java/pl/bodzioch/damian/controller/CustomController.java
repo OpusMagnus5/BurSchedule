@@ -26,6 +26,7 @@ public class CustomController {
 
     @GetMapping("/services")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
     public ResponseEntity<ServiceListViewDTO> getAllServices() {
         ServiceListViewDTO services = serviceForBurClient.getAllServicesForAllProviders();
         return ResponseEntity.ofNullable(services);
