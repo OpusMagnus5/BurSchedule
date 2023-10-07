@@ -1,3 +1,48 @@
-.service p {
-  display: inline-block;
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.service-list {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.service {
+  font-size: 16px;
+  font-family: sans-serif;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  padding: 20px 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  display: none;
+  align-items: center;
+  gap: 20px;
+}
+
+.service:nth-child(even) {
+  background-color: #d6d6d6;
+}
+
+.service:hover {
+  cursor: pointer;
+  background-color: #8cd41e;
+}
+
+.service .service-start-date {
+  white-space: nowrap;
+}
+
+.service-end-date {
+  white-space: nowrap;
+}
+
+.service-hours {
+  white-space: nowrap;
+}
+
+.service-status {
+  white-space: nowrap;
 }

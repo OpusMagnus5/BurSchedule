@@ -1,29 +1,38 @@
-import {servicesUrl} from "../util/config.js";
+import { servicesUrl } from "../util/config.js";
+import { getFromApi } from "../util/config.js";
 
 var servicesData;
 
 function getServices() {
-  fetch(servicesUrl, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        // Obsługa błędu, jeśli to konieczne
-        throw new Error("Network response was not ok", response);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      servicesData = data;
-    })
-    .catch((error) => {
-      // Tutaj możesz obsłużyć błędy
-      console.error("There was a problem with the fetch operation from " + servicesUrl, error);
-    });
+  getFromApi(servicesUrl)
+  .then(data => {
+    servicesData = data;
+    showData();
+  });
+}
+
+function showData() {
+  let article = document.querySelector(".service-list");
+  let emptyService = document.querySelector(".service");
+
+  servicesData.services.forEach((element) => {
+    let newService = emptyService.cloneNode(true);
+    newService.id = element.id;
+    newService.querySelector(".service-title").textContent = element.title;
+    newService.querySelector(".service-location").textContent =
+      element.location;
+    newService.querySelector(".service-start-date").textContent =
+      element.dateBeginningOfService;
+    newService.querySelector(".service-end-date").textContent =
+      element.dateCompletionOfService;
+    newService.querySelector(".service-status").textContent = element.status;
+    newService.querySelector(".service-hours").textContent =
+      element.numberOfHours;
+
+    newService.style.display = "flex";
+    article.appendChild(newService);
+  });
 }
 
 // Wywołanie funkcji getServices() w odpowiednim momencie, na przykład po załadowaniu strony
-document.addEventListener("DOMContentLoaded", getServices);
+document.addEventListener("DOMContentLoaded", getServices());
