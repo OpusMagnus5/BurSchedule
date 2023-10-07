@@ -1,11 +1,14 @@
 package pl.bodzioch.damian.dto.client;
 
 import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Builder
-public class ServiceViewDTO {
+@Getter
+public class ServiceViewDTO implements Serializable {
 
     private String id;
     private String status;
