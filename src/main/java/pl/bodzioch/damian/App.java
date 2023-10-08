@@ -1,27 +1,30 @@
 package pl.bodzioch.damian;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import pl.bodzioch.damian.client.conf.CustomRestTemplateCustomizer;
 import pl.bodzioch.damian.controller.conf.CustomRequestLoggingFilter;
 
+import javax.sql.DataSource;
 import java.util.Locale;
 
+@EntityScan(basePackages = {"pl.bodzioch.damian.entity"})
 @SpringBootApplication
-@Slf4j
 public class App {
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        log.info("START");
     }
 
     @Bean
@@ -60,5 +63,19 @@ public class App {
         filter.setIncludeHeaders(true);
         filter.setBeforeMessagePrefix("REQUEST DATA: ");
         return filter;
+    }
+
+    @Bean
+    @Profile("local")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource localDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    @Profile("docker")
+    @ConfigurationProperties(prefix = "docker.spring.datasource")
+    public DataSource dockerDataSource() {
+        return DataSourceBuilder.create().build();
     }
 }

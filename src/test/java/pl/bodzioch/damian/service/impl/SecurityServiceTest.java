@@ -3,6 +3,7 @@ package pl.bodzioch.damian.service.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import pl.bodzioch.damian.service.SecurityService;
 
 import java.nio.charset.StandardCharsets;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
+@ActiveProfiles("local")
 public class SecurityServiceTest {
 
     @Autowired
