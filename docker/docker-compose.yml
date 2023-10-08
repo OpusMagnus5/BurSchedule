@@ -6,12 +6,18 @@ services:
     restart: 'always'
     ports:
       - '5432:5432'
-    env_file: 'env/env_db.txt'
+    env_file:
+      - 'env/env_db.txt'
     volumes:
       - db:/postgresql
   app:
     container_name: 'application'
-
+    image: 'application:latest'
+    restart: always
+    ports:
+      - '8080:8080'
+    env_file:
+      - 'env/env_app.txt'
 volumes:
   db:
     driver: local
