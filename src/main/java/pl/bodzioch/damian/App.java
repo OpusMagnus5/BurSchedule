@@ -1,5 +1,6 @@
 package pl.bodzioch.damian;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -11,6 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import pl.bodzioch.damian.client.conf.CustomRestTemplateCustomizer;
@@ -20,6 +25,8 @@ import javax.sql.DataSource;
 import java.util.Locale;
 
 @EntityScan(basePackages = {"pl.bodzioch.damian.entity"})
+@EnableJpaRepositories(basePackages = "pl.bodzioch.damian.dao.impl")
+@EnableTransactionManagement
 @SpringBootApplication
 public class App {
 
@@ -77,5 +84,12 @@ public class App {
     @ConfigurationProperties(prefix = "docker.spring.datasource")
     public DataSource dockerDataSource() {
         return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
+        return jpaTransactionManager;
     }
 }

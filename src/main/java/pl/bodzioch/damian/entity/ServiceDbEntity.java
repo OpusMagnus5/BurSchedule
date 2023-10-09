@@ -3,23 +3,30 @@ package pl.bodzioch.damian.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.generator.EventType;
 import pl.bodzioch.damian.configuration.database.GeneratedUuidValue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "services")
+@Builder
+@Entity
+@Table(name = "services")
 public class ServiceDbEntity {
 
     @Id
     @GeneratedUuidValue(types = EventType.INSERT)
-    private String id;
+    private UUID id;
+    @NaturalId
     @Column(name = "bur_id")
     private Long burId;
     private String status;

@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import pl.bodzioch.damian.exception.CipherException;
 import pl.bodzioch.damian.exception.HttpClientException;
-import pl.bodzioch.damian.exception.HttpServerException;
 import pl.bodzioch.damian.model.ApiError;
 
 @RestControllerAdvice
@@ -34,19 +32,9 @@ public class CustomControllerAdvice {
         return ResponseEntity.ofNullable(apiError);
     }
 
-    @ExceptionHandler({HttpServerException.class})
+    @ExceptionHandler({Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiError> handleServerException(Exception ex, WebRequest webRequest) {
-        ApiError apiError = ApiError.builder()
-                .message(messageSource.getMessage("general.error", new Object[]{}, LocaleContextHolder.getLocale()))
-                .build();
-
-        return ResponseEntity.ofNullable(apiError);
-    }
-
-    @ExceptionHandler({CipherException.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ApiError> handleCipherException(Exception ex, WebRequest webRequest) {
         ApiError apiError = ApiError.builder()
                 .message(messageSource.getMessage("general.error", new Object[]{}, LocaleContextHolder.getLocale()))
                 .build();

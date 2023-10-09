@@ -6,7 +6,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.bodzioch.damian.dto.client.ServiceListViewDTO;
 import pl.bodzioch.damian.exception.ServicesNotFoundException;
 import pl.bodzioch.damian.model.ApiError;
 import pl.bodzioch.damian.service.ServiceForBurClient;
@@ -26,9 +25,9 @@ public class CustomController {
 
     @GetMapping("/services")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ServiceListViewDTO> getAllServices() {
-        ServiceListViewDTO services = serviceForBurClient.getAllServicesForAllProviders();
-        return ResponseEntity.ofNullable(services);
+    public ResponseEntity<Object> getAllServices() {
+        serviceForBurClient.synchronizeServices();
+        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler(ServicesNotFoundException.class)
