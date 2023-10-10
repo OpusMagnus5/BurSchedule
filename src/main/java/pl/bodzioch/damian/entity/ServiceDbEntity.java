@@ -1,9 +1,6 @@
 package pl.bodzioch.damian.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +11,7 @@ import pl.bodzioch.damian.configuration.database.GeneratedUuidValue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -39,12 +37,25 @@ public class ServiceDbEntity {
     private Integer numberOfHours;
     @Column(name = "service_provider_bur_id")
     private Long serviceProviderId;
+    @Enumerated(EnumType.STRING)
     @Column(name = "service_provider_name")
-    private String serviceProviderName;
+    private ServiceProviderDb serviceProviderName;
     private String location;
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @Column(name = "modify_date")
     @CurrentTimestamp(event = EventType.UPDATE)
     private LocalDateTime modifyDate;
+
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
+    }
+
+    public Optional<LocalDateTime> getModifyDate() {
+        return Optional.ofNullable(modifyDate);
+    }
+
+    public Optional<Integer> getNumberOfHours() {
+        return Optional.ofNullable(numberOfHours);
+    }
 }

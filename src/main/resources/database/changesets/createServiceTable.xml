@@ -33,10 +33,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
             <column name="service_provider_name" type="varchar">
                 <constraints nullable="false" notNullConstraintName="nn_users_address_id" />
             </column>
-            <column name="service_location" type="varchar"/>
-            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false" notNullConstraintName="nn_users_create_date"/>
-            </column>
+            <column name="location" type="varchar"/>
+            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="modify_date" type="timestamp"/>
         </createTable>
         <createIndex tableName="services" indexName="idx_services_id" unique="true">

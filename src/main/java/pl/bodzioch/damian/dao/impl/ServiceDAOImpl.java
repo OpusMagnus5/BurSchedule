@@ -29,7 +29,7 @@ public class ServiceDAOImpl implements ServiceDAO {
         List<Long> serviceIds = entityManager.createQuery("SELECT service.burId FROM ServiceDbEntity service", Long.class).getResultList();
         if (serviceIds.isEmpty()) {
             log.info("Services not found");
-            throw new ServicesNotFoundException(); //TODO dodac kolumne location
+            throw new ServicesNotFoundException();
         }
         return serviceIds;
     }
