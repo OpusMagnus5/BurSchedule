@@ -24,25 +24,39 @@ public class ServiceDbEntity {
     @Id
     @GeneratedUuidValue(types = EventType.INSERT)
     private UUID id;
+
     @NaturalId
     @Column(name = "bur_id")
     private Long burId;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private ServiceStatusDb status;
+
+    private String number;
+
     private String title;
+
     @Column(name = "date_beginning_of_service")
     private LocalDate dateBeginningOfService;
+
     @Column(name = "date_completed_of_service")
     private LocalDate dateCompletionOfService;
+
     @Column(name = "number_of_hours")
     private Integer numberOfHours;
+
     @Column(name = "service_provider_bur_id")
     private Long serviceProviderId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "service_provider_name")
     private ServiceProviderDb serviceProviderName;
+
     private String location;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
+
     @Column(name = "modify_date")
     @CurrentTimestamp(event = EventType.UPDATE)
     private LocalDateTime modifyDate;
@@ -53,9 +67,5 @@ public class ServiceDbEntity {
 
     public Optional<LocalDateTime> getModifyDate() {
         return Optional.ofNullable(modifyDate);
-    }
-
-    public Optional<Integer> getNumberOfHours() {
-        return Optional.ofNullable(numberOfHours);
     }
 }

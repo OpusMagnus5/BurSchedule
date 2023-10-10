@@ -37,10 +37,6 @@ public class BurMapper {
                 .serviceProviderId(dto.getDostawcaUslug().getId())
                 .serviceProviderName(dto.getDostawcaUslug().getNazwa())
                 .location(dto.getAdres().map(AddressDTO::getNazwaMiejscowosci).orElse(null))
-                .street(dto.getAdres().map(AddressDTO::getNazwaUlicy).orElse(null))
-                .postcode(dto.getAdres().map(AddressDTO::getKodPocztowy).orElse(null))
-                .buildingNumber(dto.getAdres().map(AddressDTO::getNumerBudynku).orElse(null))
-                .localeNumber(dto.getAdres().map(AddressDTO::getNumerLokalu).orElse(null))
                 .build();
     }
 

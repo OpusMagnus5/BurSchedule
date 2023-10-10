@@ -27,10 +27,6 @@ public class ClientMapper {
                 .serviceProviderId(securityService.encryptMessage(Long.toString(serviceModel.getServiceProviderId())))
                 .serviceProviderName(serviceModel.getServiceProviderName())
                 .location(serviceModel.getLocation().orElse(null))
-                .street(serviceModel.getStreet().orElse(null))
-                .postcode(serviceModel.getPostcode().orElse(null))
-                .buildingNumber(serviceModel.getBuildingNumber().orElse(null))
-                .localeNumber(serviceModel.getLocaleNumber().orElse(null))
                 .build();
     }
 

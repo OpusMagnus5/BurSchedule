@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.ServiceDAO;
 import pl.bodzioch.damian.entity.ServiceDbEntity;
 import pl.bodzioch.damian.exception.ServicesNotFoundException;
+import pl.bodzioch.damian.mapper.EntityMapper;
+import pl.bodzioch.damian.model.ServiceModel;
 
 import java.util.List;
 
@@ -32,5 +34,17 @@ public class ServiceDAOImpl implements ServiceDAO {
             throw new ServicesNotFoundException();
         }
         return serviceIds;
+    }
+
+    @Override
+    public List<ServiceModel> getAllServices() {
+        List<ServiceDbEntity> services = entityManager.createQuery("SELECT * FROM ServiceDbEntity service", ServiceDbEntity.class).getResultList();
+        if (services.isEmpty()) {
+            log.info("Services not found");
+            throw new ServicesNotFoundException();
+        }
+        return services.stream()
+                .map(EntityMapper::map)
+                .toList();
     }
 }
