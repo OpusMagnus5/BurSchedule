@@ -38,7 +38,7 @@ public class ServiceDAOImpl implements ServiceDAO {
 
     @Override
     public List<ServiceModel> getAllServices() {
-        List<ServiceDbEntity> services = entityManager.createQuery("SELECT * FROM ServiceDbEntity service", ServiceDbEntity.class).getResultList();
+            List<ServiceDbEntity> services = entityManager.createQuery("SELECT service FROM ServiceDbEntity service", ServiceDbEntity.class).getResultList();
         if (services.isEmpty()) {
             log.info("Services not found");
             throw new ServicesNotFoundException();

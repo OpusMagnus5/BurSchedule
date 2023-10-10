@@ -1,9 +1,7 @@
 package pl.bodzioch.damian.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.generator.EventType;
@@ -19,6 +17,8 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "services")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceDbEntity {
 
     @Id

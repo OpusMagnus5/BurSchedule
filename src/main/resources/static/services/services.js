@@ -18,6 +18,7 @@ function showData() {
   servicesData.services.forEach((element) => {
     let newService = emptyService.cloneNode(true);
     newService.id = element.id;
+    newService.querySelector(".service-number").textContent = element.number;
     newService.querySelector(".service-title").textContent = element.title;
     newService.querySelector(".service-location").textContent =
       element.location;
