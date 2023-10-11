@@ -25,7 +25,7 @@ public class ClientMapper {
                 .dateCompletionOfService(serviceModel.getDateCompletionOfService())
                 .numberOfHours(serviceModel.getNumberOfHours())
                 .serviceProviderId(securityService.encryptMessage(Long.toString(serviceModel.getServiceProviderId())))
-                .serviceProviderName(serviceModel.getServiceProviderName())
+                .serviceProviderName(serviceModel.getServiceProviderName().getName())
                 .location(serviceModel.getLocation().orElse(null))
                 .build();
     }

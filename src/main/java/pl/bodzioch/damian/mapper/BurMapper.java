@@ -5,6 +5,7 @@ import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
 import pl.bodzioch.damian.model.ServiceModel;
+import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.model.ServiceStatus;
 
 import java.time.LocalTime;
@@ -25,7 +26,7 @@ public class BurMapper {
                 .build();
     }
 
-    public static ServiceModel map(ServiceDTO dto) {  //TODO dodac opcionale
+    public static ServiceModel map(ServiceDTO dto) {
         return ServiceModel.builder()
                 .id(dto.getId())
                 .status(mapServiceStatus(dto.getStatus().getCode()))
@@ -35,7 +36,7 @@ public class BurMapper {
                 .dateCompletionOfService(ZonedDateTime.parse(dto.getDataZakonczeniaUslugi()).toLocalDate())
                 .numberOfHours(dto.getLiczbaGodzin())
                 .serviceProviderId(dto.getDostawcaUslug().getId())
-                .serviceProviderName(dto.getDostawcaUslug().getNazwa())
+                .serviceProviderName(mapServiceProvider(dto.getDostawcaUslug().getId()))
                 .location(dto.getAdres().map(AddressDTO::getNazwaMiejscowosci).orElse(null))
                 .build();
     }
@@ -45,5 +46,12 @@ public class BurMapper {
                 .filter(e -> serviceCode.equals(e.getCode()))
                 .findAny()
                 .orElseThrow(IllegalStateException::new);
+    }
+
+    private static ServiceProvider mapServiceProvider(Long providerId) {
+        return Arrays.stream(ServiceProvider.values())
+                .filter(provider -> provider.getId() == providerId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Service Provider should exists"));
     }
 }

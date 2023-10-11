@@ -36,6 +36,7 @@ public class EntityMapper {
                 .dateCompletionOfService(service.getDateCompletionOfService())
                 .numberOfHours(service.getNumberOfHours())
                 .serviceProviderId(service.getServiceProviderId())
+                .serviceProviderName(ServiceProvider.valueOf(service.getServiceProviderName().name().replace(" ", "_")))
                 .location(service.getLocation().orElse(null))
                 .build();
     }

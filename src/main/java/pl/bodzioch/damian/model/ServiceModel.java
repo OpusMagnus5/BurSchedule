@@ -18,7 +18,7 @@ public class ServiceModel {
     private LocalDate dateCompletionOfService;
     private int numberOfHours;
     private long serviceProviderId;
-    private String serviceProviderName;
+    private ServiceProvider serviceProviderName;
     private String location;
 
     public Optional<String> getLocation() {

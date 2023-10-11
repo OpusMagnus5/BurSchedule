@@ -1,48 +1,55 @@
 * {
   padding: 0;
   margin: 0;
+  font-family: sans-serif;
 }
 
 .service-list {
-  width: 90%;
+  width: 70%;
   margin: 0 auto;
-}
-
-.service {
-  font-size: 16px;
-  font-family: sans-serif;
-  width: 80%;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  padding: 20px 10px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  display: none;
-  align-items: center;
-  gap: 20px;
+  border-spacing: 0 1px;
+  box-shadow: 0 0 20px #00000026;
+  border-collapse: collapse;
+  font-size: 0.9em;
 }
 
 .service:nth-child(even) {
-  background-color: #d6d6d6;
+  background-color: #e3e3e3;
+}
+
+.service {
+  border-bottom: 1px solid #bbb;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .service:hover {
+  background-color: #54b3d6;
   cursor: pointer;
-  background-color: #8cd41e;
 }
 
-.service .service-start-date {
-  white-space: nowrap;
+.service td {
+  padding: 10px 10px;
 }
 
-.service-end-date {
-  white-space: nowrap;
+.service-number {
+  overflow-wrap: break-word;
+  max-width: 12ch;
 }
 
-.service-hours {
-  white-space: nowrap;
-}
-
+.service-start-date,
+.service-end-date,
+.service-hour,
 .service-status {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.service-list thead th {
+  padding: 10px 10px;
+}
+
+.service-list thead tr {
+  background-color: #009879;
+  color: #ffffff;
 }

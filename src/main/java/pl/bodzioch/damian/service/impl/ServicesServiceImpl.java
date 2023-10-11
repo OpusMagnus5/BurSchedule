@@ -8,6 +8,7 @@ import pl.bodzioch.damian.dto.client.ServiceViewDTO;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.service.ServicesService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class ServicesServiceImpl implements ServicesService {
     public ServiceListViewDTO getAllServices() {
         List<ServiceViewDTO> services = serviceDAO.getAllServices().stream()
                 .map(clientMapper::map)
+                .sorted(Comparator.comparing(ServiceViewDTO::getDateBeginningOfService).reversed())
                 .toList();
 
         return ServiceListViewDTO.builder()
