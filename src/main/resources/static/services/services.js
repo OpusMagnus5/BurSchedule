@@ -2,11 +2,9 @@ import { servicesUrl } from "../util/config.js";
 import { getFromApi } from "../util/config.js";
 import { getMessage } from "../util/config.js";
 
-var servicesData;
-
 function getServices() {
   getFromApi(servicesUrl).then((data) => {
-    servicesData = data;
+    sessionStorage.setItem("services-data", JSON.stringify(data));
     showData();
   });
 }
@@ -29,6 +27,7 @@ function showData() {
 
   let article = document.querySelector(".service-list");
   let emptyService = document.querySelector(".service");
+  let servicesData = JSON.parse(sessionStorage.getItem("services-data"));
 
   servicesData.services.forEach((element) => {
     let newService = emptyService.cloneNode(true);
