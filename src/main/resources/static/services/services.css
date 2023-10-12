@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   font-family: sans-serif;
+  box-sizing: border-box;
 }
 
 .service-list {
@@ -11,6 +12,11 @@
   box-shadow: 0 0 20px #00000026;
   border-collapse: collapse;
   font-size: 0.9em;
+}
+
+.service-list thead {
+  position: sticky;
+  top: 0;
 }
 
 .service:nth-child(even) {
@@ -52,4 +58,35 @@
 .service-list thead tr {
   background-color: #009879;
   color: #ffffff;
+}
+
+.filters {
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #009879;
+  border-radius: 5px;
+}
+
+.filters .first-row,
+.filters .second-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.filters div div {
+  display: inline-block;
+  margin: 5px 10px;
+}
+
+.filters div div label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filters div div input,
+.filters div div select {
+  padding: 5px;
 }

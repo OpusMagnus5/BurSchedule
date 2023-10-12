@@ -9,6 +9,61 @@
     <title>Harmonogram BUR</title>
   </head>
   <body>
+    <div class="filters">
+      <div class="first-row">
+        <div class="filter-number">
+          <label for="filter-number-input" class="filter-number-label"></label>
+          <input type="search" class="filter-number-input" />
+        </div>
+        <div class="filter-provider">
+          <label
+            for="filter-number-input"
+            class="filter-provider-label"
+          ></label>
+          <select class="filter-provider-selector">
+            <option></option>
+          </select>
+        </div>
+        <div class="filter-title">
+          <label for="filter-title-input" class="filter-title-label"></label>
+          <input type="search" class="filter-title-input" />
+        </div>
+        <div class="filter-location">
+          <label
+            for="filter-location-input"
+            class="filter-location-label"
+          ></label>
+          <input type="search" class="filter-location-input" />
+        </div>
+      </div>
+      <div class="second-row">
+        <div class="filter-start-date">
+          <label
+            for="filter-start-date-input"
+            class="filter-start-date-label"
+          ></label>
+          <input type="date" class="filter-start-date-input" />
+        </div>
+        <div class="filter-end-date">
+          <label
+            for="filter-end-date-input"
+            class="filter-end-date-label"
+          ></label>
+          <input type="date" class="filter-end-date-input" />
+        </div>
+        <div class="filter-status">
+          <label for="filter-status-input" class="filter-status-label"></label>
+          <select class="filter-status-selector">
+            <option></option>
+          </select>
+        </div>
+        <div class="filter-hours">
+          <label for="filter-hours-input" class="filter-hours-label"></label>
+          <input type="number" class="filter-hours-input" />
+        </div>
+      </div>
+    </div>
+
     <table class="service-list">
       <thead>
         <tr>

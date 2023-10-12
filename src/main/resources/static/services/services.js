@@ -1,4 +1,6 @@
 import { servicesUrl } from "../util/config.js";
+import { providersUrl } from "../util/config.js";
+import { statusesUrl } from "../util/config.js";
 import { getFromApi } from "../util/config.js";
 import { getMessage } from "../util/config.js";
 
@@ -7,6 +9,7 @@ function getServices() {
     sessionStorage.setItem("services-data", JSON.stringify(data));
     showData();
   });
+  setFilters();
 }
 
 function showData() {
@@ -50,6 +53,53 @@ function showData() {
   });
 
   emptyService.style.display = "none";
+}
+
+function setFilters() {
+  document.querySelector(".filter-number-label").textContent =
+    getMessage("head-number");
+  document.querySelector(".filter-provider-label").textContent =
+    getMessage("head-provider");
+  document.querySelector(".filter-title-label").textContent =
+    getMessage("head-title");
+  document.querySelector(".filter-location-label").textContent =
+    getMessage("head-location");
+  document.querySelector(".filter-start-date-label").textContent =
+    getMessage("head-start-date");
+  document.querySelector(".filter-end-date-label").textContent =
+    getMessage("head-end-date");
+  document.querySelector(".filter-status-label").textContent =
+    getMessage("head-status");
+  document.querySelector(".filter-hours-label").textContent =
+    getMessage("head-hours");
+
+  setSelectors();
+}
+
+function setSelectors() {
+  getFromApi(providersUrl).then((data) => {
+    let providerOption = document.querySelector(
+      ".filter-provider-selector option"
+    );
+    let providerSelector = document.querySelector(".filter-provider-selector");
+    data.providers.forEach((element) => {
+      let newOption = providerOption.cloneNode(true);
+      newOption.textContent = element;
+      providerSelector.appendChild(newOption);
+    });
+    providerOption.style.display = "none";
+  });
+
+  getFromApi(statusesUrl).then((data) => {
+    let statusOption = document.querySelector(".filter-status-selector option");
+    let statusSelector = document.querySelector(".filter-status-selector");
+    data.statuses.forEach((element) => {
+      let newOption = statusOption.cloneNode(true);
+      newOption.textContent = element;
+      statusSelector.appendChild(newOption);
+    });
+    statusOption.style.display = "none";
+  });
 }
 
 // Wywołanie funkcji getServices() w odpowiednim momencie, na przykład po załadowaniu strony
