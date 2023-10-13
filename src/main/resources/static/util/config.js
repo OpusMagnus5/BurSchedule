@@ -10,10 +10,11 @@ export const messages_pl = new Map([
   ["head-provider", "Dostawca"],
   ["head-title", "Tytuł"],
   ["head-location", "Miejscowość"],
-  ["head-start-date", "Data rozpoczęcia"],
-  ["head-end-date", "Data zakończenia"],
   ["head-status", "Status"],
   ["head-hours", "Liczba godzin"],
+  ["filter-from-date", "Data (od)"],
+  ["filter-to-date", "Data (do)"],
+  ["all-option", "Wszystkie"],
 ]);
 
 export const messages_en = new Map();

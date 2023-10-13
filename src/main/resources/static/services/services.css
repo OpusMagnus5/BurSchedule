@@ -67,26 +67,33 @@
   padding: 10px 15px;
   background-color: #009879;
   border-radius: 5px;
+  display: grid;
+  gap: 10px 50px;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.filters .first-row,
-.filters .second-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.filters div div {
-  display: inline-block;
-  margin: 5px 10px;
-}
-
-.filters div div label {
+label {
   display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.filter-input {
+  padding: 5px 10px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.filters div {
   margin-bottom: 5px;
 }
 
-.filters div div input,
-.filters div div select {
-  padding: 5px;
+.filter-from-date {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.filter-to-date {
+  grid-column: 2;
+  grid-row: 3;
 }
