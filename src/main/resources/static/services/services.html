@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="services.js" type="module"></script>
+    <script src="../util/config.js" type="module"></script>
+    <link rel="stylesheet" href="services.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="filters">
+      <div class="filter-provider">
+        <label for="provider-input" class="filter-label"></label>
+        <select class="filter-input" id="provider-input">
+          <option></option>
+        </select>
+      </div>
+      <div class="filter-status">
+        <label for="status-input" class="filter-label"></label>
+        <select class="filter-input" id="status-input">
+          <option></option>
+        </select>
+      </div>
+      <div class="filter-number">
+        <label for="number-input" class="filter-label"></label>
+        <input type="search" class="filter-input" id="number-input" />
+      </div>
+      <div class="filter-title">
+        <label for="title-input" class="filter-label"></label>
+        <input type="search" class="filter-input" id="title-input" />
+      </div>
+      <div class="filter-location">
+        <label for="location-input" class="filter-label"></label>
+        <input type="search" class="filter-input" id="location-input" />
+      </div>
+      <div class="filter-from-date">
+        <label for="from-date-input" class="filter-label"></label>
+        <input type="date" class="filter-input" id="from-date-input" />
+      </div>
+      <div class="filter-to-date">
+        <label for="to-date-input" class="filter-label"></label>
+        <input type="date" class="filter-input" id="to-date-input" />
+      </div>
+      <button class="reset-filters"></button>
+    </div>
+
+    <table class="service-list">
+      <thead>
+        <tr>
+          <th class="head-number"></th>
+          <th class="head-provider"></th>
+          <th class="head-title"></th>
+          <th class="head-location"></th>
+          <th class="head-start-date"></th>
+          <th class="head-end-date"></th>
+          <th class="head-status"></th>
+          <th class="head-hours"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="service">
+          <td class="service-number"></td>
+          <td class="service-provider"></td>
+          <td class="service-title"></td>
+          <td class="service-location"></td>
+          <td class="service-start-date"></td>
+          <td class="service-end-date"></td>
+          <td class="service-status"></td>
+          <td class="service-hours"></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

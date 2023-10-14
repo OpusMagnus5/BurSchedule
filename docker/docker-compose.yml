@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    container_name: 'database'
+    image: postgres:16
+    restart: 'no'
+    ports:
+      - '5432:5432'
+    env_file:
+      - 'env/env_db.txt'
+    volumes:
+      - db:/var/lib/postgresql/data
+  app:
+    container_name: 'application'
+    image: application:latest
+    depends_on:
+      - db
+    restart: no
+    ports:
+      - '8080:8080'
+    env_file:
+      - 'env/env_app.txt'
+    volumes:
+      - app:/application
+volumes:
+  db:
+    driver: local
+  app:
+    driver: local

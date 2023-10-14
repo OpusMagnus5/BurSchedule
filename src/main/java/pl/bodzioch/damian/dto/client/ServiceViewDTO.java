@@ -1,11 +1,15 @@
 package pl.bodzioch.damian.dto.client;
 
 import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Builder
-public class ServiceViewDTO {
+@Getter
+public class ServiceViewDTO implements Serializable {
 
     private String id;
     private String status;
@@ -17,8 +21,8 @@ public class ServiceViewDTO {
     private String serviceProviderId;
     private String serviceProviderName;
     private String location;
-    private String street;
-    private String postcode;
-    private String buildingNumber;
-    private String localeNumber;
+
+    public Optional<String> getLocation() {
+        return Optional.ofNullable(location);
+    }
 }

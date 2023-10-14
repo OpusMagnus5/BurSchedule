@@ -1,0 +1,121 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.service-list {
+  width: 70%;
+  margin: 0 auto;
+  border-spacing: 0 1px;
+  box-shadow: 0 0 20px #00000026;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.service-list thead {
+  position: sticky;
+  top: 0;
+}
+
+.white-background {
+  background-color: white;
+}
+
+.gray-background {
+  background-color: #e3e3e3;
+}
+
+.service {
+  border-bottom: 1px solid #bbb;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.service-list tr.service:hover {
+  background-color: #54b3d6;
+  cursor: pointer;
+}
+
+.service td {
+  padding: 10px 10px;
+}
+
+.service-number {
+  overflow-wrap: break-word;
+  max-width: 12ch;
+}
+
+.service-start-date,
+.service-end-date,
+.service-hour,
+.service-status {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.service-list thead th {
+  padding: 10px 10px;
+}
+
+.service-list thead tr {
+  background-color: #009879;
+  color: #ffffff;
+}
+
+.filters {
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #009879;
+  border-radius: 5px;
+  display: grid;
+  gap: 10px 50px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.filter-input {
+  padding: 5px 10px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.filters div {
+  margin-bottom: 5px;
+}
+
+.filter-from-date {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.filter-to-date {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.reset-filters {
+  padding: 5px 10px;
+  font-size: 16px;
+  grid-column: 3;
+  grid-row: 2;
+  background-color: #0dc79c;
+  width: 60%;
+  height: 80%;
+  align-self: end;
+  border-radius: 20px;
+}
+
+.reset-filters:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}

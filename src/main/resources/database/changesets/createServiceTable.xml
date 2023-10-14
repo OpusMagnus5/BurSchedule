@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1" author="Damian Bodzioch">
+        <createTable tableName="services">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="pk_services_id"
+                             nullable="false" notNullConstraintName="nn_services_id"/>
+            </column>
+            <column name="bur_id" type="number">
+                <constraints nullable="false" notNullConstraintName="nn_bur_id"
+                             unique="true" uniqueConstraintName="uk_bur_id"/>
+            </column>
+            <column name="status" type="varchar" >
+                <constraints nullable="false" notNullConstraintName="nn_status"/>
+            </column>
+            <column name="number" type="varchar" >
+                <constraints nullable="false" notNullConstraintName="nn_number"/>
+            </column>
+            <column name="title" type="varchar">
+                <constraints nullable="false" notNullConstraintName="nn_title"/>
+            </column>
+            <column name="date_beginning_of_service" type="datetime">
+                <constraints nullable="false" notNullConstraintName="nn_date_beginning_of_service"/>
+            </column>
+            <column name="date_completed_of_service" type="datetime">
+                <constraints nullable="false" notNullConstraintName="nn_date_completed_of_service"/>
+            </column>
+            <column name="number_of_hours" type="number"/>
+            <column name="service_provider_bur_id" type="number">
+                <constraints nullable="false" notNullConstraintName="nn_service_provider_bur_id" />
+            </column>
+            <column name="service_provider_name" type="varchar">
+                <constraints nullable="false" notNullConstraintName="nn_users_address_id" />
+            </column>
+            <column name="location" type="varchar"/>
+            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="modify_date" type="timestamp"/>
+        </createTable>
+        <createIndex tableName="services" indexName="idx_services_id" unique="true">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="services" indexName="idx_bur_id" unique="true">
+            <column name="bur_id"/>
+        </createIndex>
+        <sql>
+            ALTER TABLE services
+            ADD CONSTRAINT ck_status CHECK (status IN ('PUBLISHED', 'CANCELED', 'SUSPENDED', 'COMPLETED', 'BLOCKED', 'NOT_COMPLETE')),
+            ADD CONSTRAINT ck_service_provider_names CHECK (service_provider_name IN ('BTLA_SKILLS', 'BOOKING_ANIMAL_SPA', 'OPUS_MAGNUS'));
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -8,6 +8,6 @@ import java.util.List;
 public interface BurClient {
 
     List<ScheduleEntry> getScheduleForService(long serviceId);
-    List<ServiceModel> getServicesById(long serviceId);
+    List<ServiceModel> getServiceById(long serviceId);
     List<ServiceModel> getServicesByNip(long nip);
 }

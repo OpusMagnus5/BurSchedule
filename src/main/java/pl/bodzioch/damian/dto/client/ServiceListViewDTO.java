@@ -1,11 +1,14 @@
 package pl.bodzioch.damian.dto.client;
 
 import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Builder
-public class ServiceListViewDTO {
+@Getter
+public class ServiceListViewDTO implements Serializable {
 
     private List<ServiceViewDTO> services;
 }

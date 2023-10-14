@@ -6,4 +6,5 @@ import pl.bodzioch.damian.exception.ServicesNotFoundException;
 public interface ServiceForBurClient {
 
     ServiceListViewDTO getAllServicesForAllProviders() throws ServicesNotFoundException;
+    void synchronizeServices();
 }
