@@ -7,6 +7,7 @@ import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
 
 import java.util.Comparator;
@@ -18,12 +19,13 @@ import java.util.function.Predicate;
 
 @Service
 @AllArgsConstructor
-public class SchedulerServiceImpl {
+public class SchedulerServiceImpl implements SchedulerService {
 
     private final BurClient burClient;
     private final SecurityService securityService;
     private final ClientMapper clientMapper;
 
+    @Override
     public List<SchedulerViewDTO> getSchedulerForService(String serviceId) {
         String encryptedId = securityService.encryptMessage(serviceId);
         List<ScheduleEntry> scheduler = burClient.getScheduleForService(Long.parseLong(encryptedId));
