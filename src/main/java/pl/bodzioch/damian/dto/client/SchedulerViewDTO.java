@@ -1,14 +1,12 @@
-package pl.bodzioch.damian.model;
+package pl.bodzioch.damian.dto.client;
 
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Builder
-@Getter
-public class ScheduleEntry {
+public class SchedulerViewDTO {
 
     private String subject;
     private LocalDate date;

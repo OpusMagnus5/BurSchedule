@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceViewDTO;
+import pl.bodzioch.damian.model.ScheduleEntry;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.service.SecurityService;
 
@@ -32,5 +34,14 @@ public class ClientMapper {
 
     private String mapStatus(String statusCode) {
         return messageSource.getMessage("service.status." + statusCode, null, LocaleContextHolder.getLocale());
+    }
+
+    public SchedulerViewDTO map(ScheduleEntry scheduleEntry) {
+        return SchedulerViewDTO.builder()
+                .subject(scheduleEntry.getSubject())
+                .date(scheduleEntry.getDate())
+                .startTime(scheduleEntry.getStartTime())
+                .endTime(scheduleEntry.getEndTime())
+                .build();
     }
 }
