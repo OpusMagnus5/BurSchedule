@@ -15,6 +15,7 @@ export const messages_pl = new Map([
   ["filter-from-date", "Data (od)"],
   ["filter-to-date", "Data (do)"],
   ["all-option", "Wszystkie"],
+  ["reset-filters", "Wyczyść filtry"],
 ]);
 
 export const messages_en = new Map();
@@ -26,8 +27,7 @@ export function getMessage(code) {
   ]);
 
   let pickedMessages = messages.get(navigator.language);
-  pickedMessages =
-    pickedMessages != null ? pickedMessages : messages.get("pl-PL");
+  pickedMessages = pickedMessages != null ? pickedMessages : messages.get("pl-PL");
 
   return pickedMessages.get(code);
 }

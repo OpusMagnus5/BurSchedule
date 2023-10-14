@@ -8,6 +8,7 @@ function getServices() {
   getFromApi(servicesUrl).then((data) => {
     sessionStorage.setItem("services-data", JSON.stringify(data));
     showData();
+    colorEvenRows(Array.from(document.querySelectorAll(".service")));
   });
   setFilters();
 }
@@ -52,6 +53,7 @@ function setFilters() {
   document.querySelector(".filter-from-date label").textContent = getMessage("filter-from-date");
   document.querySelector(".filter-to-date label").textContent = getMessage("filter-to-date");
   document.querySelector(".filter-status label").textContent = getMessage("head-status");
+  document.querySelector(".reset-filters").textContent = getMessage("reset-filters");
 
   setSelectors();
 }
@@ -136,15 +138,28 @@ function colorEvenRows(rows) {
   let k = 0;
   for (let j = 0, row; (row = rows[j]); j++) {
     if (!(row.style.display === "none")) {
+      row.classList.remove("gray-background");
+      row.classList.remove("white-background");
       if (k % 2) {
-        row.style.backgroundColor = "#e3e3e3";
+        row.classList.add("gray-background");
       } else {
-        row.style.backgroundColor = "#fff";
+        row.classList.add("white-background");
       }
       k++;
     }
   }
 }
+
+document.querySelector(".reset-filters").addEventListener("click", function () {
+  document.querySelectorAll("select.filter-input").forEach((selector) => {
+    selector.selectedIndex = 0;
+    selector.dispatchEvent(new Event("change"));
+  });
+  document.querySelectorAll("input.filter-input").forEach((input) => {
+    input.value = "";
+    input.dispatchEvent(new Event("change"));
+  });
+});
 
 // Wywołanie funkcji getServices() w odpowiednim momencie, na przykład po załadowaniu strony
 document.addEventListener("DOMContentLoaded", getServices());
