@@ -21,6 +21,8 @@ export const messages_pl = new Map([
   ["scheduler-email-label", "Email"],
   ["scheduler-date-label", "Data"],
   ["scheduler-time-label", "Godzina rozpoczęcia"],
+  ["scheduler-email-checkbox", "Powiel email"],
+  ["scheduler-time-checkbox", "Powiel czas rozpoczęcia"],
 ]);
 
 export const messages_en = new Map();
