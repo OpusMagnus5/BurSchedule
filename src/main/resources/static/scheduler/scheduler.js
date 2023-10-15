@@ -1,4 +1,4 @@
-import { getMessage } from "../util/config.js";
+import { generateUrl, getMessage, postToApi } from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setScheduler());
 
@@ -26,9 +26,30 @@ function setScheduler() {
   emptyDayElement.remove();
 
   setOptions();
+
+  scheduler.querySelector(".send-button").textContent = getMessage("scheduler-send-button");
+  addSendButtonListener();
+}
+
+function setOptions() {
+  addOptionListeners();
+  document.querySelector(".email-option .scheduler-option-label").textContent = getMessage("scheduler-email-checkbox");
+  document.querySelector(".time-option .scheduler-option-label").textContent = getMessage("scheduler-time-checkbox");
+
+  document.querySelectorAll(".scheduler-option-input").forEach((element) => {
+    element.checked = true;
+    element.dispatchEvent(new Event("change"));
+  });
 }
 
 function addOptionListeners() {
+  addEmailCheckboxListener();
+  addTimeCheckboxListener();
+  addEmailInputListener();
+  addTimeInputListener();
+}
+
+function addEmailCheckboxListener() {
   document.querySelector(".email-option .scheduler-option-input").addEventListener("change", function () {
     let checked = document.querySelector(".email-option .scheduler-option-input").checked;
     let inputs = document.querySelectorAll(".scheduler .day .inputs");
@@ -45,7 +66,9 @@ function addOptionListeners() {
       }
     }
   });
+}
 
+function addTimeCheckboxListener() {
   document.querySelector(".time-option .scheduler-option-input").addEventListener("change", function () {
     let checked = document.querySelector(".time-option .scheduler-option-input").checked;
     let inputs = document.querySelectorAll(".scheduler .day .inputs");
@@ -62,7 +85,9 @@ function addOptionListeners() {
       }
     }
   });
+}
 
+function addEmailInputListener() {
   document.getElementById("email-input").addEventListener("change", function () {
     let emailCheckbox = document.querySelector(".email-option .scheduler-option-input").checked;
 
@@ -73,7 +98,9 @@ function addOptionListeners() {
       }
     }
   });
+}
 
+function addTimeInputListener() {
   document.getElementById("start-time-input").addEventListener("change", function () {
     let timeCheckbox = document.querySelector(".time-option .scheduler-option-input").checked;
 
@@ -86,13 +113,22 @@ function addOptionListeners() {
   });
 }
 
-function setOptions() {
-  addOptionListeners();
-  document.querySelector(".email-option .scheduler-option-label").textContent = getMessage("scheduler-email-checkbox");
-  document.querySelector(".time-option .scheduler-option-label").textContent = getMessage("scheduler-time-checkbox");
+function addSendButtonListener() {
+  document.querySelector("send-button").addEventListener("click", function () {
+    let days = document.querySelectorAll(".day");
+    let request = {
+      scheduleDays: new Array(),
+    };
 
-  document.querySelectorAll(".scheduler-option-input").forEach((element) => {
-    element.checked = true;
-    element.dispatchEvent(new Event("change"));
+    days.forEach((element) => {
+      let day = {
+        email: element.querySelector("#email-input").value,
+        date: element.querySelector("#date-input").value,
+        startTime: element.querySelector("#start-time-input").value,
+      };
+      request.scheduleDays.push(day);
+    });
+
+    postToApi(generateUrl);
   });
 }

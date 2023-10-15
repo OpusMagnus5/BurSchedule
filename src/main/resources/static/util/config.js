@@ -4,6 +4,7 @@ export const servicesUrl = baseUrl + "services";
 export const providersUrl = servicesUrl + "/providers";
 export const statusesUrl = servicesUrl + "/statuses";
 export const schedulerUrl = baseUrl + "scheduler/";
+export const generateUrl = schedulerUrl + "generate";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -23,6 +24,7 @@ export const messages_pl = new Map([
   ["scheduler-time-label", "Godzina rozpoczęcia"],
   ["scheduler-email-checkbox", "Powiel email"],
   ["scheduler-time-checkbox", "Powiel czas rozpoczęcia"],
+  ["scheduler-send-button", "Generuj harmonogram"],
 ]);
 
 export const messages_en = new Map();
@@ -42,6 +44,34 @@ export function getMessage(code) {
 export function getFromApi(url) {
   return fetch(url, {
     method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else if (!response.ok) {
+        return response.json();
+      } else {
+        throw new Error(messages_pl.get("general.error"));
+      }
+    })
+    .then((data) => {
+      if (data.hasOwnProperty("message")) {
+        alert("data.message");
+      } else {
+        return data;
+      }
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+}
+
+export function postToApi(url) {
+  return fetch(url, {
+    method: "POST",
     headers: {
       Accept: "application/json",
     },
