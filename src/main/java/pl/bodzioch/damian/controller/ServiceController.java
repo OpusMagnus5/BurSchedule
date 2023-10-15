@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/services")
+@RequestMapping("/app/services")
 @AllArgsConstructor
 public class ServiceController {
 

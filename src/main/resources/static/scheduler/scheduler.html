@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="scheduler/scheduler.js" type="module"></script>
+    <script src="util/config.js" type="module"></script>
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="scheduler">
+      <div class="day">
+        <p class="day-number"></p>
+        <div class="inputs">
+          <div class="email">
+            <label for="email-input" class="scheduler-label"></label>
+            <input type="email" class="scheduler-input" id="email-input" />
+          </div>
+          <div class="date">
+            <label for="date-input" class="scheduler-label"></label>
+            <input type="date" class="scheduler-input" id="date-input" />
+          </div>
+          <div class="time">
+            <label for="start-time-input" class="scheduler-label"></label>
+            <input type="time" class="scheduler-input" id="start-time-input" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

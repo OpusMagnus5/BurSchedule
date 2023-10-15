@@ -15,7 +15,7 @@ import pl.bodzioch.damian.service.SchedulerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/scheduler")
+@RequestMapping("/app/scheduler")
 @AllArgsConstructor
 public class SchedulerController {
 

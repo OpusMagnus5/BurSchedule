@@ -170,7 +170,7 @@ function addClickListenerForServices() {
     element.addEventListener("click", function () {
       getFromApi(schedulerUrl + element.id).then((data) => {
         sessionStorage.setItem("scheduler", JSON.stringify(data));
-        window.location.href = "/scheduler-edit";
+        window.location.href = "scheduler-edit";
       });
     });
   });

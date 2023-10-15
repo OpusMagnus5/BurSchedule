@@ -17,6 +17,10 @@ export const messages_pl = new Map([
   ["filter-to-date", "Data (do)"],
   ["all-option", "Wszystkie"],
   ["reset-filters", "Wyczyść filtry"],
+  ["scheduler-day-label", "Dzień "],
+  ["scheduler-email-label", "Email"],
+  ["scheduler-date-label", "Data"],
+  ["scheduler-time-label", "Godzina rozpoczęcia"],
 ]);
 
 export const messages_en = new Map();

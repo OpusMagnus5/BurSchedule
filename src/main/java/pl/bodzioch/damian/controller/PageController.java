@@ -11,8 +11,8 @@ public class PageController {
         return "services/services.html";
     }
 
-    @GetMapping("scheduler-edit")
+    @GetMapping("/scheduler-edit")
     public String getSchedulerEditPage() {
-        return "";
+        return "scheduler/scheduler.html";
     }
 }

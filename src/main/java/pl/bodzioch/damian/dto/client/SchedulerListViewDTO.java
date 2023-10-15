@@ -1,11 +1,14 @@
 package pl.bodzioch.damian.dto.client;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
-public class SchedulerListViewDTO {
+@Getter
+public class SchedulerListViewDTO implements Serializable {
 
-    private List<SchedulerViewDTO> scheduler;
+    private List<SchedulerViewDTO> schedulerEntries;
 }
