@@ -27,7 +27,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     public List<SchedulerViewDTO> getSchedulerForService(String serviceId) {
-        String encryptedId = securityService.encryptMessage(serviceId);
+        String encryptedId = securityService.decryptMessage(serviceId);
         List<ScheduleEntry> scheduler = burClient.getScheduleForService(Long.parseLong(encryptedId));
         if (scheduler.isEmpty()) {
             throw new SchedulerNotFoundException();
@@ -41,16 +41,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     private void sortScheduler(List<ScheduleEntry> scheduler) {
-        scheduler.sort(new Comparator<>() {
-            @Override
-            public int compare(ScheduleEntry o1, ScheduleEntry o2) {
-                int result = o1.getDate().compareTo(o2.getDate());
-                if (result == 0) {
-                    result = o1.getStartTime().compareTo(o2.getStartTime());
-                }
-                return result;
-            }
-        });
+        scheduler.sort(Comparator.comparing(ScheduleEntry::getDate).thenComparing(ScheduleEntry::getStartTime));
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

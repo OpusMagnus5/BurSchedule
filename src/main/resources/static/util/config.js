@@ -1,8 +1,9 @@
-const baseUrl = "http://localhost:8080/app/";
+const baseUrl = "/app/";
 
 export const servicesUrl = baseUrl + "services";
 export const providersUrl = servicesUrl + "/providers";
 export const statusesUrl = servicesUrl + "/statuses";
+export const schedulerUrl = baseUrl + "scheduler/";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
