@@ -11,7 +11,6 @@ import java.time.LocalTime;
 @Getter
 public class SchedulerViewDTO implements Serializable {
 
-    private String subject;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;

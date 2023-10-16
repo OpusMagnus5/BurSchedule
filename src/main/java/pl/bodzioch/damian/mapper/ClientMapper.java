@@ -38,7 +38,6 @@ public class ClientMapper {
 
     public SchedulerViewDTO map(ScheduleEntry scheduleEntry) {
         return SchedulerViewDTO.builder()
-                .subject(scheduleEntry.getSubject())
                 .date(scheduleEntry.getDate())
                 .startTime(scheduleEntry.getStartTime())
                 .endTime(scheduleEntry.getEndTime())

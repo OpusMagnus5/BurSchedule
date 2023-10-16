@@ -1,11 +1,13 @@
 package pl.bodzioch.damian.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.bodzioch.damian.dto.client.GenerateFileRequestDTO;
 import pl.bodzioch.damian.dto.client.SchedulerListViewDTO;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
@@ -29,11 +31,17 @@ public class SchedulerController {
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
+    @PostMapping("/generate")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> generateFile(@Valid @RequestBody GenerateFileRequestDTO request) {
+
+    }
+
     @ExceptionHandler(SchedulerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleServicesNotFound(SchedulerNotFoundException ex) {
         ApiError response = ApiError.builder()
-                .message(messageSource.getMessage("scheduler.not.found", new Object[]{}, LocaleContextHolder.getLocale()))
+                .messages(List.of(messageSource.getMessage("scheduler.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
                 .build();
         return ResponseEntity.ofNullable(response);
     }

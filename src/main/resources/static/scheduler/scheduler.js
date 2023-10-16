@@ -129,6 +129,6 @@ function addSendButtonListener() {
       request.scheduleDays.push(day);
     });
 
-    postToApi(generateUrl);
+    postToApi(generateUrl, request);
   });
 }
