@@ -9,6 +9,7 @@ import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.ScheduleEntry;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
+import pl.bodzioch.damian.session.SessionBean;
 
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +25,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private final BurClient burClient;
     private final SecurityService securityService;
     private final ClientMapper clientMapper;
+    private final SessionBean sessionBean;
 
     @Override
     public List<SchedulerViewDTO> getSchedulerForService(String serviceId) {
@@ -34,6 +36,8 @@ public class SchedulerServiceImpl implements SchedulerService {
         }
 
         sortScheduler(scheduler);
+        sessionBean.setScheduleEntries(scheduler);
+
         return scheduler.stream()
                 .filter(distinctByKey(ScheduleEntry::getDate))
                 .map(clientMapper::map)

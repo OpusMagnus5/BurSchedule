@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import pl.bodzioch.damian.dto.client.SchedulerDayDTO;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceViewDTO;
 import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerDayParams;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.service.SecurityService;
+
+import java.time.temporal.ChronoUnit;
 
 @Component
 @AllArgsConstructor
@@ -41,6 +45,14 @@ public class ClientMapper {
                 .date(scheduleEntry.getDate())
                 .startTime(scheduleEntry.getStartTime())
                 .endTime(scheduleEntry.getEndTime())
+                .build();
+    }
+
+    public SchedulerDayParams map(SchedulerDayDTO schedulerDay, ScheduleEntry scheduleEntry) {
+        return SchedulerDayParams.builder()
+                .email(schedulerDay.getEmail())
+                .date(schedulerDay.getDate())
+                .timeDifference(schedulerDay.getStartTime().until(scheduleEntry.getStartTime(), ChronoUnit.MINUTES))
                 .build();
     }
 }

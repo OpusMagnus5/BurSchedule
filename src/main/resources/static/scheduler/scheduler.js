@@ -114,7 +114,7 @@ function addTimeInputListener() {
 }
 
 function addSendButtonListener() {
-  document.querySelector("send-button").addEventListener("click", function () {
+  document.querySelector(".send-button").addEventListener("click", function () {
     let days = document.querySelectorAll(".day");
     let request = {
       scheduleDays: new Array(),

@@ -53,8 +53,18 @@ public class CustomControllerAdvice {
         ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(error.getField() + ": " +
                 messageSource.getMessage(error.getDefaultMessage(), null, LocaleContextHolder.getLocale())));
 
-        return ResponseEntity.ok(ApiError.builder()
+        return ResponseEntity.ofNullable(ApiError.builder()
                                     .messages(errorMessages)
                                     .build());
+    }
+
+    @ExceptionHandler({SecurityException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiError> handleSecurityException(SecurityException ex, WebRequest webRequest) {
+        ApiError apiError = ApiError.builder()
+                .messages(List.of(messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale())))
+                .build();
+
+        return ResponseEntity.ofNullable(apiError);
     }
 }

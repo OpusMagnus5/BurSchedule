@@ -69,14 +69,14 @@ export function getFromApi(url) {
     });
 }
 
-export function postToApi(url, body) {
+export function postToApi(url, request) {
   return fetch(url, {
     method: "POST",
     headers: {
-      Accept: "application/json",
+      Accept: "application/json, application/octet-stream",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(request),
   })
     .then((response) => {
       if (response.ok) {
