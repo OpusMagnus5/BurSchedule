@@ -49,19 +49,27 @@ export function getFromApi(url) {
     },
   })
     .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else if (!response.ok) {
-        return response.json();
-      } else {
-        throw new Error(messages_pl.get("general.error"));
-      }
-    })
-    .then((data) => {
-      if (data.hasOwnProperty("message")) {
-        alert("data.message");
-      } else {
-        return data;
+      let contentType = response.headers.get("Content-Type");
+      if (contentType === "application/json") {
+        let json = response.json();
+        if (response.ok) {
+          return json;
+        } else if (!response.ok && json.hasOwnProperty("message")) {
+          alert("data.message");
+        } else {
+          throw new Error(messages_pl.get("general.error"));
+        }
+      } else if (contentType === "application/octet-stream") {
+        response.blob().then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
       }
     })
     .catch((error) => {
@@ -79,19 +87,27 @@ export function postToApi(url, request) {
     body: JSON.stringify(request),
   })
     .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else if (!response.ok) {
-        return response.json();
-      } else {
-        throw new Error(messages_pl.get("general.error"));
-      }
-    })
-    .then((data) => {
-      if (data.hasOwnProperty("message")) {
-        alert("data.message");
-      } else {
-        return data;
+      let contentType = response.headers.get("Content-Type");
+      if (contentType === "application/json") {
+        let json = response.json();
+        if (response.ok) {
+          return json;
+        } else if (!response.ok && json.hasOwnProperty("message")) {
+          alert("data.message");
+        } else {
+          throw new Error(messages_pl.get("general.error"));
+        }
+      } else if (contentType === "application/octet-stream") {
+        response.blob().then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
       }
     })
     .catch((error) => {
