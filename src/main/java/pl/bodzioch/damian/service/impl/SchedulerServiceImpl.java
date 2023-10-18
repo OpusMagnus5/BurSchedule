@@ -38,8 +38,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         sortScheduler(scheduler);
         sessionBean.setScheduleEntries(scheduler);
 
-        return scheduler.stream()
-                .filter(distinctByKey(ScheduleEntry::getDate))
+        return getBeginningsOfDays(scheduler).stream()
                 .map(clientMapper::map)
                 .toList();
     }
@@ -48,7 +47,14 @@ public class SchedulerServiceImpl implements SchedulerService {
         scheduler.sort(Comparator.comparing(ScheduleEntry::getDate).thenComparing(ScheduleEntry::getStartTime));
     }
 
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    @Override
+    public List<ScheduleEntry> getBeginningsOfDays(List<ScheduleEntry> scheduler) {
+        return scheduler.stream()
+                .filter(distinctByKey(ScheduleEntry::getDate))
+                .toList();
+    }
+
+    public  <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }

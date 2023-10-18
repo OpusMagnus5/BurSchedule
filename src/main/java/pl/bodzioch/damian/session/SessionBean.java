@@ -15,5 +15,4 @@ import java.util.List;
 public class SessionBean {
 
     private List<ScheduleEntry> scheduleEntries = null;
-    private Integer numberOfDaysInScheduler;
 }

@@ -52,7 +52,7 @@ public class ClientMapper {
         return SchedulerDayParams.builder()
                 .email(schedulerDay.getEmail())
                 .date(schedulerDay.getDate())
-                .timeDifference(schedulerDay.getStartTime().until(scheduleEntry.getStartTime(), ChronoUnit.MINUTES))
+                .timeDifference(scheduleEntry.getStartTime().until(schedulerDay.getStartTime(), ChronoUnit.MINUTES))
                 .build();
     }
 }

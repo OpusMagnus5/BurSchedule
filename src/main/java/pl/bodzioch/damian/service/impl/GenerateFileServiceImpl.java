@@ -8,9 +8,8 @@ import pl.bodzioch.damian.service.GenerateFileService;
 
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GenerateFileServiceImpl implements GenerateFileService {
@@ -21,14 +20,25 @@ public class GenerateFileServiceImpl implements GenerateFileService {
     public byte[] generateFile(List<SchedulerDayParams> params, List<ScheduleEntry> burScheduler) {
         byte[] bomBytes = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
-        Iterator<ScheduleEntry> iterator = burScheduler.iterator();
-        List<String> rows = params.stream()
-                .map(day -> mapDayParamsToContentRow(day, iterator.next()))
-                .collect(Collectors.toList());
-        rows.add(0, HEADER_LINE);
-        String content = String.join("\n", rows);
+        List<String> dataRows = getDataRows(params, burScheduler);
+        dataRows.add(0, HEADER_LINE);
+        String content = String.join("\n", dataRows);
 
         return ArrayUtils.addAll(bomBytes, content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private List<String> getDataRows(List<SchedulerDayParams> params, List<ScheduleEntry> burScheduler) {
+        List<String> dataRows = new ArrayList<>();
+        dataRows.add(mapDayParamsToContentRow(params.get(0), burScheduler.get(0)));
+        for (int i = 1, j = 0; i < burScheduler.size(); i++) {
+            ScheduleEntry scheduleEntry = burScheduler.get(i);
+            ScheduleEntry prevScheduleEntry = burScheduler.get(i - 1);
+            if (prevScheduleEntry.getDate().isBefore(scheduleEntry.getDate())) {
+                j++;
+            }
+            dataRows.add(mapDayParamsToContentRow(params.get(j), scheduleEntry));
+        }
+        return dataRows;
     }
 
     private String mapDayParamsToContentRow(SchedulerDayParams dayParams, ScheduleEntry burScheduleEntry) {

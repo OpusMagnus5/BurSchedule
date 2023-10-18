@@ -40,15 +40,15 @@ public class SchedulerController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SchedulerListViewDTO> getScheduler(@PathVariable String serviceId) {
         List<SchedulerViewDTO> scheduler = schedulerService.getSchedulerForService(serviceId);
-        sessionBean.setNumberOfDaysInScheduler(scheduler.size());
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
     @PostMapping("/generate")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> generateFile(@Valid @RequestBody GenerateFileRequestDTO request) {
-        validateNumberOfDays(request.getScheduleDays());
-        Iterator<ScheduleEntry> iterator = sessionBean.getScheduleEntries().iterator();
+        List<ScheduleEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionBean.getScheduleEntries());
+        validateNumberOfDays(beginningsOfDays.size(), request.getScheduleDays());
+        Iterator<ScheduleEntry> iterator = beginningsOfDays.iterator();
         List<SchedulerDayParams> dayParams = request.getScheduleDays().stream()
                 .map(day -> clientMapper.map(day, iterator.next()))
                 .toList();
@@ -63,8 +63,8 @@ public class SchedulerController {
                 .body(fileBytes);
     }
 
-    private void validateNumberOfDays(List<SchedulerDayDTO> schedulerDays) {
-        if (sessionBean.getNumberOfDaysInScheduler() != schedulerDays.size()) {
+    private void validateNumberOfDays(Integer days, List<SchedulerDayDTO> schedulerDays) {
+        if (days != schedulerDays.size()) {
             throw new SecurityException("scheduler.generate.scheduleDays.size");
         }
     }
