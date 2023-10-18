@@ -1,9 +1,14 @@
 package pl.bodzioch.damian.model;
 
 import lombok.Builder;
+import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.List;
 
 @Builder
-public class ApiError {
+@Getter
+public class ApiError implements Serializable {
 
-    private String message;
+    private List<String> messages;
 }

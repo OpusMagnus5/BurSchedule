@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/services")
+@RequestMapping("/app/services")
 @AllArgsConstructor
 public class ServiceController {
 
@@ -65,7 +65,7 @@ public class ServiceController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleServicesNotFound(ServicesNotFoundException ex) {
         ApiError response = ApiError.builder()
-                .message(messageSource.getMessage("services.not.found", new Object[]{}, LocaleContextHolder.getLocale()))
+                .messages(List.of(messageSource.getMessage("services.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
                 .build();
         return ResponseEntity.ofNullable(response);
     }

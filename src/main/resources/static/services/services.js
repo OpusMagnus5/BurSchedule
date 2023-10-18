@@ -1,14 +1,18 @@
 import { providersUrl } from "../util/config.js";
 import { servicesUrl } from "../util/config.js";
 import { statusesUrl } from "../util/config.js";
+import { schedulerUrl } from "../util/config.js";
 import { getFromApi } from "../util/config.js";
 import { getMessage } from "../util/config.js";
+
+document.addEventListener("DOMContentLoaded", getServices());
 
 function getServices() {
   getFromApi(servicesUrl).then((data) => {
     sessionStorage.setItem("services-data", JSON.stringify(data));
     showData();
     colorEvenRows(Array.from(document.querySelectorAll(".service")));
+    addClickListenerForServices();
   });
   setFilters();
 }
@@ -161,5 +165,13 @@ document.querySelector(".reset-filters").addEventListener("click", function () {
   });
 });
 
-// Wywołanie funkcji getServices() w odpowiednim momencie, na przykład po załadowaniu strony
-document.addEventListener("DOMContentLoaded", getServices());
+function addClickListenerForServices() {
+  document.querySelectorAll(".service").forEach((element) => {
+    element.addEventListener("click", function () {
+      getFromApi(schedulerUrl + element.id).then((data) => {
+        sessionStorage.setItem("scheduler", JSON.stringify(data));
+        window.location.href = "scheduler-edit";
+      });
+    });
+  });
+}

@@ -21,6 +21,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -67,7 +68,7 @@ public class BurClientImpl implements BurClient {
                 .map(ListOfServiceScheduleEntriesDTO::getLista)
                 .flatMap(List::stream)
                 .map(BurMapper::map)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override

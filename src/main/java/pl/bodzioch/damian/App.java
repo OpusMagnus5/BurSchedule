@@ -16,7 +16,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import pl.bodzioch.damian.client.conf.CustomRestTemplateCustomizer;
@@ -29,7 +28,6 @@ import java.util.Locale;
 @EnableJpaRepositories(basePackages = "pl.bodzioch.damian.dao.impl")
 @EnableTransactionManagement
 @SpringBootApplication
-@RequestMapping("/app")
 public class App {
 
     public static void main(String[] args) {

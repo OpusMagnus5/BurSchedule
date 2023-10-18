@@ -1,0 +1,73 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.day {
+  margin: 0 auto;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.scheduler {
+  margin: 0 auto;
+  width: 70%;
+  font-size: 16px;
+  margin-bottom: 50px;
+}
+
+.scheduler-input {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.day-number {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #696969;
+  font-size: 20px;
+}
+
+.inputs {
+  margin: 20px 0;
+}
+
+.scheduler-options {
+  display: flex;
+  gap: 40px;
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px 40px;
+  background-color: #009879;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+input.scheduler-option-input {
+  width: 18px;
+  height: 18px;
+}
+
+.send-button:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}
+
+.send-button {
+  display: block;
+  width: 15%;
+  margin: 0 auto;
+  padding: 10px 10px;
+  background-color: #0dc79c;
+  font-size: 18px;
+  color: white;
+}

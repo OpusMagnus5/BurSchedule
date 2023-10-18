@@ -35,7 +35,7 @@ public class SecurityServiceImpl implements SecurityService {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmSpec);
             byte[] encryptedBytes = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
             byte[] outputBytes = attachIvAndGetOutput(iv, encryptedBytes);
-            return Base64.getEncoder().encodeToString(outputBytes);
+            return Base64.getUrlEncoder().encodeToString(outputBytes);
         } catch (GeneralSecurityException ex) {
             log.error("Cipher exception during encrypt message: {}", text, ex);
             throw new CipherException("Cipher exception during encrypt message", ex);
@@ -45,7 +45,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public String decryptMessage(String encryptedText) throws CipherException {
         try {
-            byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
+            byte[] encryptedBytes = Base64.getUrlDecoder().decode(encryptedText);
             byte[] iv = extractIv(encryptedBytes);
             byte[] ciphertext = extractEncodedTextBytes(encryptedBytes, iv);
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
