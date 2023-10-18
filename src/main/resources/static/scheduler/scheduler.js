@@ -27,7 +27,7 @@ function setScheduler() {
 
   setOptions();
 
-  scheduler.querySelector(".send-button").textContent = getMessage("scheduler-send-button");
+  document.querySelector(".send-button").textContent = getMessage("scheduler-send-button");
   addSendButtonListener();
 }
 

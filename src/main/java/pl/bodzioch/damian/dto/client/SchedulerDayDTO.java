@@ -1,6 +1,7 @@
 package pl.bodzioch.damian.dto.client;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ import java.time.LocalTime;
 public class SchedulerDayDTO implements Serializable {
 
     @Email(message = "scheduler.generate.day.email")
+    @NotEmpty(message = "scheduler.generate.day.email")
     private String email;
     @NotNull(message = "scheduler.generate.day.date.notNull")
     private LocalDate date;

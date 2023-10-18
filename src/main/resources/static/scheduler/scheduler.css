@@ -21,6 +21,7 @@
   margin: 0 auto;
   width: 70%;
   font-size: 16px;
+  margin-bottom: 50px;
 }
 
 .scheduler-input {
@@ -51,6 +52,22 @@
 }
 
 input.scheduler-option-input {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
+}
+
+.send-button:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}
+
+.send-button {
+  display: block;
+  width: 15%;
+  margin: 0 auto;
+  padding: 10px 10px;
+  background-color: #0dc79c;
+  font-size: 18px;
+  color: white;
 }

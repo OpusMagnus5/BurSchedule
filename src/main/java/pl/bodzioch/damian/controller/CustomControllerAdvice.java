@@ -1,6 +1,6 @@
 package pl.bodzioch.damian.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -17,14 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
+@AllArgsConstructor
 public class CustomControllerAdvice {
 
     private final MessageSource messageSource;
-
-    @Autowired
-    public CustomControllerAdvice(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
 
     @ExceptionHandler({HttpClientException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -33,7 +29,7 @@ public class CustomControllerAdvice {
                 .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
                 .build();
 
-        return ResponseEntity.ofNullable(apiError);
+        return ResponseEntity.badRequest().body(apiError);
     }
 
     @ExceptionHandler({Exception.class})
@@ -43,17 +39,17 @@ public class CustomControllerAdvice {
                 .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
                 .build();
 
-        return ResponseEntity.ofNullable(apiError);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest webRequest) {
         List<String> errorMessages = new ArrayList<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(error.getField() + ": " +
-                messageSource.getMessage(error.getDefaultMessage(), null, LocaleContextHolder.getLocale())));
+        ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(messageSource.getMessage(error.getDefaultMessage(),
+                null, LocaleContextHolder.getLocale())));
 
-        return ResponseEntity.ofNullable(ApiError.builder()
+        return ResponseEntity.badRequest().body(ApiError.builder()
                                     .messages(errorMessages)
                                     .build());
     }
@@ -65,6 +61,6 @@ public class CustomControllerAdvice {
                 .messages(List.of(messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale())))
                 .build();
 
-        return ResponseEntity.ofNullable(apiError);
+        return ResponseEntity.badRequest().body(apiError);
     }
 }

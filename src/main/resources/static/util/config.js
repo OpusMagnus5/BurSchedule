@@ -51,16 +51,17 @@ export function getFromApi(url) {
     .then((response) => {
       let contentType = response.headers.get("Content-Type");
       if (contentType === "application/json") {
-        let json = response.json();
-        if (response.ok) {
-          return json;
-        } else if (!response.ok && json.hasOwnProperty("message")) {
-          alert("data.message");
-        } else {
-          throw new Error(messages_pl.get("general.error"));
-        }
+        return response.json().then((json) => {
+          if (response.ok) {
+            return json;
+          } else if (!response.ok && json.hasOwnProperty("messages")) {
+            alert(json.messages[0]);
+          } else {
+            throw new Error(messages_pl.get("general.error"));
+          }
+        });
       } else if (contentType === "application/octet-stream") {
-        response.blob().then((blob) => {
+        return response.blob().then((blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
@@ -89,16 +90,17 @@ export function postToApi(url, request) {
     .then((response) => {
       let contentType = response.headers.get("Content-Type");
       if (contentType === "application/json") {
-        let json = response.json();
-        if (response.ok) {
-          return json;
-        } else if (!response.ok && json.hasOwnProperty("message")) {
-          alert("data.message");
-        } else {
-          throw new Error(messages_pl.get("general.error"));
-        }
+        return response.json().then((json) => {
+          if (response.ok) {
+            return json;
+          } else if (!response.ok && json.hasOwnProperty("messages")) {
+            alert(json.messages[0]);
+          } else {
+            throw new Error(messages_pl.get("general.error"));
+          }
+        });
       } else if (contentType === "application/octet-stream") {
-        response.blob().then((blob) => {
+        return response.blob().then((blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
