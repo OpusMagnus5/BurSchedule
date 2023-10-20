@@ -124,3 +124,22 @@ export function postToApi(url, request) {
       alert(getMessage("general.error"));
     });
 }
+
+let loader;
+let overlay;
+
+export function schowLoader() {
+  loader = document.createElement("div");
+  loader.className = "loader";
+  overlay = document.createElement("div");
+  overlay.className = "overlay";
+  document.body.appendChild(overlay);
+  document.body.appendChild(loader);
+}
+
+export function hideLoader() {
+  document.body.removeChild(loader);
+  document.body.removeChild(overlay);
+  loader = null;
+  overlay = null;
+}
