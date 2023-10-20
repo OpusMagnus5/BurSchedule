@@ -30,8 +30,9 @@ public class ServiceController {
 
     @GetMapping("/synchronization")
     @ResponseStatus(HttpStatus.OK)
-    public void synchronize() {
+    public HttpStatus synchronize() {
         serviceForBurClient.synchronizeServices();
+        return HttpStatus.OK;
     }
 
     @GetMapping("")

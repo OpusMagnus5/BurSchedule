@@ -103,10 +103,19 @@ label {
 }
 
 .reset-filters {
-  padding: 5px 10px;
-  font-size: 16px;
   grid-column: 3;
   grid-row: 2;
+}
+
+.synchronzation {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.synchronzation,
+.reset-filters {
+  padding: 5px 10px;
+  font-size: 16px;
   background-color: #0dc79c;
   width: 60%;
   height: 80%;
@@ -114,6 +123,7 @@ label {
   border-radius: 20px;
 }
 
+.synchronzation:hover,
 .reset-filters:hover {
   cursor: pointer;
   background-color: #0e37ab;

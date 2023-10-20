@@ -1,4 +1,4 @@
-import { providersUrl } from "../util/config.js";
+import { providersUrl, synchronizationUrl } from "../util/config.js";
 import { servicesUrl } from "../util/config.js";
 import { statusesUrl } from "../util/config.js";
 import { schedulerUrl } from "../util/config.js";
@@ -58,6 +58,7 @@ function setFilters() {
   document.querySelector(".filter-to-date label").textContent = getMessage("filter-to-date");
   document.querySelector(".filter-status label").textContent = getMessage("head-status");
   document.querySelector(".reset-filters").textContent = getMessage("reset-filters");
+  document.querySelector(".synchronzation").textContent = getMessage("synchronization");
 
   setSelectors();
 }
@@ -162,6 +163,16 @@ document.querySelector(".reset-filters").addEventListener("click", function () {
   document.querySelectorAll("input.filter-input").forEach((input) => {
     input.value = "";
     input.dispatchEvent(new Event("change"));
+  });
+});
+
+document.querySelector(".synchronzation").addEventListener("click", function () {
+  getFromApi(synchronizationUrl).then((response) => {
+    if (response) {
+      window.location.href = "services-list";
+    } else {
+      alert(getMessage("general.error"));
+    }
   });
 });
 
