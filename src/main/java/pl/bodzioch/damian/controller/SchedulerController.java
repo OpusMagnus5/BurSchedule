@@ -2,6 +2,7 @@ package pl.bodzioch.damian.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import pl.bodzioch.damian.dto.client.GenerateFileRequestDTO;
 import pl.bodzioch.damian.dto.client.SchedulerDayDTO;
 import pl.bodzioch.damian.dto.client.SchedulerListViewDTO;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
+import pl.bodzioch.damian.exception.FileProcessingException;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.ApiError;
@@ -31,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/scheduler")
 @AllArgsConstructor
+@Slf4j
 public class SchedulerController {
 
     private final MessageSource messageSource;
@@ -52,7 +55,8 @@ public class SchedulerController {
         try {
             scheduler = schedulerService.getSchedulerForService(file.getInputStream());
         } catch (IOException ex) {
-            //TODO dokoczyc
+            log.error(ex.getMessage(), ex);
+            throw new FileProcessingException(ex);
         }
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
@@ -86,8 +90,19 @@ public class SchedulerController {
     @ExceptionHandler(SchedulerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleServicesNotFound(SchedulerNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
         ApiError response = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("scheduler.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
+                .messages(List.of(messageSource.getMessage("scheduler.not.found", null, LocaleContextHolder.getLocale())))
+                .build();
+        return ResponseEntity.ofNullable(response);
+    }
+
+    @ExceptionHandler(FileProcessingException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ApiError> handleFileProcessingException(FileProcessingException ex) {
+        log.error(ex.getMessage(), ex);
+        ApiError response = ApiError.builder()
+                .messages(List.of(messageSource.getMessage("scheduler.file.processing.error", null, LocaleContextHolder.getLocale())))
                 .build();
         return ResponseEntity.ofNullable(response);
     }

@@ -1,6 +1,7 @@
 package pl.bodzioch.damian.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestControllerAdvice
 @AllArgsConstructor
+@Slf4j
 public class CustomControllerAdvice {
 
     private final MessageSource messageSource;
@@ -25,6 +27,7 @@ public class CustomControllerAdvice {
     @ExceptionHandler({HttpClientException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleClientException(HttpClientException ex, WebRequest webRequest) {
+        log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
                 .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
                 .build();
@@ -35,6 +38,7 @@ public class CustomControllerAdvice {
     @ExceptionHandler({Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiError> handleServerException(Exception ex, WebRequest webRequest) {
+        log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
                 .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
                 .build();
@@ -45,6 +49,7 @@ public class CustomControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest webRequest) {
+        log.error(ex.getMessage(), ex);
         List<String> errorMessages = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(messageSource.getMessage(error.getDefaultMessage(),
                 null, LocaleContextHolder.getLocale())));
@@ -57,6 +62,7 @@ public class CustomControllerAdvice {
     @ExceptionHandler({SecurityException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleSecurityException(SecurityException ex, WebRequest webRequest) {
+        log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
                 .messages(List.of(messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale())))
                 .build();

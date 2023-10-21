@@ -1,6 +1,7 @@
 package pl.bodzioch.damian.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/services")
 @AllArgsConstructor
+@Slf4j
 public class ServiceController {
 
     private final ServiceForBurClient serviceForBurClient;
@@ -60,6 +62,7 @@ public class ServiceController {
 
     @ExceptionHandler(ServicesNotFoundException.class)
     public ResponseEntity<ApiError> handleServicesNotFound(ServicesNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
         ApiError response = ApiError.builder()
                 .messages(List.of(messageSource.getMessage("services.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
                 .build();
