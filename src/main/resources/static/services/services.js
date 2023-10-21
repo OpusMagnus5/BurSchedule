@@ -1,20 +1,22 @@
-import { providersUrl } from "../util/config.js";
+import { hideLoader, providersUrl, schowLoader, synchronizationUrl } from "../util/config.js";
 import { servicesUrl } from "../util/config.js";
 import { statusesUrl } from "../util/config.js";
 import { schedulerUrl } from "../util/config.js";
 import { getFromApi } from "../util/config.js";
 import { getMessage } from "../util/config.js";
 
-document.addEventListener("DOMContentLoaded", getServices());
+document.addEventListener("DOMContentLoaded", getServices);
 
 function getServices() {
+  schowLoader();
   getFromApi(servicesUrl).then((data) => {
     sessionStorage.setItem("services-data", JSON.stringify(data));
     showData();
     colorEvenRows(Array.from(document.querySelectorAll(".service")));
     addClickListenerForServices();
+    setFilters();
+    hideLoader();
   });
-  setFilters();
 }
 
 function showData() {
@@ -29,7 +31,13 @@ function showData() {
 
   let article = document.querySelector(".service-list");
   let emptyService = document.querySelector(".service");
-  let servicesData = JSON.parse(sessionStorage.getItem("services-data"));
+  let servicesData = sessionStorage.getItem("services-data");
+
+  if (servicesData !== "undefined") {
+    servicesData = JSON.parse(servicesData);
+  } else {
+    return;
+  }
 
   servicesData.services.forEach((element) => {
     let newService = emptyService.cloneNode(true);
@@ -58,6 +66,7 @@ function setFilters() {
   document.querySelector(".filter-to-date label").textContent = getMessage("filter-to-date");
   document.querySelector(".filter-status label").textContent = getMessage("head-status");
   document.querySelector(".reset-filters").textContent = getMessage("reset-filters");
+  document.querySelector(".synchronzation").textContent = getMessage("synchronization");
 
   setSelectors();
 }
@@ -165,11 +174,25 @@ document.querySelector(".reset-filters").addEventListener("click", function () {
   });
 });
 
+document.querySelector(".synchronzation").addEventListener("click", function () {
+  schowLoader();
+  getFromApi(synchronizationUrl).then((response) => {
+    hideLoader();
+    if (response) {
+      window.location.href = "services-list";
+    } else {
+      alert(getMessage("general.error"));
+    }
+  });
+});
+
 function addClickListenerForServices() {
   document.querySelectorAll(".service").forEach((element) => {
     element.addEventListener("click", function () {
+      schowLoader();
       getFromApi(schedulerUrl + element.id).then((data) => {
         sessionStorage.setItem("scheduler", JSON.stringify(data));
+        hideLoader();
         window.location.href = "scheduler-edit";
       });
     });

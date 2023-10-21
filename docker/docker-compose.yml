@@ -11,11 +11,11 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
   app:
-    container_name: 'application'
-    image: application:latest
+    container_name: 'burschedule'
+    image: szaddaj/burschedule:latest
     depends_on:
       - db
-    restart: no
+    restart: 'no'
     ports:
       - '8080:8080'
     env_file:

@@ -1,6 +1,6 @@
-import { generateUrl, getMessage, postToApi } from "../util/config.js";
+import { generateUrl, getMessage, hideLoader, postToApi, schowLoader } from "../util/config.js";
 
-document.addEventListener("DOMContentLoaded", setScheduler());
+document.addEventListener("DOMContentLoaded", setScheduler);
 
 function setScheduler() {
   let schedulerEntries = JSON.parse(sessionStorage.getItem("scheduler")).schedulerEntries;
@@ -115,6 +115,7 @@ function addTimeInputListener() {
 
 function addSendButtonListener() {
   document.querySelector(".send-button").addEventListener("click", function () {
+    schowLoader();
     let days = document.querySelectorAll(".day");
     let request = {
       scheduleDays: new Array(),
@@ -130,5 +131,6 @@ function addSendButtonListener() {
     });
 
     postToApi(generateUrl, request);
+    hideLoader();
   });
 }

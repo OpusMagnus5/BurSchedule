@@ -29,19 +29,17 @@ public class ServiceController {
     private final MessageSource messageSource;
 
     @GetMapping("/synchronization")
-    @ResponseStatus(HttpStatus.OK)
-    public void synchronize() {
+    public HttpStatus synchronize() {
         serviceForBurClient.synchronizeServices();
+        return HttpStatus.OK;
     }
 
     @GetMapping("")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ServiceListViewDTO> getAllServices() {
         return ResponseEntity.ok(servicesService.getAllServices());
     }
 
     @GetMapping("/providers")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProviderListViewDTO> getServiceProviders() {
         List<String> providers = Arrays.stream(ServiceProvider.values())
                 .map(ServiceProvider::getName)
@@ -51,7 +49,6 @@ public class ServiceController {
     }
 
     @GetMapping("/statuses")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ServiceStatusListViewDTO> getServiceStatuses() {
         List<String> statuses = Arrays.stream(ServiceStatus.values())
                 .map(ServiceStatus::getCode)
@@ -62,11 +59,10 @@ public class ServiceController {
     }
 
     @ExceptionHandler(ServicesNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleServicesNotFound(ServicesNotFoundException ex) {
         ApiError response = ApiError.builder()
                 .messages(List.of(messageSource.getMessage("services.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
                 .build();
-        return ResponseEntity.ofNullable(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

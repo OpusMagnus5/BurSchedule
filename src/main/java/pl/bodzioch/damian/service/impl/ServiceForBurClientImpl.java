@@ -43,6 +43,7 @@ public class ServiceForBurClientImpl implements ServiceForBurClient {
                 .build();
     }
 
+    @Override
     public void synchronizeServices() {
         List<ServiceModel> servicesFromApi = getAllServicesFromApi();
         if (servicesFromApi.isEmpty()) {
