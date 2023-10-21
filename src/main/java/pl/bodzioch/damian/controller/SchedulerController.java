@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.bodzioch.damian.dto.client.GenerateFileRequestDTO;
 import pl.bodzioch.damian.dto.client.SchedulerDayDTO;
 import pl.bodzioch.damian.dto.client.SchedulerListViewDTO;
@@ -22,6 +23,8 @@ import pl.bodzioch.damian.service.GenerateFileService;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.session.SessionBean;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +43,17 @@ public class SchedulerController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SchedulerListViewDTO> getScheduler(@PathVariable String serviceId) {
         List<SchedulerViewDTO> scheduler = schedulerService.getSchedulerForService(serviceId);
+        return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<SchedulerListViewDTO> getSchedulerFromFile(@RequestParam("file") MultipartFile file) {
+        List<SchedulerViewDTO> scheduler = new ArrayList<>();
+        try {
+            scheduler = schedulerService.getSchedulerForService(file.getInputStream());
+        } catch (IOException ex) {
+            //TODO dokoczyc
+        }
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
