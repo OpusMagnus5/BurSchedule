@@ -60,8 +60,6 @@ export function getFromApi(url) {
             return json;
           } else if (!response.ok && json.hasOwnProperty("messages")) {
             alert(json.messages[0]);
-          } else {
-            throw new Error(messages_pl.get("general.error"));
           }
         });
       } else if (contentType === "application/octet-stream") {
@@ -81,9 +79,7 @@ export function getFromApi(url) {
         return false;
       }
     })
-    .catch((error) => {
-      alert(getMessage("general.error"));
-    });
+    .catch((error) => {});
 }
 
 export function postToApi(url, request) {
@@ -103,8 +99,6 @@ export function postToApi(url, request) {
             return json;
           } else if (!response.ok && json.hasOwnProperty("messages")) {
             alert(json.messages[0]);
-          } else {
-            throw new Error(messages_pl.get("general.error"));
           }
         });
       } else if (contentType === "application/octet-stream") {
@@ -120,9 +114,7 @@ export function postToApi(url, request) {
         });
       }
     })
-    .catch((error) => {
-      alert(getMessage("general.error"));
-    });
+    .catch((error) => {});
 }
 
 let loader;

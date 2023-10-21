@@ -31,7 +31,13 @@ function showData() {
 
   let article = document.querySelector(".service-list");
   let emptyService = document.querySelector(".service");
-  let servicesData = JSON.parse(sessionStorage.getItem("services-data"));
+  let servicesData = sessionStorage.getItem("services-data");
+
+  if (servicesData !== "undefined") {
+    servicesData = JSON.parse(servicesData);
+  } else {
+    return;
+  }
 
   servicesData.services.forEach((element) => {
     let newService = emptyService.cloneNode(true);

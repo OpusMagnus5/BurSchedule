@@ -33,6 +33,7 @@ public class BurClientImpl implements BurClient {
     private static final String GET_SERVICES_PATH = BUR_URL + "/usluga";
     private static final String PAGE_PARAM = "strona";
     private static final String NIP_PARAM = "nipDostawcyUslug";
+    private static final String SERVICE_ID_PARAM = "id";
 
     private String jwtToken;
 
@@ -73,7 +74,7 @@ public class BurClientImpl implements BurClient {
 
     @Override
     public List<ServiceModel> getServiceById(long serviceId) {
-        return getServicesBy(serviceId, "id");
+        return getServicesBy(serviceId, SERVICE_ID_PARAM);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class BurClientImpl implements BurClient {
     }
 
     private ListOfServiceScheduleEntriesDTO getPageOfServiceScheduleEntries(long serviceId, int page) {
-        Map<String, String> urlVariables = Map.of("id", Long.toString(serviceId));
+        Map<String, String> urlVariables = Map.of(SERVICE_ID_PARAM, Long.toString(serviceId));
         URI uri = UriComponentsBuilder.fromHttpUrl(GET_SCHEDULE_PATH)
                 .queryParam(PAGE_PARAM, page)
                 .build(urlVariables);

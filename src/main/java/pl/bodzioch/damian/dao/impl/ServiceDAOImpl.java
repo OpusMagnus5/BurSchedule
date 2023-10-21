@@ -27,13 +27,8 @@ public class ServiceDAOImpl implements ServiceDAO {
     }
 
     @Override
-    public List<Long> getAllServiceIds() throws ServicesNotFoundException {
-        List<Long> serviceIds = entityManager.createQuery("SELECT service.burId FROM ServiceDbEntity service", Long.class).getResultList();
-        if (serviceIds.isEmpty()) {
-            log.info("Services not found");
-            throw new ServicesNotFoundException();
-        }
-        return serviceIds;
+    public List<Long> getAllServiceIds() {
+        return entityManager.createQuery("SELECT service.burId FROM ServiceDbEntity service", Long.class).getResultList();
     }
 
     @Override
