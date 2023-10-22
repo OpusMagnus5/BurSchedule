@@ -29,6 +29,8 @@ export const messages_pl = new Map([
   ["scheduler-time-checkbox", "Powiel czas rozpoczęcia"],
   ["scheduler-send-button", "Generuj harmonogram"],
   ["synchronization", "Synchronizuj usługi"],
+  ["menu-service-list", "Lista usług"],
+  ["menu-scheduler-from-file", "Generowanie z pliku"],
 ]);
 
 export const messages_en = new Map();

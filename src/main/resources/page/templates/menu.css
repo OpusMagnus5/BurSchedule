@@ -1,0 +1,19 @@
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  padding: 30px 0;
+  background-color: #0dc79c;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+aside {
+  width: 20%;
+  margin-right: 50px;
+  margin-top: 20px;
+}

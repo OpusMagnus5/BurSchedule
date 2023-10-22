@@ -92,4 +92,15 @@ public class App {
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
         return jpaTransactionManager;
     }
+
+/*    @Bean
+    public ITemplateResolver secondaryTemplateResolver() {
+        ClassLoaderTemplateResolver secondaryTemplateResolver = new ClassLoaderTemplateResolver();
+        secondaryTemplateResolver.setPrefix("/page/");
+        secondaryTemplateResolver.setSuffix(".html");
+        secondaryTemplateResolver.setOrder(0);
+        secondaryTemplateResolver.setCheckExistence(true);
+
+        return secondaryTemplateResolver;
+    }*/
 }
