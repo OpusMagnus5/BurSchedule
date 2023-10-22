@@ -15,4 +15,9 @@ public class PageController {
     public String getSchedulerEditPage() {
         return "scheduler/scheduler";
     }
+
+    @GetMapping("/scheduler-upload")
+    public String getUploadSchedulerPage() {
+        return "schedulerupload/scheduler-upload";
+    }
 }

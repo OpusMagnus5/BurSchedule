@@ -205,9 +205,3 @@ function addClickListenerForServices() {
     });
   });
 }
-
-document.querySelectorAll(".menu-service-list").forEach((element) => {
-  element.addEventListener("click", function () {
-    window.location.href = "services-list";
-  });
-});

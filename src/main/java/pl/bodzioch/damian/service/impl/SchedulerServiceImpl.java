@@ -16,6 +16,7 @@ import pl.bodzioch.damian.session.SessionBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -27,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -58,6 +60,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     public List<SchedulerViewDTO> getSchedulerForService(InputStream inputStream) throws IOException {
         BOMInputStream streamWithoutBOM = getStreamWithoutBOM(inputStream);
         List<String> lines = IOUtils.readLines(streamWithoutBOM, StandardCharsets.UTF_8);
+        lines.remove(0);
         List<ScheduleEntry> scheduleEntries = mapToScheduleEntries(lines);
         sortScheduler(scheduleEntries);
         sessionBean.setScheduleEntries(scheduleEntries);
@@ -98,16 +101,18 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .map(Matcher::results)
                 .map(Stream::toList)
                 .map(this::mapToDateLine)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private ScheduleEntry mapToDateLine(List<MatchResult> results) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return ScheduleEntry.builder()
                 .subject(results.get(0).group())
-                .startTime(LocalTime.parse(results.get(3).group(), formatter))
-                .endTime(LocalTime.parse(results.get(4).group(), formatter))
+                .date(LocalDate.parse(results.get(2).group(), dateFormatter))
+                .startTime(LocalTime.parse(results.get(3).group(), dimeFormatter))
+                .endTime(LocalTime.parse(results.get(4).group(), dimeFormatter))
                 .build();
     }
 }

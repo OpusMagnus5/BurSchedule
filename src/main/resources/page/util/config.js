@@ -6,6 +6,7 @@ export const statusesUrl = servicesUrl + "/statuses";
 export const schedulerUrl = baseUrl + "scheduler/";
 export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
+export const fileUrl = schedulerUrl + "file";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -31,6 +32,11 @@ export const messages_pl = new Map([
   ["synchronization", "Synchronizuj usługi"],
   ["menu-service-list", "Lista usług"],
   ["menu-scheduler-from-file", "Generowanie z pliku"],
+  ["scheduler-upload-input-header", "Wybierz plik z harmonogramem w formacie csv"],
+  ["scheduler-upload-input-send-button", "Wyślij"],
+  ["scheduler-upload-input-file-button", "Wybierz plik"],
+  ["scheduler-upload-input-file-name", "Nie wybrano pliku"],
+  ["scheduler-upload-file-not-found", "Nie wybrano pliku!"],
 ]);
 
 export const messages_en = new Map();
@@ -92,6 +98,40 @@ export function postToApi(url, request) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
+  })
+    .then((response) => {
+      let contentType = response.headers.get("Content-Type");
+      if (contentType === "application/json") {
+        return response.json().then((json) => {
+          if (response.ok) {
+            return json;
+          } else if (!response.ok && json.hasOwnProperty("messages")) {
+            alert(json.messages[0]);
+          }
+        });
+      } else if (contentType === "application/octet-stream") {
+        return response.blob().then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
+      }
+    })
+    .catch((error) => {});
+}
+
+export function postFileToApi(url, formData) {
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json, application/octet-stream",
+    },
+    body: formData,
   })
     .then((response) => {
       let contentType = response.headers.get("Content-Type");

@@ -49,7 +49,7 @@ public class SchedulerController {
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
-    @GetMapping("/file")
+    @PostMapping("/file")
     public ResponseEntity<SchedulerListViewDTO> getSchedulerFromFile(@RequestParam("file") MultipartFile file) {
         List<SchedulerViewDTO> scheduler = new ArrayList<>();
         try {
