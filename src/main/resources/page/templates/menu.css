@@ -17,3 +17,9 @@ aside {
   margin-right: 50px;
   margin-top: 20px;
 }
+
+.menu li:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}

@@ -1,45 +1,53 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="scheduler/scheduler.js" type="module"></script>
     <script src="util/config.js" type="module"></script>
+    <script src="templates/menu.js" type="module"></script>
     <link rel="stylesheet" href="scheduler/scheduler.css" />
     <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="templates/menu.css" />
     <title>Harmonogram BUR</title>
   </head>
   <body>
-    <div class="scheduler-options">
-      <div class="email-option">
-        <label for="email-option-input" class="scheduler-option-label"></label>
-        <input type="checkbox" class="scheduler-option-input" id="email-option-input" />
-      </div>
-      <div class="time-option">
-        <label for="time-option-input" class="scheduler-option-label"></label>
-        <input type="checkbox" class="scheduler-option-input" id="time-option-input" />
-      </div>
-    </div>
-
-    <div class="scheduler">
-      <div class="day">
-        <p class="day-number"></p>
-        <div class="inputs">
-          <div class="email">
-            <label for="email-input" class="scheduler-label"></label>
-            <input type="email" class="scheduler-input" id="email-input" />
+    <div class="main-container">
+      <article>
+        <div class="scheduler-options">
+          <div class="email-option">
+            <label for="email-option-input" class="scheduler-option-label"></label>
+            <input type="checkbox" class="scheduler-option-input" id="email-option-input" />
           </div>
-          <div class="date">
-            <label for="date-input" class="scheduler-label"></label>
-            <input type="date" class="scheduler-input" id="date-input" />
-          </div>
-          <div class="time">
-            <label for="start-time-input" class="scheduler-label"></label>
-            <input type="time" class="scheduler-input" id="start-time-input" />
+          <div class="time-option">
+            <label for="time-option-input" class="scheduler-option-label"></label>
+            <input type="checkbox" class="scheduler-option-input" id="time-option-input" />
           </div>
         </div>
-      </div>
+
+        <div class="scheduler">
+          <div class="day">
+            <p class="day-number"></p>
+            <div class="inputs">
+              <div class="email">
+                <label for="email-input" class="scheduler-label"></label>
+                <input type="email" class="scheduler-input" id="email-input" />
+              </div>
+              <div class="date">
+                <label for="date-input" class="scheduler-label"></label>
+                <input type="date" class="scheduler-input" id="date-input" />
+              </div>
+              <div class="time">
+                <label for="start-time-input" class="scheduler-label"></label>
+                <input type="time" class="scheduler-input" id="start-time-input" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="send-button"></button>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
     </div>
-    <button class="send-button"></button>
   </body>
 </html>

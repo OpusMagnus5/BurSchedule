@@ -130,8 +130,7 @@ label {
 }
 
 .synchronzation:hover,
-.reset-filters:hover,
-.menu li:hover {
+.reset-filters:hover {
   cursor: pointer;
   background-color: #0e37ab;
   color: white;

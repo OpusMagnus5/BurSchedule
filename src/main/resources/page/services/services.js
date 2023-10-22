@@ -9,7 +9,6 @@ import {
   getFromApi,
   getMessage,
 } from "../util/config.js";
-
 import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", getServices);
