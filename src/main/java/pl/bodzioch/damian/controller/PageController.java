@@ -20,4 +20,9 @@ public class PageController {
     public String getUploadSchedulerPage() {
         return "schedulerupload/scheduler-upload";
     }
+
+    @GetMapping("")
+    public String getMainPage() {
+        return "redirect:/services-list";
+    }
 }
