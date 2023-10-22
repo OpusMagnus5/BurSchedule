@@ -19,7 +19,7 @@
 
 .scheduler {
   margin: 0 auto;
-  width: 70%;
+  width: 100%;
   font-size: 16px;
   margin-bottom: 50px;
 }
@@ -42,7 +42,7 @@
 .scheduler-options {
   display: flex;
   gap: 40px;
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
   padding: 20px 40px;
   background-color: #009879;
@@ -69,5 +69,17 @@ input.scheduler-option-input {
   padding: 10px 10px;
   background-color: #0dc79c;
   font-size: 18px;
-  color: white;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.main-container {
+  display: flex;
+  gap: 50px;
+  align-items: start;
+}
+
+article {
+  width: 85%;
+  margin-left: 50px;
 }

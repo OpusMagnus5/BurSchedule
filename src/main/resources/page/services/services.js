@@ -1,9 +1,15 @@
-import { hideLoader, providersUrl, schowLoader, synchronizationUrl } from "../util/config.js";
-import { servicesUrl } from "../util/config.js";
-import { statusesUrl } from "../util/config.js";
-import { schedulerUrl } from "../util/config.js";
-import { getFromApi } from "../util/config.js";
-import { getMessage } from "../util/config.js";
+import {
+  hideLoader,
+  providersUrl,
+  schowLoader,
+  synchronizationUrl,
+  servicesUrl,
+  statusesUrl,
+  schedulerUrl,
+  getFromApi,
+  getMessage,
+} from "../util/config.js";
+import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", getServices);
 
@@ -16,6 +22,7 @@ function getServices() {
     addClickListenerForServices();
     setFilters();
     hideLoader();
+    setMenu();
   });
 }
 

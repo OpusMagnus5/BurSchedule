@@ -8,11 +8,21 @@ public class PageController {
 
     @GetMapping("/services-list")
     public String getServicesPage() {
-        return "services/services.html";
+        return "services/services";
     }
 
     @GetMapping("/scheduler-edit")
     public String getSchedulerEditPage() {
-        return "scheduler/scheduler.html";
+        return "scheduler/scheduler";
+    }
+
+    @GetMapping("/scheduler-upload")
+    public String getUploadSchedulerPage() {
+        return "schedulerupload/scheduler-upload";
+    }
+
+    @GetMapping("")
+    public String getMainPage() {
+        return "redirect:/services-list";
     }
 }

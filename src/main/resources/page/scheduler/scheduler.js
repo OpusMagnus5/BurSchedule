@@ -1,4 +1,5 @@
 import { generateUrl, getMessage, hideLoader, postToApi, schowLoader } from "../util/config.js";
+import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", setScheduler);
 
@@ -29,6 +30,7 @@ function setScheduler() {
 
   document.querySelector(".send-button").textContent = getMessage("scheduler-send-button");
   addSendButtonListener();
+  setMenu();
 }
 
 function setOptions() {

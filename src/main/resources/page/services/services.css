@@ -5,8 +5,13 @@
   box-sizing: border-box;
 }
 
+article {
+  width: 85%;
+  margin-left: 50px;
+}
+
 .service-list {
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
   border-spacing: 0 1px;
   box-shadow: 0 0 20px #00000026;
@@ -65,7 +70,7 @@
 }
 
 .filters {
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
   margin-bottom: 20px;
   padding: 10px 15px;
@@ -121,6 +126,7 @@ label {
   height: 80%;
   align-self: end;
   border-radius: 20px;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .synchronzation:hover,
@@ -128,4 +134,10 @@ label {
   cursor: pointer;
   background-color: #0e37ab;
   color: white;
+}
+
+.main-container {
+  display: flex;
+  gap: 50px;
+  align-items: start;
 }

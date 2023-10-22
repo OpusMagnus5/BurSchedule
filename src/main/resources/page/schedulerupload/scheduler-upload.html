@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="util/config.js" type="module"></script>
+    <script src="templates/menu.js" type="module"></script>
+    <script src="schedulerupload/scheduler-upload.js" type="module"></script>
+    <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="schedulerupload/scheduler-upload.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="input-form">
+          <p class="input-header"></p>
+          <p class="input-file-name"></p>
+          <input type="file" class="input-file" accept=".csv" />
+          <button class="input-file-button"></button>
+          <button class="input-send-button"></button>
+        </div>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
+    </div>
+  </body>
+</html>
