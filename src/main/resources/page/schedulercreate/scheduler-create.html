@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="templates/menu.js" type="module"></script>
     <script src="util/config.js" type="module"></script>
+    <script src="schedulercreate/scheduler-create.js" type="module"></script>
     <link rel="stylesheet" href="templates/menu.css" />
     <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="schedulercreate/scheduler-create.css" />
     <title>Harmonogram BUR</title>
   </head>
   <body>
@@ -15,14 +17,14 @@
         <div class="scheduler">
           <div class="day hidden">
             <div class="header-day">
-              <p class="day-number"></p>
+              <p class="day-number">Dzień 1</p>
               <input type="date" class="date-input" required />
               <input type="email" class="email-input" required />
               <button class="add-record"></button>
               <button class="remove-day"></button>
               <button class="clone-day"></button>
               <p class="hours-number-label"></p>
-              <p class="hours-number-value"></p>
+              <p class="hours-number-value">3</p>
             </div>
             <div class="content-day hidden">
               <div class="record-day">

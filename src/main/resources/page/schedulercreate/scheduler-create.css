@@ -1,0 +1,44 @@
+article {
+  width: 85%;
+  margin-left: 50px;
+}
+
+.main-container {
+  display: flex;
+  gap: 50px;
+  align-items: start;
+}
+
+.header-day {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #696969;
+  font-size: 18px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.date-input,
+.email-input,
+.add-record,
+.remove-day,
+.clone-day {
+  font-size: 16px;
+  padding: 5px;
+}
+
+.add-record,
+.remove-day,
+.clone-day {
+  background-color: #0dc79c;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.add-record:hover,
+.remove-day:hover,
+.clone-day:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}

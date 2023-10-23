@@ -25,4 +25,9 @@ public class PageController {
     public String getMainPage() {
         return "redirect:/services-list";
     }
+
+    @GetMapping("scheduler-create")
+    public String getScheduleCreatePage() {
+        return "schedulercreate/scheduler-create";
+    }
 }
