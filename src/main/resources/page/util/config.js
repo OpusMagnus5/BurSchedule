@@ -37,6 +37,12 @@ export const messages_pl = new Map([
   ["scheduler-upload-input-file-button", "Wybierz plik"],
   ["scheduler-upload-input-file-name", "Nie wybrano pliku"],
   ["scheduler-upload-file-not-found", "Nie wybrano pliku!"],
+  ["scheduler-create-email-input-placeholder", "Email trenera"],
+  ["scheduler-create-add-record-button", "Dodaj wpis"],
+  ["scheduler-create-remove-day-button", "Usuń dzień"],
+  ["scheduler-create-clone-day-button", "Skopiuj dzień"],
+  ["scheduler-create-record-subject", "Wpisz temat zajęć..."],
+  ["scheduler-create-hours-number-label", "Liczba godzin: "],
 ]);
 
 export const messages_en = new Map();

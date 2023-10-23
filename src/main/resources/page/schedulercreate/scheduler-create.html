@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="templates/menu.js" type="module"></script>
+    <script src="util/config.js" type="module"></script>
+    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="util/util.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="scheduler">
+          <div class="day hidden">
+            <div class="header-day">
+              <p class="day-number"></p>
+              <input type="date" class="date-input" required />
+              <input type="email" class="email-input" required />
+              <button class="add-record"></button>
+              <button class="remove-day"></button>
+              <button class="clone-day"></button>
+              <p class="hours-number-label"></p>
+              <p class="hours-number-value"></p>
+            </div>
+            <div class="content-day hidden">
+              <div class="record-day">
+                <p class="record-number"></p>
+                <textarea class="record-subject" cols="30" rows="6" required></textarea>
+                <p class="start-time-label"></p>
+                <input type="time" class="record-start-time" required />
+                <p class="end-time-label"></p>
+                <input type="time" class="record-end-time" required />
+                <button class="remove-record"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="add-day"></button>
+          <button class="send-scheduler"></button>
+        </div>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
+    </div>
+  </body>
+</html>
