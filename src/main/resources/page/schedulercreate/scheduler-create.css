@@ -9,13 +9,17 @@ article {
   align-items: start;
 }
 
+.scheduler {
+  box-shadow: 0 0 20px #00000026;
+}
+
 .header-day {
   display: flex;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #696969;
+  margin: 10px 0;
   font-size: 18px;
   align-items: center;
   justify-content: space-around;
+  background-color: #00987a;
 }
 
 .date-input,
@@ -41,4 +45,72 @@ article {
   cursor: pointer;
   background-color: #0e37ab;
   color: white;
+}
+
+.day-hours {
+  display: flex;
+  gap: 5px;
+}
+
+.record-day {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid #696969;
+  padding: 10px 0;
+}
+
+.record-subject,
+.record-start-time,
+.record-end-time,
+.remove-record {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.remove-record {
+  background-color: #0dc79c;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.remove-record:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+  gap: 50px;
+}
+
+.add-day,
+.send-scheduler {
+  background-color: #0dc79c;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 16px;
+}
+
+.add-day:hover,
+.send-scheduler:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}
+
+.start-time-box,
+.end-time-box {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
 }

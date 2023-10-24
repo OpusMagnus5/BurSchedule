@@ -15,27 +15,31 @@
     <div class="main-container">
       <article>
         <div class="scheduler">
-          <div class="day hidden">
+          <div class="hidden">
             <div class="header-day">
-              <p class="day-number">Dzień 1</p>
+              <p class="day-number"></p>
               <input type="date" class="date-input" required />
               <input type="email" class="email-input" required />
               <button class="add-record"></button>
               <button class="remove-day"></button>
               <button class="clone-day"></button>
-              <p class="hours-number-label"></p>
-              <p class="hours-number-value">3</p>
+              <div class="day-hours">
+                <p class="hours-number-label"></p>
+                <p class="hours-number-value"></p>
+              </div>
             </div>
-            <div class="content-day hidden">
-              <div class="record-day">
-                <p class="record-number"></p>
-                <textarea class="record-subject" cols="30" rows="6" required></textarea>
+            <div class="record-day">
+              <p class="record-number">1</p>
+              <textarea class="record-subject" cols="30" rows="6" required></textarea>
+              <div class="start-time-box">
                 <p class="start-time-label"></p>
                 <input type="time" class="record-start-time" required />
+              </div>
+              <div class="end-time-box">
                 <p class="end-time-label"></p>
                 <input type="time" class="record-end-time" required />
-                <button class="remove-record"></button>
               </div>
+              <button class="remove-record"></button>
             </div>
           </div>
         </div>

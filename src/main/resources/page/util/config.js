@@ -42,12 +42,13 @@ export const messages_pl = new Map([
   ["scheduler-create-remove-day-button", "Usuń dzień"],
   ["scheduler-create-clone-day-button", "Skopiuj dzień"],
   ["scheduler-create-record-subject", "Wpisz temat zajęć..."],
-  ["scheduler-create-hours-number-label", "Liczba godzin:"],
+  ["scheduler-create-hours-number-label", "Czas:"],
   ["scheduler-create-start-time-label", "Czas rozpoczęcia"],
   ["scheduler-create-end-time-label", "Czas zakończenia"],
   ["scheduler-create-remove-record-button", "Usuń wpis"],
   ["scheduler-create-add-day-button", "Dodaj dzień"],
   ["scheduler-create-send-scheduler-button", "Wyślij"],
+  ["scheduler-create-day-number-label", "Dzień "],
 ]);
 
 export const messages_en = new Map();
