@@ -32,11 +32,9 @@ document.querySelector(".add-day").addEventListener("click", function () {
   let existingDaysNo = existingDays.length;
   let prevDay = null;
   cloneDay.querySelector(".day-number").textContent = getMessage("scheduler-create-day-number-label") + (existingDaysNo + 1);
+  setNextDayDate(existingDays, cloneDay);
   if (existingDaysNo !== 0) {
     prevDay = existingDays[existingDaysNo - 1];
-    let nextDay = new Date(prevDay.querySelector(".date-input").value);
-    nextDay.setDate(nextDay.getDate() + 1);
-    cloneDay.querySelector(".date-input").valueAsDate = nextDay;
     cloneDay.querySelector(".email-input").value = prevDay.querySelector(".email-input").value;
   }
   cloneDay.querySelector(".hours-number-value").textContent = "00:00";
@@ -50,7 +48,21 @@ document.querySelector(".add-day").addEventListener("click", function () {
   cloneDay.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
   cloneDay.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
   cloneDay.querySelector(".remove-day").addEventListener("click", handleRemoveDay);
+  cloneDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
+  cloneDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
 });
+
+function setNextDayDate(existingDays, nextDayNode) {
+  let existingDaysNo = existingDays.length;
+  let prevDay = null;
+  nextDayNode.querySelector(".day-number").textContent = getMessage("scheduler-create-day-number-label") + (existingDaysNo + 1);
+  if (existingDaysNo !== 0) {
+    prevDay = existingDays[existingDaysNo - 1];
+    let nextDay = new Date(prevDay.querySelector(".date-input").value);
+    nextDay.setDate(nextDay.getDate() + 1);
+    nextDayNode.querySelector(".date-input").valueAsDate = nextDay;
+  }
+}
 
 function handleAddRecordEvent(event) {
   let day = event.target.parentElement.parentElement;
@@ -61,11 +73,33 @@ function handleAddRecordEvent(event) {
 
   emptyRecord.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
   emptyRecord.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+  emptyRecord.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
   day.appendChild(emptyRecord);
 }
 
 function calculateDayHour(event) {
   let day = event.target.parentElement.parentElement.parentElement;
+  let sumInMinutes = 0;
+  day.querySelectorAll(".record-day").forEach((element) => {
+    let startTime = element.querySelector(".record-start-time").value;
+    let endTime = element.querySelector(".record-end-time").value;
+    let startDate = new Date("1970-01-01T" + startTime);
+    let endDate = new Date("1970-01-01T" + endTime);
+    let timeDifference = endDate - startDate;
+    let differenceInMinutes = timeDifference / 60000;
+    sumInMinutes += differenceInMinutes;
+  });
+
+  let hours = Math.floor(sumInMinutes / 60);
+  let minutes = sumInMinutes - hours * 60;
+
+  let formattedTime = formatTime(hours, minutes);
+  let dayHours = day.querySelector(".hours-number-value");
+  dayHours.textContent = isNaN(sumInMinutes) ? dayHours.textContent : formattedTime;
+  calculateSchedulerHour();
+}
+
+function calculateDayHourByDay(day) {
   let sumInMinutes = 0;
   day.querySelectorAll(".record-day").forEach((element) => {
     let startTime = element.querySelector(".record-start-time").value;
@@ -108,7 +142,46 @@ function calculateSchedulerHour() {
 function handleRemoveDay(event) {
   let dayToRemove = event.target.parentElement.parentElement;
   dayToRemove.remove();
-  calculateSchedulerHour(); //TODO dodać ponowne ustawianie numeracji dni
+  calculateSchedulerHour();
+  recalculateDayNumbers();
+}
+
+function handleCopyDay(event) {
+  let copiedDay = event.target.parentElement.parentElement.cloneNode(true);
+  copiedDay.querySelectorAll(".record-day").forEach((element) => {
+    element.querySelector(".record-subject").textContent = "";
+  });
+  let scheduler = event.target.parentElement.parentElement.parentElement;
+
+  let existingDays = scheduler.querySelectorAll(".day");
+  setNextDayDate(existingDays, copiedDay);
+
+  scheduler.appendChild(copiedDay);
+  calculateSchedulerHour();
+  recalculateDayNumbers();
+}
+
+function handleRemoveRecord(event) {
+  let recordToRemove = event.target.parentElement;
+  let day = event.target.parentElement.parentElement;
+  recordToRemove.remove();
+
+  calculateDayHourByDay(day);
+  recalculateRecordNumbers(day);
+}
+
+function recalculateDayNumbers() {
+  let days = document.querySelectorAll(".day");
+  for (let i = 0; days[i]; i++) {
+    days[i].querySelector(".day-number").textContent = getMessage("scheduler-create-day-number-label") + (i + 1);
+  }
+}
+
+function recalculateRecordNumbers(day) {
+  let records = day.querySelectorAll(".record-day");
+  for (let i = 0; records[i]; i++) {
+    records[i].querySelector(".record-number").textContent = i + 1;
+  }
 }
 
 function formatTime(hours, minutes) {
