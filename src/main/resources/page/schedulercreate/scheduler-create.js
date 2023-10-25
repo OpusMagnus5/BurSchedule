@@ -168,7 +168,7 @@ function handleRemoveRecord(event) {
 
   calculateDayHourByDay(day);
   recalculateRecordNumbers(day);
-}
+}//TODO usuwanie kopiowanego dnia, usuwanie tematu w skopiowanym
 
 function recalculateDayNumbers() {
   let days = document.querySelectorAll(".day");
