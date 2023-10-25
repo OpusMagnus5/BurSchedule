@@ -49,6 +49,7 @@ export const messages_pl = new Map([
   ["scheduler-create-add-day-button", "Dodaj dzień"],
   ["scheduler-create-send-scheduler-button", "Wyślij"],
   ["scheduler-create-day-number-label", "Dzień "],
+  ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
 ]);
 
 export const messages_en = new Map();

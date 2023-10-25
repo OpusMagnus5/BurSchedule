@@ -114,3 +114,9 @@ article {
 .hidden {
   display: none;
 }
+
+.scheduler-hours {
+  font-size: 18px;
+  display: flex;
+  gap: 5px;
+}
