@@ -11,16 +11,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pl.bodzioch.damian.dto.client.GenerateFileRequestDTO;
-import pl.bodzioch.damian.dto.client.SchedulerDayDTO;
-import pl.bodzioch.damian.dto.client.SchedulerListViewDTO;
-import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
+import pl.bodzioch.damian.dto.client.*;
 import pl.bodzioch.damian.exception.FileProcessingException;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.ApiError;
 import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.SchedulerDayParams;
+import pl.bodzioch.damian.model.SchedulerCreateDayParams;
+import pl.bodzioch.damian.model.SchedulerGenerateDayParams;
+import pl.bodzioch.damian.service.GenerateFileFromCreatedSchedulerService;
 import pl.bodzioch.damian.service.GenerateFileService;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.session.SessionBean;
@@ -39,6 +38,7 @@ public class SchedulerController {
     private final MessageSource messageSource;
     private final SchedulerService schedulerService;
     private final GenerateFileService generateFileService;
+    private final GenerateFileFromCreatedSchedulerService generateFileFromCreatedSchedulerService;
     private final SessionBean sessionBean;
     private final ClientMapper clientMapper;
 
@@ -67,18 +67,37 @@ public class SchedulerController {
         List<ScheduleEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionBean.getScheduleEntries());
         validateNumberOfDays(beginningsOfDays.size(), request.getScheduleDays());
         Iterator<ScheduleEntry> iterator = beginningsOfDays.iterator();
-        List<SchedulerDayParams> dayParams = request.getScheduleDays().stream()
+        List<SchedulerGenerateDayParams> dayParams = request.getScheduleDays().stream()
                 .map(day -> clientMapper.map(day, iterator.next()))
                 .toList();
         byte[] fileBytes = generateFileService.generateFile(dayParams, sessionBean.getScheduleEntries());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "harmonogram.csv");
+        HttpHeaders headers = getHeadersToSendSchedulerFile();
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(fileBytes);
+    }
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> createScheduler(@Valid @RequestBody CreateSchedulerRequestDTO request) {
+        List<SchedulerCreateDayParams> daysParams = request.getDays().stream()
+                .map(clientMapper::map)
+                .toList();
+
+        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(daysParams);
+
+        return ResponseEntity.ok()
+                .headers(getHeadersToSendSchedulerFile())
+                .body(fileBytes);
+    }
+
+    private HttpHeaders getHeadersToSendSchedulerFile() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "harmonogram.csv");
+        return headers;
     }
 
     private void validateNumberOfDays(Integer days, List<SchedulerDayDTO> schedulerDays) {
