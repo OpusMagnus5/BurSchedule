@@ -1,4 +1,4 @@
-import { getMessage } from "../util/config.js";
+import { createSchedulerUrl, getMessage, postToApi } from "../util/config.js";
 import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", setPage);
 function setPage() {
   setTextData();
   setMenu();
+  document.querySelector(".send-scheduler").addEventListener("click", handleSendSchedulerEvent);
 }
 
 function setTextData() {
@@ -51,6 +52,37 @@ document.querySelector(".add-day").addEventListener("click", function () {
   cloneDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
   cloneDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
 });
+
+function handleSendSchedulerEvent() {
+  let days = document.querySelectorAll(".day");
+  let schedulerDTO = getSchedulerDTO(days);
+  postToApi(createSchedulerUrl, schedulerDTO);
+}
+
+function getSchedulerDTO(days) {
+  let schedulerDTO = {
+    days: [],
+  };
+
+  days.forEach((dayNode) => {
+    let records = dayNode.querySelectorAll(".record-day");
+    let dayDTO = {
+      email: dayNode.querySelector(".email-input").value,
+      date: dayNode.querySelector(".date-input").value,
+      records: [],
+    };
+    records.forEach((recordNode) => {
+      let recordDTO = {
+        subject: recordNode.querySelector(".record-subject").value,
+        startTime: recordNode.querySelector(".record-start-time").value,
+        endTime: recordNode.querySelector(".record-end-time").value,
+      };
+      dayDTO.records.push(recordDTO);
+    });
+    schedulerDTO.days.push(dayDTO);
+  });
+  return schedulerDTO;
+}
 
 function setNextDayDate(existingDays, nextDayNode) {
   let existingDaysNo = existingDays.length;
@@ -149,7 +181,7 @@ function handleRemoveDay(event) {
 function handleCopyDay(event) {
   let copiedDay = event.target.parentElement.parentElement.cloneNode(true);
   copiedDay.querySelectorAll(".record-day").forEach((element) => {
-    element.querySelector(".record-subject").textContent = "";
+    element.querySelector(".record-subject").value = "";
   });
   let scheduler = event.target.parentElement.parentElement.parentElement;
 
@@ -157,6 +189,12 @@ function handleCopyDay(event) {
   setNextDayDate(existingDays, copiedDay);
 
   scheduler.appendChild(copiedDay);
+  copiedDay.querySelector(".add-record").addEventListener("click", handleAddRecordEvent);
+  copiedDay.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
+  copiedDay.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+  copiedDay.querySelector(".remove-day").addEventListener("click", handleRemoveDay);
+  copiedDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
+  copiedDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
   calculateSchedulerHour();
   recalculateDayNumbers();
 }
@@ -168,7 +206,7 @@ function handleRemoveRecord(event) {
 
   calculateDayHourByDay(day);
   recalculateRecordNumbers(day);
-}//TODO usuwanie kopiowanego dnia, usuwanie tematu w skopiowanym
+}
 
 function recalculateDayNumbers() {
   let days = document.querySelectorAll(".day");

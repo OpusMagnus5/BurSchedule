@@ -7,6 +7,7 @@ export const schedulerUrl = baseUrl + "scheduler/";
 export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
+export const createSchedulerUrl = schedulerUrl + "create";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -32,6 +33,7 @@ export const messages_pl = new Map([
   ["synchronization", "Synchronizuj usługi"],
   ["menu-service-list", "Lista usług"],
   ["menu-scheduler-from-file", "Generowanie z pliku"],
+  ["menu-scheduler-create", "Tworzenie harmonogramu"],
   ["scheduler-upload-input-header", "Wybierz plik z harmonogramem w formacie csv"],
   ["scheduler-upload-input-send-button", "Wyślij"],
   ["scheduler-upload-input-file-button", "Wybierz plik"],
