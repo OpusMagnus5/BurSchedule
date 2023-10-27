@@ -1,11 +1,14 @@
 package pl.bodzioch.damian.mapper;
 
+import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.entity.ServiceDbEntity;
 import pl.bodzioch.damian.entity.ServiceProviderDb;
 import pl.bodzioch.damian.entity.ServiceStatusDb;
+import pl.bodzioch.damian.entity.UserDbEntity;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.model.ServiceStatus;
+import pl.bodzioch.damian.model.UserModel;
 
 import java.util.Arrays;
 
@@ -38,6 +41,17 @@ public class EntityMapper {
                 .serviceProviderId(service.getServiceProviderId())
                 .serviceProviderName(ServiceProvider.valueOf(service.getServiceProviderName().name().replace(" ", "_")))
                 .location(service.getLocation().orElse(null))
+                .build();
+    }
+
+    public static UserModel map(UserDbEntity user) {
+        return UserModel.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRoles().stream()
+                        .map(role -> UserRoles.valueOf(role.name().replace(" ", "_")))
+                        .toList())
                 .build();
     }
 
