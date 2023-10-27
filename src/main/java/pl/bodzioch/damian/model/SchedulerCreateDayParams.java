@@ -4,11 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Getter
 @Builder
-public class SchedulerDayParams {
+@Getter
+public class SchedulerCreateDayParams {
+
     private String email;
     private LocalDate date;
-    private long timeDifference;
+    private List<SchedulerCreateRecordParams> records;
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="templates/menu.js" type="module"></script>
+    <script src="util/config.js" type="module"></script>
+    <script src="schedulercreate/scheduler-create.js" type="module"></script>
+    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="schedulercreate/scheduler-create.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="scheduler">
+          <div class="hidden">
+            <div class="header-day">
+              <p class="day-number"></p>
+              <input type="date" class="date-input" required />
+              <input type="email" class="email-input" required />
+              <button class="add-record"></button>
+              <button class="remove-day"></button>
+              <button class="clone-day"></button>
+              <div class="day-hours">
+                <p class="hours-number-label"></p>
+                <p class="hours-number-value"></p>
+              </div>
+            </div>
+            <div class="record-day">
+              <p class="record-number">1</p>
+              <textarea class="record-subject" cols="30" rows="6" required></textarea>
+              <div class="start-time-box">
+                <p class="start-time-label"></p>
+                <input type="time" class="record-start-time" required />
+              </div>
+              <div class="end-time-box">
+                <p class="end-time-label"></p>
+                <input type="time" class="record-end-time" required />
+              </div>
+              <button class="remove-record"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="add-day"></button>
+          <button class="send-scheduler"></button>
+          <div class="scheduler-hours">
+            <p class="scheduler-hours-label"></p>
+            <p class="scheduler-hours-value"></p>
+          </div>
+        </div>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
+    </div>
+  </body>
+</html>

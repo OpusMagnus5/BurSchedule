@@ -3,7 +3,7 @@ package pl.bodzioch.damian.service.impl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.SchedulerDayParams;
+import pl.bodzioch.damian.model.SchedulerGenerateDayParams;
 import pl.bodzioch.damian.service.GenerateFileService;
 
 import java.nio.charset.StandardCharsets;
@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class GenerateFileServiceImpl implements GenerateFileService {
 
-    private final String HEADER_LINE = "\"Przedmiot / temat (max 200 znaków)\";\"Prowadzący (adres email)\";\"Termin (w formacie dd-mm-yyyy)\";\"Godzina od (w formacie hh:mm)\";\"Godzina do (w formacie hh:mm)\"";
+    public static final String HEADER_LINE = "\"Przedmiot / temat (max 200 znaków)\";\"Prowadzący (adres email)\";\"Termin (w formacie dd-mm-yyyy)\";\"Godzina od (w formacie hh:mm)\";\"Godzina do (w formacie hh:mm)\"";
 
     @Override
-    public byte[] generateFile(List<SchedulerDayParams> params, List<ScheduleEntry> burScheduler) {
+    public byte[] generateFile(List<SchedulerGenerateDayParams> params, List<ScheduleEntry> burScheduler) {
         byte[] bomBytes = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
         List<String> dataRows = getDataRows(params, burScheduler);
@@ -27,7 +27,7 @@ public class GenerateFileServiceImpl implements GenerateFileService {
         return ArrayUtils.addAll(bomBytes, content.getBytes(StandardCharsets.UTF_8));
     }
 
-    private List<String> getDataRows(List<SchedulerDayParams> params, List<ScheduleEntry> burScheduler) {
+    private List<String> getDataRows(List<SchedulerGenerateDayParams> params, List<ScheduleEntry> burScheduler) {
         List<String> dataRows = new ArrayList<>();
         dataRows.add(mapDayParamsToContentRow(params.get(0), burScheduler.get(0)));
         for (int i = 1, j = 0; i < burScheduler.size(); i++) {
@@ -41,7 +41,7 @@ public class GenerateFileServiceImpl implements GenerateFileService {
         return dataRows;
     }
 
-    private String mapDayParamsToContentRow(SchedulerDayParams dayParams, ScheduleEntry burScheduleEntry) {
+    private String mapDayParamsToContentRow(SchedulerGenerateDayParams dayParams, ScheduleEntry burScheduleEntry) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
