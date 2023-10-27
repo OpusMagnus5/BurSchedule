@@ -4,12 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import pl.bodzioch.damian.dto.client.SchedulerDayDTO;
-import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
-import pl.bodzioch.damian.dto.client.ServiceViewDTO;
-import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.SchedulerDayParams;
-import pl.bodzioch.damian.model.ServiceModel;
+import pl.bodzioch.damian.dto.client.*;
+import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.SecurityService;
 
 import java.time.temporal.ChronoUnit;
@@ -48,11 +44,29 @@ public class ClientMapper {
                 .build();
     }
 
-    public SchedulerDayParams map(SchedulerDayDTO schedulerDay, ScheduleEntry scheduleEntry) {
-        return SchedulerDayParams.builder()
+    public SchedulerGenerateDayParams map(SchedulerDayDTO schedulerDay, ScheduleEntry scheduleEntry) {
+        return SchedulerGenerateDayParams.builder()
                 .email(schedulerDay.getEmail())
                 .date(schedulerDay.getDate())
                 .timeDifference(scheduleEntry.getStartTime().until(schedulerDay.getStartTime(), ChronoUnit.MINUTES))
+                .build();
+    }
+
+    public SchedulerCreateDayParams map(CreateSchedulerDayDTO day) {
+        return SchedulerCreateDayParams.builder()
+                .email(day.getEmail())
+                .date(day.getDate())
+                .records(day.getRecords().stream()
+                        .map(this::map)
+                        .toList())
+                .build();
+    }
+
+    private SchedulerCreateRecordParams map(CreateSchedulerRecordDTO record) {
+        return SchedulerCreateRecordParams.builder()
+                .subject(record.getSubject())
+                .startTime(record.getStartTime())
+                .endTime(record.getEndTime())
                 .build();
     }
 }

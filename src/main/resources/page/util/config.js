@@ -7,6 +7,7 @@ export const schedulerUrl = baseUrl + "scheduler/";
 export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
+export const createSchedulerUrl = schedulerUrl + "create";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -32,11 +33,25 @@ export const messages_pl = new Map([
   ["synchronization", "Synchronizuj usługi"],
   ["menu-service-list", "Lista usług"],
   ["menu-scheduler-from-file", "Generowanie z pliku"],
+  ["menu-scheduler-create", "Tworzenie harmonogramu"],
   ["scheduler-upload-input-header", "Wybierz plik z harmonogramem w formacie csv"],
   ["scheduler-upload-input-send-button", "Wyślij"],
   ["scheduler-upload-input-file-button", "Wybierz plik"],
   ["scheduler-upload-input-file-name", "Nie wybrano pliku"],
   ["scheduler-upload-file-not-found", "Nie wybrano pliku!"],
+  ["scheduler-create-email-input-placeholder", "Email trenera"],
+  ["scheduler-create-add-record-button", "Dodaj wpis"],
+  ["scheduler-create-remove-day-button", "Usuń dzień"],
+  ["scheduler-create-clone-day-button", "Skopiuj dzień"],
+  ["scheduler-create-record-subject", "Wpisz temat zajęć..."],
+  ["scheduler-create-hours-number-label", "Czas:"],
+  ["scheduler-create-start-time-label", "Czas rozpoczęcia"],
+  ["scheduler-create-end-time-label", "Czas zakończenia"],
+  ["scheduler-create-remove-record-button", "Usuń wpis"],
+  ["scheduler-create-add-day-button", "Dodaj dzień"],
+  ["scheduler-create-send-scheduler-button", "Wyślij"],
+  ["scheduler-create-day-number-label", "Dzień "],
+  ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
 ]);
 
 export const messages_en = new Map();
