@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import pl.bodzioch.damian.dao.UserDAO;
 import pl.bodzioch.damian.model.UserModel;
 
@@ -27,7 +29,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/app/login").permitAll()
-                        .anyRequest().hasRole(UserRoles.USER.getRoleCode()));
+                        .requestMatchers("/admin/**", "app/login/**").hasRole(UserRoles.ADMIN.getRoleCode())
+                        .requestMatchers("/scheduler/**", "/schedulercreate/**", "schedulerupload/**", "/services/**",
+                                "/templates/**", "/util/**", "/login/**").permitAll()
+                        .anyRequest().hasRole(UserRoles.USER.getRoleCode()))
+                .securityContext(securityContext -> securityContext.requireExplicitSave(true)
+                        .securityContextRepository(new HttpSessionSecurityContextRepository()))
+                .sessionManagement(session -> session.maximumSessions(1))
+                .logout(logout -> logout.logoutUrl("/app/logout"))
+                .formLogin(form -> form.loginPage("/login")
+                        .defaultSuccessUrl("/services-list")
+                        .failureUrl("/login"));
 
         return http.build();
     }
@@ -43,8 +55,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     @Bean
@@ -58,6 +70,13 @@ public class SecurityConfig {
                     .build(); //TODO rzucanie wyjątku gdy user sie nie znajdzie
         };
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
 
 
 }

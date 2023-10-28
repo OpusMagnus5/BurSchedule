@@ -7,15 +7,15 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="3" author="Damian Bodzioch">
         <createTable tableName="users_role">
             <column name="user_id" type="uuid">
-                <constraints nullable="false" notNullConstraintName="nn_services_id" />
+                <constraints nullable="false" notNullConstraintName="nn_users_user_id" />
             </column>
             <column name="role" type="varchar" >
-                <constraints nullable="false" notNullConstraintName="nn_status" />
+                <constraints nullable="false" notNullConstraintName="nn_users_role_role" />
             </column>
             <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="modify_date" type="timestamp"/>
         </createTable>
-        <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="user_id"
+        <addForeignKeyConstraint baseTableName="users_role" baseColumnNames="user_id"
                                  constraintName="fk_users_role_user_id"
                                  referencedTableName="users" referencedColumnNames="id" />
         <sql>

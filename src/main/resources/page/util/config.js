@@ -52,6 +52,9 @@ export const messages_pl = new Map([
   ["scheduler-create-send-scheduler-button", "Wyślij"],
   ["scheduler-create-day-number-label", "Dzień "],
   ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
+  ["login.username.input.placeholder", "Nazwa użytkownika"],
+  ["login.password.input.placeholder", "Hasło"],
+  ["login.send.button", "Zaloguj"],
 ]);
 
 export const messages_en = new Map();

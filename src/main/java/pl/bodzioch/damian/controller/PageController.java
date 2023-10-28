@@ -26,8 +26,13 @@ public class PageController {
         return "redirect:/services-list";
     }
 
-    @GetMapping("scheduler-create")
+    @GetMapping("/scheduler-create")
     public String getScheduleCreatePage() {
         return "schedulercreate/scheduler-create";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login/login";
     }
 }

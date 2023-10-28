@@ -7,15 +7,15 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="2" author="Damian Bodzioch">
         <createTable tableName="users">
             <column name="id" type="uuid">
-                <constraints primaryKey="true" primaryKeyName="pk_services_id"
-                             nullable="false" notNullConstraintName="nn_services_id"/>
+                <constraints primaryKey="true" primaryKeyName="pk_users_id"
+                             nullable="false" notNullConstraintName="nn_users_id"/>
             </column>
             <column name="username" type="varchar" >
-                <constraints nullable="false" notNullConstraintName="nn_status"
+                <constraints nullable="false" notNullConstraintName="nn_users_username"
                              unique="true" uniqueConstraintName="uk_users_username" />
             </column>
             <column name="password" type="varchar">
-                <constraints nullable="false" notNullConstraintName="nn_title"/>
+                <constraints nullable="false" notNullConstraintName="nn_users_password"/>
             </column>
             <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="modify_date" type="timestamp"/>
