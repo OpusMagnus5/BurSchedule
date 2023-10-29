@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.exception.HttpClientException;
 import pl.bodzioch.damian.model.ApiError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestControllerAdvice
 @AllArgsConstructor
@@ -23,13 +25,15 @@ import java.util.List;
 public class CustomControllerAdvice {
 
     private final MessageSource messageSource;
+    private final Locale locale = LocaleContextHolder.getLocale();
+
 
     @ExceptionHandler({HttpClientException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleClientException(HttpClientException ex, WebRequest webRequest) {
         log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
+                .messages(List.of(messageSource.getMessage("general.error", null, locale)))
                 .build();
 
         return ResponseEntity.badRequest().body(apiError);
@@ -40,7 +44,7 @@ public class CustomControllerAdvice {
     public ResponseEntity<ApiError> handleServerException(Exception ex, WebRequest webRequest) {
         log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("general.error", null, LocaleContextHolder.getLocale())))
+                .messages(List.of(messageSource.getMessage("general.error", null, locale)))
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
@@ -52,7 +56,7 @@ public class CustomControllerAdvice {
         log.error(ex.getMessage(), ex);
         List<String> errorMessages = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(messageSource.getMessage(error.getDefaultMessage(),
-                null, LocaleContextHolder.getLocale())));
+                null, locale)));
 
         return ResponseEntity.badRequest().body(ApiError.builder()
                                     .messages(errorMessages)
@@ -64,9 +68,19 @@ public class CustomControllerAdvice {
     public ResponseEntity<ApiError> handleSecurityException(SecurityException ex, WebRequest webRequest) {
         log.error(ex.getMessage(), ex);
         ApiError apiError = ApiError.builder()
-                .messages(List.of(messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale())))
+                .messages(List.of(messageSource.getMessage(ex.getMessage(), null, locale)))
                 .build();
 
         return ResponseEntity.badRequest().body(apiError);
+    }
+
+    @ExceptionHandler({AppException.class})
+    public ResponseEntity<ApiError> handleAppException(AppException ex, WebRequest webRequest) {
+        log.warn("Error message: {}", ex.getMessage(), ex);
+        ApiError apiError = ApiError.builder()
+                .messages(List.of(messageSource.getMessage(ex.getMessage(), ex.getMessageParams().toArray(), locale)))
+                .build();
+
+        return ResponseEntity.status(ex.getHttpStatus()).body(apiError);
     }
 }

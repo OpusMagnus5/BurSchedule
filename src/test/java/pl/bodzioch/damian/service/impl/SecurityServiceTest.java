@@ -22,7 +22,7 @@ public class SecurityServiceTest {
     @Test
     public void decryptionShouldReturnTheEncryptedMessage() {
         String messageToEncrypt = getRandomMessage();
-        String encryptedMessage = securityService.encryptMessage(messageToEncrypt); //TODO fix Invalid AES key length: 50 bytes
+        String encryptedMessage = securityService.encryptMessage(messageToEncrypt);
         String decryptedMessage = securityService.decryptMessage(encryptedMessage);
 
         assertEquals(messageToEncrypt, decryptedMessage);

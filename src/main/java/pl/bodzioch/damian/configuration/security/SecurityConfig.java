@@ -13,13 +13,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import pl.bodzioch.damian.client.conf.CustomCsrfTokenRequestHandler;
 import pl.bodzioch.damian.dao.UserDAO;
 import pl.bodzioch.damian.model.UserModel;
+
+import static org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES;
 
 @Configuration
 @EnableWebSecurity
@@ -30,9 +33,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
-        requestHandler.setCsrfRequestAttributeName(null);
-
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/app/login").permitAll()
                         .requestMatchers("/admin/**", "app/admin/**").hasRole(UserRoles.ADMIN.getRoleCode())
@@ -44,7 +44,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler()))
                 .sessionManagement(session -> session.maximumSessions(1))
-                .logout(logout -> logout.logoutUrl("/app/logout"))
+                .logout(logout -> logout.logoutUrl("/app/logout")
+                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
                 .formLogin(form -> form.loginPage("/login")
                         .defaultSuccessUrl("/services-list")
                         .failureUrl("/login"));
@@ -75,7 +76,7 @@ public class SecurityConfig {
                     .username(user.getUsername())
                     .password(user.getPassword())
                     .roles(user.getRoles())
-                    .build(); //TODO rzucanie wyjątku gdy user sie nie znajdzie
+                    .build();
         };
     }
 
