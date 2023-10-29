@@ -14,7 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import pl.bodzioch.damian.client.conf.CustomCsrfTokenRequestHandler;
 import pl.bodzioch.damian.dao.UserDAO;
 import pl.bodzioch.damian.model.UserModel;
 
@@ -27,14 +30,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName(null);
+
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/app/login").permitAll()
-                        .requestMatchers("/admin/**", "app/login/**").hasRole(UserRoles.ADMIN.getRoleCode())
+                        .requestMatchers("/admin/**", "app/admin/**").hasRole(UserRoles.ADMIN.getRoleCode())
                         .requestMatchers("/scheduler/**", "/schedulercreate/**", "schedulerupload/**", "/services/**",
                                 "/templates/**", "/util/**", "/login/**").permitAll()
                         .anyRequest().hasRole(UserRoles.USER.getRoleCode()))
                 .securityContext(securityContext -> securityContext.requireExplicitSave(true)
                         .securityContextRepository(new HttpSessionSecurityContextRepository()))
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler()))
                 .sessionManagement(session -> session.maximumSessions(1))
                 .logout(logout -> logout.logoutUrl("/app/logout"))
                 .formLogin(form -> form.loginPage("/login")

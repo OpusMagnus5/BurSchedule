@@ -8,6 +8,7 @@ export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
 export const createSchedulerUrl = schedulerUrl + "create";
+export const loginUrl = baseUrl + "login";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -114,6 +115,7 @@ export function postToApi(url, request) {
     headers: {
       Accept: "application/json, application/octet-stream",
       "Content-Type": "application/json",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
     },
     body: JSON.stringify(request),
   })
