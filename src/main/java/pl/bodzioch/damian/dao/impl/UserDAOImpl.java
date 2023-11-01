@@ -14,6 +14,7 @@ import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.UserModel;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -43,6 +44,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @Transactional
     public void saveNewUser(UserDbEntity userDbEntity) {
-        entityManager.persist(userDbEntity);
+        try {
+            entityManager.persist(userDbEntity);
+        } catch (Exception ex) {
+            log.error("Error during save user", ex);
+            throw new AppException("user.create.saveUserError", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

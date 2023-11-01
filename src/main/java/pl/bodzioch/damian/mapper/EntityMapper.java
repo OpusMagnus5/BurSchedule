@@ -1,10 +1,8 @@
 package pl.bodzioch.damian.mapper;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.bodzioch.damian.configuration.security.UserRoles;
-import pl.bodzioch.damian.entity.ServiceDbEntity;
-import pl.bodzioch.damian.entity.ServiceProviderDb;
-import pl.bodzioch.damian.entity.ServiceStatusDb;
-import pl.bodzioch.damian.entity.UserDbEntity;
+import pl.bodzioch.damian.entity.*;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.model.ServiceStatus;
@@ -13,6 +11,8 @@ import pl.bodzioch.damian.model.UserModel;
 import java.util.Arrays;
 
 public class EntityMapper {
+
+    private final static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static ServiceDbEntity map(ServiceModel service) {
         return ServiceDbEntity.builder()
@@ -51,6 +51,16 @@ public class EntityMapper {
                 .password(user.getPassword())
                 .roles(user.getRoles().stream()
                         .map(role -> UserRoles.valueOf(role.name().replace(" ", "_")))
+                        .toList())
+                .build();
+    }
+
+    public static UserDbEntity map(UserModel user) {
+        return UserDbEntity.builder()
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .roles(user.getRoles().stream()
+                        .map(role -> RoleDbEntity.valueOf(role.name().replace(" ", "_")))
                         .toList())
                 .build();
     }

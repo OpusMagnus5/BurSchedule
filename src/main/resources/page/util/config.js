@@ -8,7 +8,10 @@ export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
 export const createSchedulerUrl = schedulerUrl + "create";
-export const loginUrl = baseUrl + "login";
+export const securityUrl = baseUrl + "security";
+export const loginUrl = securityUrl + "/login";
+export const rolesUrl = securityUrl + "/roles";
+export const userUrl = baseUrl + "user";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -56,6 +59,11 @@ export const messages_pl = new Map([
   ["login.username.input.placeholder", "Nazwa użytkownika"],
   ["login.password.input.placeholder", "Hasło"],
   ["login.send.button", "Zaloguj"],
+  ["menu-add-user", "Dodaj użytkownika"],
+  ["admin-add-user-username-input", "Nazwa użytkownika"],
+  ["admin-add-user-password-input", "Hasło"],
+  ["admin-add-user-submit-button", "Wyślij"],
+  ["admin-add-user-roles-input-label", "Role"],
 ]);
 
 export const messages_en = new Map();
