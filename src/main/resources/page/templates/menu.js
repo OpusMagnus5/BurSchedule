@@ -5,7 +5,7 @@ export function setMenu() {
   document.querySelector(".menu .menu-service-list").textContent = getMessage("menu-service-list");
   document.querySelector(".menu .menu-scheduler-from-file").textContent = getMessage("menu-scheduler-from-file");
   document.querySelector(".menu .menu-scheduler-create").textContent = getMessage("menu-scheduler-create");
-  document.querySelector(".menu .menu-add-user").textContent = getMessage = "menu-add-user";
+  document.querySelector(".menu .menu-add-user").textContent = getMessage("menu-add-user");
 
   document.querySelectorAll(".menu-service-list").forEach((element) => {
     element.addEventListener("click", function () {
@@ -25,5 +25,5 @@ export function setMenu() {
     });
   });
 
-  document.querySelector(".submit-add-user").addEventListener("click", handleAddUserButton);
+  document.querySelector(".menu-add-user").addEventListener("click", handleAddUserButton);
 }

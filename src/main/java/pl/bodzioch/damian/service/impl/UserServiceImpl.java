@@ -20,11 +20,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserModel userModel) {
+        UserModel existingUser = null;
+        String username = userModel.getUsername();
         try {
-            String username = userModel.getUsername();
-            userDAO.getUserByUsername(username);
-            throw new AppException("create.user.alreadyExist", List.of(username), HttpStatus.BAD_REQUEST);
+            existingUser = userDAO.getUserByUsername(username);
         } catch (AppException ex) {
+        }
+
+        if (existingUser != null) {
+            throw new AppException("create.user.alreadyExist", List.of(username), HttpStatus.BAD_REQUEST);
         }
 
         UserDbEntity userEntity = EntityMapper.map(userModel);

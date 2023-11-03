@@ -1,9 +1,10 @@
+import { setMenu } from "../templates/menu.js";
 import { getFromApi, getMessage, postToApi, rolesUrl, userUrl } from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
 
 function setPage() {
-  hidePrevDisplay();
+  setMenu();
   setAddUserForm();
 }
 
@@ -19,44 +20,47 @@ function setAddUserForm() {
   form.querySelector(".username-input").placeholder = getMessage("admin-add-user-username-input");
   form.querySelector(".password-input").placeholder = getMessage("admin-add-user-password-input");
   form.querySelector(".submit-add-user").textContent = getMessage("admin-add-user-submit-button");
+  form.querySelector(".roles-box-label").textContent = getMessage("admin-add-user-roles-box-label");
 
-  setRolesSelector();
-  let newForm = form.cloneNode(true);
-  document.querySelector("article").appendChild(newForm);
-  newForm.classList.remove("hidden");
+  setRoleCheckboxes();
 }
 
-function setRolesSelector() {
-  document.querySelector(".roles-input-label").textContent = getMessage("admin-add-user-roles-input-label");
-  let roleSelector = document.querySelector(".roles-input");
-  let emptyOption = roleSelector.querySelector("option");
+function setRoleCheckboxes() {
+  let rolesBox = document.querySelector(".roles-box");
+  let emptyRole = document.querySelector(".role");
 
   getFromApi(rolesUrl).then((data) => {
     let roles = data.roles;
     roles.forEach((element) => {
-      let option = emptyOption.cloneNode(true);
-      option.textContent = element;
-      roleSelector.appendChild(option);
+      let newRole = emptyRole.cloneNode(true);
+      newRole.querySelector(".role-input-label").textContent = element;
+      newRole.querySelector(".role-input").value = element;
+      rolesBox.appendChild(newRole);
     });
   });
 
-  emptyOption.remove;
+  emptyRole.remove();
 }
 
 export function handleAddUserButton() {
-  let hiddenAddUserFrom = document.querySelector(".add-user-form .hidden");
+  hidePrevDisplay();
+  let hiddenAddUserFrom = document.querySelector(".add-user-form.hidden");
   let addUserForm = hiddenAddUserFrom.cloneNode(true);
+  let article = document.querySelector("article");
+  article.appendChild(addUserForm);
+  addUserForm.classList.remove("hidden");
 
   addUserForm.querySelector(".submit-add-user").addEventListener("click", handleSendFormButton);
 }
 
 function handleSendFormButton() {
-  let form = document.querySelector("div:not(hidden).add-user-form");
-  let rolesNode = form.querySelectorAll(".roles-input option");
+  let form = document.querySelector("div:not(.hidden).add-user-form");
+  let rolesNode = form.querySelectorAll(".roles-box .role");
 
   let roles = [];
   rolesNode.forEach((element) => {
-    roles.push(element.textContent);
+    let roleCheckbox = element.querySelector(".role-input");
+    roles.push(roleCheckbox.value);
   });
 
   let request = {

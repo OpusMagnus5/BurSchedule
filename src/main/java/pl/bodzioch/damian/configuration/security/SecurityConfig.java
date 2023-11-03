@@ -34,8 +34,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/app/login", "/admin", "/app/user").permitAll()
-                       /* .requestMatchers("/admin/**", "app/admin/**").hasRole(UserRoles.ADMIN.getRoleCode())*/
+                        .requestMatchers("/login", "/admin", "/app/user", "/app/security/**").permitAll()
+                       /* .requestMatchers("/admin/**", "app/admin/**").hasRole(UserRoles.ADMIN.getRoleCode())*/ //TODO
                         .requestMatchers("/scheduler/**", "/schedulercreate/**", "schedulerupload/**", "/services/**",
                                 "/templates/**", "/util/**", "/login/**", "/admin/**").permitAll()
                         .anyRequest().hasRole(UserRoles.USER.getRoleCode()))

@@ -63,7 +63,7 @@ export const messages_pl = new Map([
   ["admin-add-user-username-input", "Nazwa użytkownika"],
   ["admin-add-user-password-input", "Hasło"],
   ["admin-add-user-submit-button", "Wyślij"],
-  ["admin-add-user-roles-input-label", "Role"],
+  ["admin-add-user-roles-box-label", "Wybierz role:"],
 ]);
 
 export const messages_en = new Map();
