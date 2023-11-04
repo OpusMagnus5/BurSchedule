@@ -114,7 +114,9 @@ export function getFromApi(url) {
         return false;
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      return false;
+    });
 }
 
 export function postToApi(url, request) {
@@ -148,9 +150,13 @@ export function postToApi(url, request) {
           a.click();
           window.URL.revokeObjectURL(url);
         });
+      } else if (response.ok) {
+        return true;
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      return false;
+    });
 }
 
 export function postFileToApi(url, formData) {
@@ -182,6 +188,8 @@ export function postFileToApi(url, formData) {
           a.click();
           window.URL.revokeObjectURL(url);
         });
+      } else if (response.ok) {
+        return true;
       }
     })
     .catch((error) => {});

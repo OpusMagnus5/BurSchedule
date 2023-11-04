@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.bodzioch.damian.dto.client.*;
@@ -42,6 +43,7 @@ public class SchedulerController {
     private final SessionBean sessionBean;
     private final ClientMapper clientMapper;
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SchedulerListViewDTO> getScheduler(@PathVariable String serviceId) {
@@ -49,6 +51,7 @@ public class SchedulerController {
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/file")
     public ResponseEntity<SchedulerListViewDTO> getSchedulerFromFile(@RequestParam("file") MultipartFile file) {
         List<SchedulerViewDTO> scheduler = new ArrayList<>();
@@ -61,6 +64,7 @@ public class SchedulerController {
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/generate")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> generateFile(@Valid @RequestBody GenerateFileRequestDTO request) {
@@ -79,6 +83,7 @@ public class SchedulerController {
                 .body(fileBytes);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> createScheduler(@Valid @RequestBody CreateSchedulerRequestDTO request) {

@@ -42,7 +42,7 @@ function setRoleCheckboxes() {
   emptyRole.remove();
 }
 
-export function handleAddUserButton() {
+export function handleAdminButton() {
   hidePrevDisplay();
   let hiddenAddUserFrom = document.querySelector(".add-user-form.hidden");
   let addUserForm = hiddenAddUserFrom.cloneNode(true);

@@ -1,6 +1,7 @@
 package pl.bodzioch.damian.configuration.security;
 
 import lombok.Builder;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Builder
+@ToString
 public class UserDetailsModel implements UserDetails {
 
     private String username;
@@ -17,7 +19,8 @@ public class UserDetailsModel implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> (GrantedAuthority) role::getRoleCode)
+                .map(UserRoles::getRoleCode)
+                .map(CustomGrantedAuthority::new)
                 .toList();
     }
 

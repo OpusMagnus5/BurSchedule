@@ -20,5 +20,9 @@ function handleSendLoginForm() {
     password: document.querySelector(".password-input").value,
   };
 
-  postToApi(loginUrl, request);
+  postToApi(loginUrl, request).then((response) => {
+    if (response) {
+      window.location.href = "services-list";
+    }
+  });
 }

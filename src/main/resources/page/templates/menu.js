@@ -25,5 +25,5 @@ export function setMenu() {
     });
   });
 
-  document.querySelector(".menu-add-user").addEventListener("click", handleAddUserButton);
+  document.querySelector(".menu-admin").addEventListener("click", handleAdminButton);
 }

@@ -7,8 +7,10 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,28 +29,20 @@ import static org.springframework.security.web.header.writers.ClearSiteDataHeade
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserDAO userDAO;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/admin", "/app/user", "/app/security/**").permitAll()
-                       /* .requestMatchers("/admin/**", "app/admin/**").hasRole(UserRoles.ADMIN.getRoleCode())*/ //TODO
-                        .requestMatchers("/scheduler/**", "/schedulercreate/**", "schedulerupload/**", "/services/**",
-                                "/templates/**", "/util/**", "/login/**", "/admin/**").permitAll()
-                        .anyRequest().hasRole(UserRoles.USER.getRoleCode()))
-                .securityContext(securityContext -> securityContext.requireExplicitSave(true)
+        http.securityContext(securityContext -> securityContext.requireExplicitSave(true)
                         .securityContextRepository(new HttpSessionSecurityContextRepository()))
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler()))
                 .sessionManagement(session -> session.maximumSessions(1))
                 .logout(logout -> logout.logoutUrl("/app/logout")
-                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
-                .formLogin(form -> form.loginPage("/login")
-                        .defaultSuccessUrl("/services-list")
-                        .failureUrl("/login"));
+                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))));
 
         return http.build();
     }
@@ -85,10 +79,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-   /* @Bean
+    @Bean
     static GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("");
-    }*/
-
-
+    }
 }
