@@ -60,6 +60,7 @@ export const messages_pl = new Map([
   ["login.password.input.placeholder", "Hasło"],
   ["login.send.button", "Zaloguj"],
   ["menu-add-user", "Dodaj użytkownika"],
+  ["menu-admin", "Panel admina"],
   ["admin-add-user-username-input", "Nazwa użytkownika"],
   ["admin-add-user-password-input", "Hasło"],
   ["admin-add-user-submit-button", "Wyślij"],

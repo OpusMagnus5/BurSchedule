@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="util/config.js" type="module"></script>
-    <script src="templates/menu.js" type="module"></script>
+    <script src="templates/admin/admin-menu.js" type="module"></script>
     <script src="admin/admin.js" type="module"></script>
-    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="templates/admin/admin-menu.css" />
     <link rel="stylesheet" href="admin/admin.css" />
     <title>Harmonogram BUR</title>
   </head>
@@ -27,7 +27,7 @@
         </div>
       </article>
 
-      <div th:replace="~{templates/menu.html :: menu}"></div>
+      <div th:replace="~{templates/admin/admin-menu.html :: admin-menu}"></div>
     </div>
   </body>
 </html>

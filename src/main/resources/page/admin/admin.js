@@ -1,4 +1,4 @@
-import { setMenu } from "../templates/menu.js";
+import { setMenu } from "../templates/admin/admin-menu.js";
 import { getFromApi, getMessage, postToApi, rolesUrl, userUrl } from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
@@ -42,7 +42,7 @@ function setRoleCheckboxes() {
   emptyRole.remove();
 }
 
-export function handleAdminButton() {
+export function handleAddUserButton() {
   hidePrevDisplay();
   let hiddenAddUserFrom = document.querySelector(".add-user-form.hidden");
   let addUserForm = hiddenAddUserFrom.cloneNode(true);

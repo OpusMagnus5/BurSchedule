@@ -42,7 +42,7 @@ public class PageController {
         return "login/login";
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
     public String admin() {
         return "admin/admin";

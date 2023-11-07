@@ -42,7 +42,8 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(new CustomCsrfTokenRequestHandler()))
                 .sessionManagement(session -> session.maximumSessions(1))
                 .logout(logout -> logout.logoutUrl("/app/logout")
-                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))));
+                        .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(COOKIES))))
+                /*.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))*/;
 
         return http.build();
     }
