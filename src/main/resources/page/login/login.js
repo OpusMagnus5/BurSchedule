@@ -22,6 +22,7 @@ function handleSendLoginForm() {
 
   postToApi(loginUrl, request).then((response) => {
     if (response) {
+      sessionStorage.setItem("userRoles", JSON.stringify(response.userRoles));
       window.location.href = "services-list";
     }
   });

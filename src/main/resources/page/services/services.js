@@ -15,15 +15,24 @@ document.addEventListener("DOMContentLoaded", getServices);
 
 function getServices() {
   schowLoader();
-  getFromApi(servicesUrl).then((data) => {
-    sessionStorage.setItem("services-data", JSON.stringify(data));
-    showData();
-    colorEvenRows(Array.from(document.querySelectorAll(".service")));
-    addClickListenerForServices();
-    setFilters();
-    hideLoader();
-    setMenu();
-  });
+  let storedServices = sessionStorage.getItem("services-data");
+  if (storedServices === "undefined" || !storedServices) {
+    getFromApi(servicesUrl).then((data) => {
+      sessionStorage.setItem("services-data", JSON.stringify(data));
+      setElementsDependOnData();
+    });
+  } else {
+    setElementsDependOnData();
+  }
+}
+
+function setElementsDependOnData() {
+  showData();
+  colorEvenRows(Array.from(document.querySelectorAll(".service")));
+  addClickListenerForServices();
+  setFilters();
+  hideLoader();
+  setMenu();
 }
 
 function showData() {
@@ -186,6 +195,7 @@ document.querySelector(".synchronzation").addEventListener("click", function () 
   getFromApi(synchronizationUrl).then((response) => {
     hideLoader();
     if (response) {
+      sessionStorage.removeItem("services-data");
       window.location.href = "services-list";
     } else {
       alert(getMessage("general.error"));

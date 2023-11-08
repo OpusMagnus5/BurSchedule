@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -18,8 +19,11 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.dto.client.LoginRequestDTO;
+import pl.bodzioch.damian.dto.client.LoginResponseViewDTO;
 import pl.bodzioch.damian.dto.client.UserRolesViewDTO;
 import pl.bodzioch.damian.mapper.ClientMapper;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -32,7 +36,8 @@ public class SecurityController {
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequestDTO loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<LoginResponseViewDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest, HttpServletRequest request,
+                                                      HttpServletResponse response) {
         Authentication authenticationRequest =
                 UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
@@ -40,7 +45,11 @@ public class SecurityController {
         context.setAuthentication(authenticationResponse);
         securityContextHolderStrategy.setContext(context);
         securityContextRepository.saveContext(context, request, response);
-        return ResponseEntity.status(HttpStatus.OK).build();
+
+        List<String> roles = authenticationResponse.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseViewDTO(roles));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

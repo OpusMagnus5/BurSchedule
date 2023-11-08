@@ -103,7 +103,7 @@ export function getFromApi(url) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
@@ -145,7 +145,7 @@ export function postToApi(url, request) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
@@ -153,6 +153,8 @@ export function postToApi(url, request) {
         });
       } else if (response.ok) {
         return true;
+      } else {
+        return false;
       }
     })
     .catch((error) => {
@@ -183,7 +185,7 @@ export function postFileToApi(url, formData) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
@@ -191,6 +193,8 @@ export function postFileToApi(url, formData) {
         });
       } else if (response.ok) {
         return true;
+      } else {
+        return false;
       }
     })
     .catch((error) => {});
@@ -213,4 +217,12 @@ export function hideLoader() {
   document.body.removeChild(overlay);
   loader = null;
   overlay = null;
+}
+
+export function hasUserRole(role) {
+  let roles = sessionStorage.getItem("userRoles");
+  if (roles !== "undefined" && roles.includes(role)) {
+    return true;
+  }
+  return false;
 }
