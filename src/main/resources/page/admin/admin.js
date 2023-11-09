@@ -60,7 +60,9 @@ function handleSendFormButton() {
   let roles = [];
   rolesNode.forEach((element) => {
     let roleCheckbox = element.querySelector(".role-input");
-    roles.push(roleCheckbox.value);
+    if (roleCheckbox.checked) {
+      roles.push(roleCheckbox.value);
+    }
   });
 
   let request = {

@@ -55,6 +55,7 @@ public class ServiceDbEntity {
     private String location;
 
     @Column(name = "create_date")
+    @CurrentTimestamp(event = EventType.INSERT)
     private LocalDateTime createDate;
 
     @Column(name = "modify_date")

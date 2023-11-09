@@ -37,6 +37,7 @@ public class UserDbEntity {
     private List<RoleDbEntity> roles;
 
     @Column(name = "create_date")
+    @CurrentTimestamp(event = EventType.INSERT)
     private LocalDateTime createDate;
 
     @Column(name = "modify_date")
