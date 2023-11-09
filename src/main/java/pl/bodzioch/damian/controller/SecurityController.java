@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,13 +22,16 @@ import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.dto.client.LoginRequestDTO;
 import pl.bodzioch.damian.dto.client.LoginResponseViewDTO;
 import pl.bodzioch.damian.dto.client.UserRolesViewDTO;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/app/security")
+@Slf4j
 public class SecurityController {
 
     private final AuthenticationManager authenticationManager;
@@ -40,7 +44,14 @@ public class SecurityController {
                                                       HttpServletResponse response) {
         Authentication authenticationRequest =
                 UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
-        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+        Authentication authenticationResponse;
+        try {
+            authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+        } catch (Exception ex) {
+            log.info("Authentication error", ex);
+            throw new AppException("authentication.failed", Collections.emptyList(), HttpStatus.BAD_REQUEST);
+        }
+
         SecurityContext context = securityContextHolderStrategy.createEmptyContext();
         context.setAuthentication(authenticationResponse);
         securityContextHolderStrategy.setContext(context);

@@ -12,6 +12,8 @@ export const securityUrl = baseUrl + "security";
 export const loginUrl = securityUrl + "/login";
 export const rolesUrl = securityUrl + "/roles";
 export const userUrl = baseUrl + "user";
+export const logoutUrl = baseUrl + "logout";
+export const tokenUrl = securityUrl + "/token";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -65,6 +67,8 @@ export const messages_pl = new Map([
   ["admin-add-user-password-input", "Hasło"],
   ["admin-add-user-submit-button", "Wyślij"],
   ["admin-add-user-roles-box-label", "Wybierz role:"],
+  ["menu-logout", "Wyloguj"],
+  ["logout-failure", "Nie udało się nam Cię wylogować. Spróbuj jeszcze raz."],
 ]);
 
 export const messages_en = new Map();
