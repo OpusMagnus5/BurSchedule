@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="util/config.js" type="module"></script>
+    <script src="templates/admin/admin-menu.js" type="module"></script>
+    <script src="admin/admin.js" type="module"></script>
+    <link rel="stylesheet" href="templates/admin/admin-menu.css" />
+    <link rel="stylesheet" href="admin/admin.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="add-user-form hidden">
+          <input type="text" class="username-input" />
+          <input type="password" class="password-input" />
+          <p class="roles-box-label"></p>
+          <div class="roles-box">
+            <div class="role">
+              <input class="role-input" type="checkbox" />
+              <p class="role-input-label"></p>
+            </div>
+          </div>
+          <button class="submit-add-user"></button>
+        </div>
+      </article>
+
+      <div th:replace="~{templates/admin/admin-menu.html :: admin-menu}"></div>
+    </div>
+  </body>
+</html>

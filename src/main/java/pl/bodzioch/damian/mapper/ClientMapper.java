@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.dto.client.*;
 import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.SecurityService;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -58,6 +61,24 @@ public class ClientMapper {
                 .date(day.getDate())
                 .records(day.getRecords().stream()
                         .map(this::map)
+                        .toList())
+                .build();
+    }
+
+    public UserRolesViewDTO map(UserRoles[] roles) {
+        List<String> result = Arrays.stream(roles)
+                .map(UserRoles::getRoleCode)
+                .toList();
+
+        return new UserRolesViewDTO(result);
+    }
+
+    public UserModel map(CreateUserRequestDTO request) {
+        return UserModel.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .roles(request.getRoles().stream()
+                        .map(role -> UserRoles.valueOf(role.replace(" ", "_")))
                         .toList())
                 .build();
     }

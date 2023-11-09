@@ -18,8 +18,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
+import org.zalando.logbook.Logbook;
+import org.zalando.logbook.core.DefaultSink;
+import org.zalando.logbook.json.JsonHttpLogFormatter;
 import pl.bodzioch.damian.client.conf.CustomRestTemplateCustomizer;
-import pl.bodzioch.damian.controller.conf.CustomRequestLoggingFilter;
+import pl.bodzioch.damian.controller.conf.CustomHttpLowWriter;
 
 import javax.sql.DataSource;
 import java.util.Locale;
@@ -62,17 +65,6 @@ public class App {
     }
 
     @Bean
-    public CustomRequestLoggingFilter logFilter() {
-        CustomRequestLoggingFilter filter = new CustomRequestLoggingFilter();
-        filter.setIncludeQueryString(true);
-        filter.setIncludePayload(true);
-        filter.setMaxPayloadLength(10000);
-        filter.setIncludeHeaders(true);
-        filter.setBeforeMessagePrefix("REQUEST DATA: ");
-        return filter;
-    }
-
-    @Bean
     @Profile("local")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource localDataSource() {
@@ -93,14 +85,10 @@ public class App {
         return jpaTransactionManager;
     }
 
-/*    @Bean
-    public ITemplateResolver secondaryTemplateResolver() {
-        ClassLoaderTemplateResolver secondaryTemplateResolver = new ClassLoaderTemplateResolver();
-        secondaryTemplateResolver.setPrefix("/page/");
-        secondaryTemplateResolver.setSuffix(".html");
-        secondaryTemplateResolver.setOrder(0);
-        secondaryTemplateResolver.setCheckExistence(true);
-
-        return secondaryTemplateResolver;
-    }*/
+    @Bean
+    public Logbook logbook() {
+        return Logbook.builder()
+                .sink(new DefaultSink(new JsonHttpLogFormatter(), new CustomHttpLowWriter()))
+                .build();
+    }
 }

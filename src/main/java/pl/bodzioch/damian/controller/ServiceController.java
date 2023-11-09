@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.bodzioch.damian.dto.client.ProviderListViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceListViewDTO;
@@ -30,17 +31,20 @@ public class ServiceController {
     private final ServicesService servicesService;
     private final MessageSource messageSource;
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/synchronization")
     public HttpStatus synchronize() {
         serviceForBurClient.synchronizeServices();
         return HttpStatus.OK;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("")
     public ResponseEntity<ServiceListViewDTO> getAllServices() {
         return ResponseEntity.ok(servicesService.getAllServices());
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/providers")
     public ResponseEntity<ProviderListViewDTO> getServiceProviders() {
         List<String> providers = Arrays.stream(ServiceProvider.values())
@@ -50,6 +54,7 @@ public class ServiceController {
         return ResponseEntity.ok(new ProviderListViewDTO(providers));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/statuses")
     public ResponseEntity<ServiceStatusListViewDTO> getServiceStatuses() {
         List<String> statuses = Arrays.stream(ServiceStatus.values())

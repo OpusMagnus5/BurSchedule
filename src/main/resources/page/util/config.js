@@ -8,6 +8,12 @@ export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
 export const createSchedulerUrl = schedulerUrl + "create";
+export const securityUrl = baseUrl + "security";
+export const loginUrl = securityUrl + "/login";
+export const rolesUrl = securityUrl + "/roles";
+export const userUrl = baseUrl + "user";
+export const logoutUrl = baseUrl + "logout";
+export const tokenUrl = securityUrl + "/token";
 
 export const messages_pl = new Map([
   ["general.error", "Przepraszamy wystąpił błąd."],
@@ -52,6 +58,17 @@ export const messages_pl = new Map([
   ["scheduler-create-send-scheduler-button", "Wyślij"],
   ["scheduler-create-day-number-label", "Dzień "],
   ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
+  ["login.username.input.placeholder", "Nazwa użytkownika"],
+  ["login.password.input.placeholder", "Hasło"],
+  ["login.send.button", "Zaloguj"],
+  ["menu-add-user", "Dodaj użytkownika"],
+  ["menu-admin", "Panel admina"],
+  ["admin-add-user-username-input", "Nazwa użytkownika"],
+  ["admin-add-user-password-input", "Hasło"],
+  ["admin-add-user-submit-button", "Wyślij"],
+  ["admin-add-user-roles-box-label", "Wybierz role:"],
+  ["menu-logout", "Wyloguj"],
+  ["logout-failure", "Nie udało się nam Cię wylogować. Spróbuj jeszcze raz."],
 ]);
 
 export const messages_en = new Map();
@@ -90,7 +107,7 @@ export function getFromApi(url) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
@@ -102,7 +119,9 @@ export function getFromApi(url) {
         return false;
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      return false;
+    });
 }
 
 export function postToApi(url, request) {
@@ -111,6 +130,7 @@ export function postToApi(url, request) {
     headers: {
       Accept: "application/json, application/octet-stream",
       "Content-Type": "application/json",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
     },
     body: JSON.stringify(request),
   })
@@ -129,15 +149,21 @@ export function postToApi(url, request) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
         });
+      } else if (response.ok) {
+        return true;
+      } else {
+        return false;
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      return false;
+    });
 }
 
 export function postFileToApi(url, formData) {
@@ -163,12 +189,16 @@ export function postFileToApi(url, formData) {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "harmonogram.csv"; // Nazwa pliku
+          a.download = "harmonogram.csv";
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
         });
+      } else if (response.ok) {
+        return true;
+      } else {
+        return false;
       }
     })
     .catch((error) => {});
@@ -191,4 +221,12 @@ export function hideLoader() {
   document.body.removeChild(overlay);
   loader = null;
   overlay = null;
+}
+
+export function hasUserRole(role) {
+  let roles = sessionStorage.getItem("userRoles");
+  if (roles !== "undefined" && roles.includes(role)) {
+    return true;
+  }
+  return false;
 }

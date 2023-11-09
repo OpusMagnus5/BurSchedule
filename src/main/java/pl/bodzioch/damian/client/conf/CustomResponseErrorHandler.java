@@ -18,16 +18,14 @@ public class CustomResponseErrorHandler implements ResponseErrorHandler {
 
     @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {
+        log.info("Headers: {}", response.getHeaders());
+        log.info("Request Status: {}", response.getStatusCode());
+        log.info("Request Body: {}", getBody(response.getBody()));
         return response.getStatusCode().isError();
     }
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-
-        log.info("Headers: {}", response.getHeaders());
-        log.info("Request Status: {}", response.getStatusCode());;
-        log.info("Request Body: {}", getBody(response.getBody()));
-
         if (response.getStatusCode().is4xxClientError()) {
             throw new HttpClientException();
         } else if (response.getStatusCode().is5xxServerError()) {

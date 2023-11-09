@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="3" author="Damian Bodzioch">
+        <createTable tableName="users_role">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" notNullConstraintName="nn_users_user_id" />
+            </column>
+            <column name="role" type="varchar" >
+                <constraints nullable="false" notNullConstraintName="nn_users_role_role" />
+            </column>
+            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="modify_date" type="timestamp"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="users_role" baseColumnNames="user_id"
+                                 constraintName="fk_users_role_user_id"
+                                 referencedTableName="users" referencedColumnNames="id" />
+        <sql>
+            ALTER TABLE users_role
+            ADD CONSTRAINT ck_user_role_role CHECK (role IN ('USER', 'ADMIN'));
+        </sql>
+    </changeSet>
+</databaseChangeLog>
