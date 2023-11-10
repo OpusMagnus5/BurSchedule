@@ -15,6 +15,7 @@ import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Repository
@@ -25,8 +26,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
 
     @Override
     @Transactional
-    public void saveScheduler(SchedulerDbEntity entity) {
+    public UUID saveScheduler(SchedulerDbEntity entity) {
         entityManager.persist(entity);
+        return entity.getId();
     }
 
     @Override

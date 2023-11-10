@@ -69,6 +69,7 @@ public class EntityMapper {
         return SchedulerDbEntity.builder()
                 .name(params.getSchedulerName())
                 .entries(map(params.getSchedulerDays()))
+                .id(params.getId().orElseGet(null))
                 .build();
     }
 

@@ -20,12 +20,14 @@ import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.GenerateFileFromCreatedSchedulerService;
 import pl.bodzioch.damian.service.GenerateFileService;
 import pl.bodzioch.damian.service.SchedulerService;
+import pl.bodzioch.damian.service.SecurityService;
 import pl.bodzioch.damian.session.SessionBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/app/scheduler")
@@ -39,6 +41,7 @@ public class SchedulerController {
     private final GenerateFileFromCreatedSchedulerService generateFileFromCreatedSchedulerService;
     private final SessionBean sessionBean;
     private final ClientMapper clientMapper;
+    private final SecurityService securityService;
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{serviceId}")
@@ -98,18 +101,24 @@ public class SchedulerController {
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> save(@Valid @RequestBody SaveSchedulerRequestDTO request) {
+    public ResponseEntity<SaveSchedulerResponseDTO> save(@Valid @RequestBody SaveSchedulerRequestDTO request) {
         List<SchedulerCreateDayParams> daysParams = request.getDays().stream()
                 .map(clientMapper::map)
                 .toList();
+
+        UUID id = request.getId()
+                .map(securityService::decryptMessage)
+                .map(UUID::fromString).orElseGet(null);
         SaveSchedulerParams params = SaveSchedulerParams.builder()
                 .schedulerDays(daysParams)
                 .schedulerName(request.getName())
+                .id(id)
                 .build();
 
-        schedulerService.saveScheduler(params);
+        UUID newId = schedulerService.saveScheduler(params);
+        String encryptedId = securityService.encryptMessage(newId.toString());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SaveSchedulerResponseDTO(encryptedId));
     }
 
     private HttpHeaders getHeadersToSendSchedulerFile() {

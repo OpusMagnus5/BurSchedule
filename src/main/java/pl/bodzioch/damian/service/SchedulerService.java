@@ -7,11 +7,12 @@ import pl.bodzioch.damian.model.SchedulerEntry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 public interface SchedulerService {
 
     List<SchedulerViewDTO> getSchedulerForService(String serviceId);
     List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler);
     List<SchedulerViewDTO> getSchedulerForService(InputStream inputStream) throws IOException;
-    void saveScheduler(SaveSchedulerParams params);
+    UUID saveScheduler(SaveSchedulerParams params);
 }
