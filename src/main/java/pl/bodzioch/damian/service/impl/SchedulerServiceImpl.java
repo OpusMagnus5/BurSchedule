@@ -6,8 +6,11 @@ import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.stereotype.Service;
 import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
+import pl.bodzioch.damian.entity.SchedulerDbEntity;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
+import pl.bodzioch.damian.mapper.EntityMapper;
+import pl.bodzioch.damian.model.SaveSchedulerParams;
 import pl.bodzioch.damian.model.ScheduleEntry;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
@@ -68,6 +71,13 @@ public class SchedulerServiceImpl implements SchedulerService {
         return getBeginningsOfDays(scheduleEntries).stream()
                 .map(clientMapper::map)
                 .toList();
+    }
+
+    @Override
+    public void saveScheduler(SaveSchedulerParams params) {
+        SchedulerDbEntity schedulerDbEntity = EntityMapper.map(params);
+
+
     }
 
     @Override

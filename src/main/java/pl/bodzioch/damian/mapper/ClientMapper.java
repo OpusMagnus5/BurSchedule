@@ -65,6 +65,16 @@ public class ClientMapper {
                 .build();
     }
 
+    public SchedulerCreateDayParams map(SaveSchedulerDayDTO day) {
+        return SchedulerCreateDayParams.builder()
+                .email(day.getEmail())
+                .date(day.getDate())
+                .records(day.getRecords().stream()
+                        .map(this::map)
+                        .toList())
+                .build();
+    }
+
     public UserRolesViewDTO map(UserRoles[] roles) {
         List<String> result = Arrays.stream(roles)
                 .map(UserRoles::getRoleCode)

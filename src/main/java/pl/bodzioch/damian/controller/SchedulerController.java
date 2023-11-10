@@ -16,10 +16,7 @@ import pl.bodzioch.damian.dto.client.*;
 import pl.bodzioch.damian.exception.FileProcessingException;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
-import pl.bodzioch.damian.model.ApiError;
-import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.SchedulerCreateDayParams;
-import pl.bodzioch.damian.model.SchedulerGenerateDayParams;
+import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.GenerateFileFromCreatedSchedulerService;
 import pl.bodzioch.damian.service.GenerateFileService;
 import pl.bodzioch.damian.service.SchedulerService;
@@ -96,6 +93,23 @@ public class SchedulerController {
         return ResponseEntity.ok()
                 .headers(getHeadersToSendSchedulerFile())
                 .body(fileBytes);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> save(@Valid @RequestBody SaveSchedulerRequestDTO request) {
+        List<SchedulerCreateDayParams> daysParams = request.getDays().stream()
+                .map(clientMapper::map)
+                .toList();
+        SaveSchedulerParams params = SaveSchedulerParams.builder()
+                .schedulerDays(daysParams)
+                .schedulerName(request.getName())
+                .build();
+
+        schedulerService.saveScheduler(params);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     private HttpHeaders getHeadersToSendSchedulerFile() {

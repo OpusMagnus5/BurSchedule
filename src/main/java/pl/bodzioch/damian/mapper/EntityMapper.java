@@ -3,12 +3,11 @@ package pl.bodzioch.damian.mapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.entity.*;
-import pl.bodzioch.damian.model.ServiceModel;
-import pl.bodzioch.damian.model.ServiceProvider;
-import pl.bodzioch.damian.model.ServiceStatus;
-import pl.bodzioch.damian.model.UserModel;
+import pl.bodzioch.damian.model.*;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class EntityMapper {
 
@@ -63,6 +62,33 @@ public class EntityMapper {
                         .map(role -> RoleDbEntity.valueOf(role.name().replace(" ", "_")))
                         .toList())
                 .build();
+    }
+
+    public static SchedulerDbEntity map(SaveSchedulerParams params) {
+        return SchedulerDbEntity.builder()
+                .name(params.getSchedulerName())
+                .entries(map(params.getSchedulerDays()))
+                .build();
+    }
+
+    private static List<SchedulerEntryDbEntity> map(List<SchedulerCreateDayParams> params) {
+        return params.stream()
+                .map(EntityMapper::map)
+                .flatMap(Collection::stream)
+                .toList();
+
+    }
+
+    private static List<SchedulerEntryDbEntity> map(SchedulerCreateDayParams params) {
+        return params.getRecords().stream()
+                .map(record -> SchedulerEntryDbEntity.builder()
+                        .email(params.getEmail())
+                        .date(params.getDate())
+                        .startTime(record.getStartTime())
+                        .endTime(record.getEndTime())
+                        .subject(record.getSubject())
+                        .build())
+                .toList();
     }
 
     private static ServiceProviderDb mapServiceProviderName(Long serviceProviderId) {
