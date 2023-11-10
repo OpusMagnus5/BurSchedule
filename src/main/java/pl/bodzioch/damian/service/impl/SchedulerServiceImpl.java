@@ -11,7 +11,7 @@ import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.SaveSchedulerParams;
-import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerEntry;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
 import pl.bodzioch.damian.session.SessionBean;
@@ -46,7 +46,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public List<SchedulerViewDTO> getSchedulerForService(String serviceId) {
         String encryptedId = securityService.decryptMessage(serviceId);
-        List<ScheduleEntry> scheduler = burClient.getScheduleForService(Long.parseLong(encryptedId));
+        List<SchedulerEntry> scheduler = burClient.getScheduleForService(Long.parseLong(encryptedId));
         if (scheduler.isEmpty()) {
             throw new SchedulerNotFoundException();
         }
@@ -64,7 +64,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         BOMInputStream streamWithoutBOM = getStreamWithoutBOM(inputStream);
         List<String> lines = IOUtils.readLines(streamWithoutBOM, StandardCharsets.UTF_8);
         lines.remove(0);
-        List<ScheduleEntry> scheduleEntries = mapToScheduleEntries(lines);
+        List<SchedulerEntry> scheduleEntries = mapToScheduleEntries(lines);
         sortScheduler(scheduleEntries);
         sessionBean.setScheduleEntries(scheduleEntries);
 
@@ -81,14 +81,14 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<ScheduleEntry> getBeginningsOfDays(List<ScheduleEntry> scheduler) {
+    public List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler) {
         return scheduler.stream()
-                .filter(distinctByKey(ScheduleEntry::getDate))
+                .filter(distinctByKey(SchedulerEntry::getDate))
                 .toList();
     }
 
-    private void sortScheduler(List<ScheduleEntry> scheduler) {
-        scheduler.sort(Comparator.comparing(ScheduleEntry::getDate).thenComparing(ScheduleEntry::getStartTime));
+    private void sortScheduler(List<SchedulerEntry> scheduler) {
+        scheduler.sort(Comparator.comparing(SchedulerEntry::getDate).thenComparing(SchedulerEntry::getStartTime));
     }
 
     public <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
@@ -103,7 +103,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .get();
     }
 
-    private List<ScheduleEntry> mapToScheduleEntries(List<String> lines) {
+    private List<SchedulerEntry> mapToScheduleEntries(List<String> lines) {
         Pattern pattern = Pattern.compile("[^;\"\\n]+");
 
         return lines.stream()
@@ -114,11 +114,11 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .collect(Collectors.toList());
     }
 
-    private ScheduleEntry mapToDateLine(List<MatchResult> results) {
+    private SchedulerEntry mapToDateLine(List<MatchResult> results) {
         DateTimeFormatter dimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        return ScheduleEntry.builder()
+        return SchedulerEntry.builder()
                 .subject(results.get(0).group())
                 .date(LocalDate.parse(results.get(2).group(), dateFormatter))
                 .startTime(LocalTime.parse(results.get(3).group(), dimeFormatter))

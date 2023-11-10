@@ -39,19 +39,19 @@ public class ClientMapper {
         return messageSource.getMessage("service.status." + statusCode, null, LocaleContextHolder.getLocale());
     }
 
-    public SchedulerViewDTO map(ScheduleEntry scheduleEntry) {
+    public SchedulerViewDTO map(SchedulerEntry schedulerEntry) {
         return SchedulerViewDTO.builder()
-                .date(scheduleEntry.getDate())
-                .startTime(scheduleEntry.getStartTime())
-                .endTime(scheduleEntry.getEndTime())
+                .date(schedulerEntry.getDate())
+                .startTime(schedulerEntry.getStartTime())
+                .endTime(schedulerEntry.getEndTime())
                 .build();
     }
 
-    public SchedulerGenerateDayParams map(SchedulerDayDTO schedulerDay, ScheduleEntry scheduleEntry) {
+    public SchedulerGenerateDayParams map(SchedulerDayDTO schedulerDay, SchedulerEntry schedulerEntry) {
         return SchedulerGenerateDayParams.builder()
                 .email(schedulerDay.getEmail())
                 .date(schedulerDay.getDate())
-                .timeDifference(scheduleEntry.getStartTime().until(schedulerDay.getStartTime(), ChronoUnit.MINUTES))
+                .timeDifference(schedulerEntry.getStartTime().until(schedulerDay.getStartTime(), ChronoUnit.MINUTES))
                 .build();
     }
 

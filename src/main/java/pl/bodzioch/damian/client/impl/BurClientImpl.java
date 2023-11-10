@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dto.bur.*;
 import pl.bodzioch.damian.mapper.BurMapper;
-import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerEntry;
 import pl.bodzioch.damian.model.ServiceModel;
 
 import java.net.URI;
@@ -52,7 +52,7 @@ public class BurClientImpl implements BurClient {
     }
 
     @Override
-    public List<ScheduleEntry> getScheduleForService(long serviceId) {
+    public List<SchedulerEntry> getScheduleForService(long serviceId) {
         int page = 1;
         int downloadedElements = 0;
         List<ListOfServiceScheduleEntriesDTO> responses = new ArrayList<>();

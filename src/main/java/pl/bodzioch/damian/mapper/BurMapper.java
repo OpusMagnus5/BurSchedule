@@ -3,7 +3,7 @@ package pl.bodzioch.damian.mapper;
 import pl.bodzioch.damian.dto.bur.AddressDTO;
 import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
-import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerEntry;
 import pl.bodzioch.damian.model.ServiceModel;
 import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.model.ServiceStatus;
@@ -15,10 +15,10 @@ import java.util.Arrays;
 
 public class BurMapper {
 
-    public static ScheduleEntry map(ServiceScheduleDTO dto) {
+    public static SchedulerEntry map(ServiceScheduleDTO dto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        return ScheduleEntry.builder()
+        return SchedulerEntry.builder()
                 .subject(dto.getTemat())
                 .date(ZonedDateTime.parse(dto.getData()).toLocalDate())
                 .startTime(LocalTime.parse(dto.getGodzinaRozpoczecia(), formatter))

@@ -65,9 +65,9 @@ public class SchedulerController {
     @PostMapping("/generate")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> generateFile(@Valid @RequestBody GenerateFileRequestDTO request) {
-        List<ScheduleEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionBean.getScheduleEntries());
+        List<SchedulerEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionBean.getScheduleEntries());
         validateNumberOfDays(beginningsOfDays.size(), request.getScheduleDays());
-        Iterator<ScheduleEntry> iterator = beginningsOfDays.iterator();
+        Iterator<SchedulerEntry> iterator = beginningsOfDays.iterator();
         List<SchedulerGenerateDayParams> dayParams = request.getScheduleDays().stream()
                 .map(day -> clientMapper.map(day, iterator.next()))
                 .toList();

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
 import pl.bodzioch.damian.exception.AppException;
+import pl.bodzioch.damian.mapper.EntityMapper;
+import pl.bodzioch.damian.model.Scheduler;
 
 import java.util.List;
 
@@ -27,16 +29,18 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         entityManager.persist(entity);
     }
 
-    public SchedulerDbEntity getByName(String name) {
+    @Override
+    public Scheduler getByName(String name) {
         try {
             SchedulerDbEntity scheduler = entityManager.createQuery(
                             "SELECT scheduler " +
                                     "FROM SchedulerDbEntity scheduler " +
-                                    "WHERE scheduler.name = :name", SchedulerDbEntity.class)
+                                    "WHERE scheduler.name = :name" +
+                                    "ORDER BY scheduler.entries.date, scheduler.entries.startTime", SchedulerDbEntity.class)
                     .setParameter("name", name)
                     .getSingleResult();
-//TODO
-            entityManager.
+
+            return EntityMapper.map(scheduler);
         } catch (NoResultException | NonUniqueResultException ex) {
             log.warn("Scheduler with name {} not found", name, ex);
             throw new AppException("scheduler.dao.scheduler.notFound", List.of(name), HttpStatus.BAD_REQUEST, ex);

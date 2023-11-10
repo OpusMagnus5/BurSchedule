@@ -5,9 +5,10 @@ import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.entity.*;
 import pl.bodzioch.damian.model.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+
+import static java.util.stream.Collectors.*;
 
 public class EntityMapper {
 
@@ -70,6 +71,41 @@ public class EntityMapper {
                 .entries(map(params.getSchedulerDays()))
                 .build();
     }
+
+    public static Scheduler map(SchedulerDbEntity entity) {
+        Map<LocalDate, List<SchedulerEntry>> mapEntriesToDate = entity.getEntries().stream()
+                .map(EntityMapper::map)
+                .collect(groupingBy(SchedulerEntry::getDate));
+
+        List<SchedulerDay> days = mapEntriesToDate.values().stream()
+                .map(entries -> SchedulerDay.builder().entries(entries).build())
+                .map(day -> {
+                    LocalDate date = day.getEntries().get(0).getDate();
+                    String email = entity.getEntries().stream()
+                            .filter(entry -> entry.getDate().equals(date))
+                            .map(SchedulerEntryDbEntity::getEmail)
+                            .reduce("", String::concat);
+                    return SchedulerDay.builder().entries(day.getEntries()).email(email).build();
+                })
+                .toList();
+
+
+        return Scheduler.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .days(days)
+                .build();
+    }
+
+    private static SchedulerEntry map(SchedulerEntryDbEntity entry) {
+        return SchedulerEntry.builder()
+                .subject(entry.getSubject())
+                .date(entry.getDate())
+                .startTime(entry.getStartTime())
+                .endTime(entry.getEndTime())
+                .build();
+    }
+
 
     private static List<SchedulerEntryDbEntity> map(List<SchedulerCreateDayParams> params) {
         return params.stream()

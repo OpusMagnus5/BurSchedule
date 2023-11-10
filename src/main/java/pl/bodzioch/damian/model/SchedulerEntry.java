@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Builder
 @Getter
-public class ScheduleEntry {
+public class SchedulerEntry {
 
     private String subject;
     private LocalDate date;

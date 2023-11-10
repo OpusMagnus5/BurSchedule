@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
-import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerEntry;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ import java.util.List;
 @SessionScope
 public class SessionBean {
 
-    private List<ScheduleEntry> scheduleEntries = null;
+    private List<SchedulerEntry> scheduleEntries = null;
 }
