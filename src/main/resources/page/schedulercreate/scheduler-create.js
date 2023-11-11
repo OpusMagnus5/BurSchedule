@@ -190,11 +190,17 @@ function handleCopyDay(event) {
 
   scheduler.appendChild(copiedDay);
   copiedDay.querySelector(".add-record").addEventListener("click", handleAddRecordEvent);
-  copiedDay.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
-  copiedDay.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+  copiedDay.querySelectorAll(".record-start-time").forEach((element) => {
+    element.addEventListener("change", calculateDayHour);
+  });
+  copiedDay.querySelectorAll(".record-end-time").forEach((element) => {
+    element.addEventListener("change", calculateDayHour);
+  });
   copiedDay.querySelector(".remove-day").addEventListener("click", handleRemoveDay);
   copiedDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
-  copiedDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
+  copiedDay.querySelectorAll(".remove-record").forEach((element) => {
+    element.addEventListener("click", handleRemoveRecord);
+  });
   calculateSchedulerHour();
   recalculateDayNumbers();
 }
