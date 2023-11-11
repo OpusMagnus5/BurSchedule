@@ -21,13 +21,13 @@ import java.util.UUID;
 public class SchedulerDbEntity {
 
     @GeneratedUuidValue(types = EventType.INSERT)
+    @Id
     private UUID id;
 
     @NaturalId
     private String name;
 
     @OneToMany(targetEntity = SchedulerEntryDbEntity.class)
-    @JoinColumn(name = "scheduler_id", table = "scheduler_entries")
     private List<SchedulerEntryDbEntity> entries;
 
     @CurrentTimestamp(event = EventType.INSERT)

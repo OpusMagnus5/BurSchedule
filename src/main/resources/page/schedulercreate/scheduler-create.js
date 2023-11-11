@@ -1,12 +1,15 @@
-import { createSchedulerUrl, getMessage, postToApi } from "../util/config.js";
+import { createSchedulerUrl, getMessage, postToApi, schedulerUrl } from "../util/config.js";
 import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
+
+let schedulerId = null;
 
 function setPage() {
   setTextData();
   setMenu();
   document.querySelector(".send-scheduler").addEventListener("click", handleSendSchedulerEvent);
+  document.querySelector(".save-scheduler").addEventListener("click", handleSaveSchedulerEvent);
 }
 
 function setTextData() {
@@ -21,6 +24,7 @@ function setTextData() {
   document.querySelector(".remove-record").textContent = getMessage("scheduler-create-remove-record-button");
   document.querySelector(".add-day").textContent = getMessage("scheduler-create-add-day-button");
   document.querySelector(".send-scheduler").textContent = getMessage("scheduler-create-send-scheduler-button");
+  document.querySelector(".save-scheduler").textContent = getMessage("scheduler-create-save-scheduler-button");
   document.querySelector(".scheduler-hours-label").textContent = getMessage("scheduler-create-scheduler-hours-label");
   document.querySelector(".scheduler-hours-value").textContent = "00:00";
 }
@@ -59,9 +63,23 @@ function handleSendSchedulerEvent() {
   postToApi(createSchedulerUrl, schedulerDTO);
 }
 
+function handleSaveSchedulerEvent() {
+  let days = document.querySelectorAll(".day");
+  let schedulerDTO = getSchedulerDTO(days);
+  postToApi(schedulerUrl, schedulerDTO).then(
+    (response) =>
+      function () {
+        schedulerId = response.id;
+        alert(response.message);
+      }
+  );
+}
+
 function getSchedulerDTO(days) {
   let schedulerDTO = {
     days: [],
+    id: schedulerId,
+    name: null,
   };
 
   days.forEach((dayNode) => {
@@ -190,11 +208,17 @@ function handleCopyDay(event) {
 
   scheduler.appendChild(copiedDay);
   copiedDay.querySelector(".add-record").addEventListener("click", handleAddRecordEvent);
-  copiedDay.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
-  copiedDay.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+  copiedDay.querySelectorAll(".record-start-time").forEach((element) => { //TODO dodac do mastera
+    element.addEventListener("change", calculateDayHour);
+  });
+  copiedDay.querySelectorAll(".record-end-time").forEach((element) => {
+    element.addEventListener("change", calculateDayHour);
+  });
   copiedDay.querySelector(".remove-day").addEventListener("click", handleRemoveDay);
   copiedDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
-  copiedDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
+  copiedDay.querySelectorAll(".remove-record").forEach((element) => {
+    element.addEventListener("click", handleRemoveRecord);
+  });
   calculateSchedulerHour();
   recalculateDayNumbers();
 }

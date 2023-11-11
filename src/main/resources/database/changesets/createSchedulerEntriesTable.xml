@@ -7,7 +7,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="5" author="Damian Bodzioch">
         <createTable tableName="scheduler_entries">
             <column name="id" type="uuid">
-                <constraints primaryKey="true" primaryKeyName="pk_schedulers_id"
+                <constraints primaryKey="true" primaryKeyName="pk_scheduler_entries_id"
                              nullable="false" notNullConstraintName="nn_scheduler_entries_id" />
             </column>
             <column name="scheduler_id" type="uuid">

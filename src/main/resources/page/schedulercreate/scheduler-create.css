@@ -89,7 +89,8 @@ article {
 }
 
 .add-day,
-.send-scheduler {
+.send-scheduler,
+.save-scheduler {
   background-color: #0dc79c;
   transition: background-color 0.3s ease-in-out;
   border-radius: 10px;
@@ -98,7 +99,8 @@ article {
 }
 
 .add-day:hover,
-.send-scheduler:hover {
+.send-scheduler:hover,
+.save-scheduler:hover {
   cursor: pointer;
   background-color: #0e37ab;
   color: white;

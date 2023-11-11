@@ -3,7 +3,7 @@ const baseUrl = "/app/";
 export const servicesUrl = baseUrl + "services";
 export const providersUrl = servicesUrl + "/providers";
 export const statusesUrl = servicesUrl + "/statuses";
-export const schedulerUrl = baseUrl + "scheduler/";
+export const schedulerUrl = baseUrl + "scheduler";
 export const generateUrl = schedulerUrl + "generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "file";
@@ -56,6 +56,7 @@ export const messages_pl = new Map([
   ["scheduler-create-remove-record-button", "Usuń wpis"],
   ["scheduler-create-add-day-button", "Dodaj dzień"],
   ["scheduler-create-send-scheduler-button", "Wyślij"],
+  ["scheduler-create-save-scheduler-button", "Zapisz"],
   ["scheduler-create-day-number-label", "Dzień "],
   ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
   ["login.username.input.placeholder", "Nazwa użytkownika"],

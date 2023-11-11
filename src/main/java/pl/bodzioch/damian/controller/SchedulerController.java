@@ -117,8 +117,12 @@ public class SchedulerController {
 
         UUID newId = schedulerService.saveScheduler(params);
         String encryptedId = securityService.encryptMessage(newId.toString());
+        SaveSchedulerResponseDTO response = SaveSchedulerResponseDTO.builder()
+                .id(encryptedId)
+                .message(messageSource.getMessage("save.scheduler.success", new String[]{request.getName()}, LocaleContextHolder.getLocale()))
+                .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SaveSchedulerResponseDTO(encryptedId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     private HttpHeaders getHeadersToSendSchedulerFile() {
