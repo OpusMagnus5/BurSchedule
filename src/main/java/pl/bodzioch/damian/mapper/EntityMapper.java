@@ -104,6 +104,7 @@ public class EntityMapper {
                 .date(entry.getDate())
                 .startTime(entry.getStartTime())
                 .endTime(entry.getEndTime())
+                .id(entry.getId())
                 .build();
     }
 

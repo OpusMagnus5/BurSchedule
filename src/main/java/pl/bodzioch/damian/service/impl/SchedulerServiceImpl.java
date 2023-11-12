@@ -9,12 +9,12 @@ import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
-import pl.bodzioch.damian.entity.SchedulerEntryDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.SaveSchedulerParams;
+import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerEntry;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
@@ -26,7 +26,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -77,23 +79,21 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<UUID> saveScheduler(SaveSchedulerParams params) {
+    public Scheduler saveScheduler(SaveSchedulerParams params) {
         SchedulerDbEntity schedulerDbEntity = EntityMapper.map(params);
-        List<SchedulerEntryDbEntity> entries = schedulerDbEntity.getEntries();
-        schedulerDbEntity.setEntries(Collections.emptyList());
 
         if (params.getId().isPresent()) {
-            return schedulerDAO.saveScheduler(schedulerDbEntity, entries);
+            return schedulerDAO.saveScheduler(schedulerDbEntity);
         }
-        return saveSchedulerIfNotExists(schedulerDbEntity, entries);
+        return saveSchedulerIfNotExists(schedulerDbEntity);
     }
 
-    private List<UUID> saveSchedulerIfNotExists(SchedulerDbEntity schedulerDbEntity, List<SchedulerEntryDbEntity> entries) {
+    private Scheduler saveSchedulerIfNotExists(SchedulerDbEntity schedulerDbEntity) {
         String schedulerName = schedulerDbEntity.getName();
         try {
             schedulerDAO.getByName(schedulerName);
         } catch (AppException ex) {
-            return schedulerDAO.saveScheduler(schedulerDbEntity, entries);
+            return schedulerDAO.saveScheduler(schedulerDbEntity);
         }
         throw new AppException("save.scheduler.exists", List.of(schedulerName), HttpStatus.BAD_REQUEST);
     }

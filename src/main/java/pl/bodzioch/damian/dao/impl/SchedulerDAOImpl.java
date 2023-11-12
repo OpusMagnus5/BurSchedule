@@ -10,14 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
-import pl.bodzioch.damian.entity.SchedulerEntryDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Repository
@@ -28,21 +25,11 @@ public class SchedulerDAOImpl implements SchedulerDAO {
 
     @Override
     @Transactional
-    public List<UUID> saveScheduler(SchedulerDbEntity entity, List<SchedulerEntryDbEntity> entries) {
+    public Scheduler saveScheduler(SchedulerDbEntity entity) {
+        entity.getEntries().forEach(entry -> entry.setScheduler(entity));
         entityManager.merge(entity);
-        entries.stream()
-                .peek(entry -> entry.setSchedulerId(entity.getId()))
-                .forEach(entityManager::merge);
-
-        List<UUID> entriesIds = entries.stream()
-                .map(SchedulerEntryDbEntity::getId)
-                .toList();
-
-        List<UUID> ids = new ArrayList<>();
-        ids.add(entity.getId());
-        ids.addAll(entriesIds);
-        return ids;
-
+        entityManager.flush();
+        return EntityMapper.map(entity);
     }
 
     @Override

@@ -97,6 +97,7 @@ function getSchedulerDTO(days) {
     };
     records.forEach((recordNode) => {
       let recordDTO = {
+        id: recordNode.id && recordNode.id.length > 0 ? recordNode.id : null,
         subject: recordNode.querySelector(".record-subject").value,
         startTime: recordNode.querySelector(".record-start-time").value,
         endTime: recordNode.querySelector(".record-end-time").value,

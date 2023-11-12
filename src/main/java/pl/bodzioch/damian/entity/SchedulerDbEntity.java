@@ -2,6 +2,7 @@ package pl.bodzioch.damian.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.generator.EventType;
@@ -27,15 +28,14 @@ public class SchedulerDbEntity {
     @NaturalId
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "scheduler_id")
+    @OneToMany(mappedBy = "scheduler", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SchedulerEntryDbEntity> entries;
 
-    @CurrentTimestamp(event = EventType.INSERT)
+    @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
     @CurrentTimestamp(event = EventType.UPDATE)
     @Column(name = "modify_date")
-    private LocalDateTime modifyDate;
+    private LocalDateTime modifyDate;  //TODO dodanie usuwania session do strony logowania, sprobowac wylczyc kaskade i zobczyc czy zadziala
 }

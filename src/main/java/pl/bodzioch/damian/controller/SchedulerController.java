@@ -24,10 +24,7 @@ import pl.bodzioch.damian.service.SecurityService;
 import pl.bodzioch.damian.session.SessionBean;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -116,14 +113,17 @@ public class SchedulerController {
                 .id(id)
                 .build();
 
-        List<UUID> ids = schedulerService.saveScheduler(params);
-        List<String> encryptedIds = ids.stream()
+        Scheduler scheduler = schedulerService.saveScheduler(params);
+        List<String> encryptedIds = scheduler.getDays().stream()
+                .map(SchedulerDay::getEntries)
+                .flatMap(Collection::stream)
+                .map(SchedulerEntry::getId)
                 .map(UUID::toString)
                 .map(securityService::encryptMessage)
                 .collect(Collectors.toList());
 
         SaveSchedulerResponseDTO response = SaveSchedulerResponseDTO.builder()
-                .schedulerId(encryptedIds.remove(0))
+                .schedulerId(securityService.encryptMessage(scheduler.getId().toString()))
                 .entriesIds(encryptedIds)
                 .message(messageSource.getMessage("save.scheduler.success", new String[]{request.getName()}, LocaleContextHolder.getLocale()))
                 .build();

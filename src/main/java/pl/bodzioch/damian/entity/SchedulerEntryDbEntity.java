@@ -2,6 +2,7 @@ package pl.bodzioch.damian.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.generator.EventType;
 import pl.bodzioch.damian.configuration.database.GeneratedUuidValue;
@@ -25,9 +26,9 @@ public class SchedulerEntryDbEntity {
     @GeneratedUuidValue(types = EventType.INSERT)
     private UUID id;
 
-    @Column(name = "scheduler_id")
-    @JoinColumn(referencedColumnName = "id")
-    private UUID schedulerId;
+    @ManyToOne
+    @JoinColumn(name = "scheduler_id")
+    private SchedulerDbEntity scheduler;
 
     private String subject;
 
@@ -41,7 +42,7 @@ public class SchedulerEntryDbEntity {
 
     private LocalDate date;
 
-    @CurrentTimestamp(event = EventType.INSERT)
+    @CreationTimestamp
     @Column(name = "create_date")
     private LocalDateTime createDate;
 

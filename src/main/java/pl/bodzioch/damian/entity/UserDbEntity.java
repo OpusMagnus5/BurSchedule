@@ -2,6 +2,7 @@ package pl.bodzioch.damian.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.generator.EventType;
@@ -37,7 +38,7 @@ public class UserDbEntity {
     private List<RoleDbEntity> roles;
 
     @Column(name = "create_date")
-    @CurrentTimestamp(event = EventType.INSERT)
+    @CreationTimestamp
     private LocalDateTime createDate;
 
     @Column(name = "modify_date")
