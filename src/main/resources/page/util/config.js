@@ -57,6 +57,7 @@ export const messages_pl = new Map([
   ["scheduler-create-add-day-button", "Dodaj dzień"],
   ["scheduler-create-send-scheduler-button", "Wyślij"],
   ["scheduler-create-save-scheduler-button", "Zapisz"],
+  ["scheduler-create-save-scheduler-name-prompt", "Podaj nazwę dla harmonogramu"],
   ["scheduler-create-day-number-label", "Dzień "],
   ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
   ["login.username.input.placeholder", "Nazwa użytkownika"],

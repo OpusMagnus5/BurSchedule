@@ -4,6 +4,7 @@ import { setMenu } from "../templates/menu.js";
 document.addEventListener("DOMContentLoaded", setPage);
 
 let schedulerId = null;
+let schedulerName = null;
 
 function setPage() {
   setTextData();
@@ -66,20 +67,25 @@ function handleSendSchedulerEvent() {
 function handleSaveSchedulerEvent() {
   let days = document.querySelectorAll(".day");
   let schedulerDTO = getSchedulerDTO(days);
-  postToApi(schedulerUrl, schedulerDTO).then(
-    (response) =>
-      function () {
-        schedulerId = response.id;
-        alert(response.message);
-      }
-  );
+  if (!schedulerName) {
+    schedulerName = prompt(getMessage("scheduler-create-save-scheduler-name-prompt"));
+    schedulerDTO.name = schedulerName;
+  }
+  postToApi(schedulerUrl, schedulerDTO).then((response) => {
+    schedulerId = response.schedulerId;
+    let records = document.querySelectorAll(".day .record-day");
+    for (let i = 0; records[i]; i++) {
+      records[i].id = response.entriesIds[i];
+    }
+    alert(response.message);
+  });
 }
 
 function getSchedulerDTO(days) {
   let schedulerDTO = {
     days: [],
     id: schedulerId,
-    name: null,
+    name: schedulerName,
   };
 
   days.forEach((dayNode) => {
@@ -208,7 +214,7 @@ function handleCopyDay(event) {
 
   scheduler.appendChild(copiedDay);
   copiedDay.querySelector(".add-record").addEventListener("click", handleAddRecordEvent);
-  copiedDay.querySelectorAll(".record-start-time").forEach((element) => { //TODO dodac do mastera
+  copiedDay.querySelectorAll(".record-start-time").forEach((element) => {
     element.addEventListener("change", calculateDayHour);
   });
   copiedDay.querySelectorAll(".record-end-time").forEach((element) => {

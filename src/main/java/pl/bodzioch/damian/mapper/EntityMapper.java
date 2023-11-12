@@ -69,7 +69,7 @@ public class EntityMapper {
         return SchedulerDbEntity.builder()
                 .name(params.getSchedulerName())
                 .entries(map(params.getSchedulerDays()))
-                .id(params.getId().orElseGet(null))
+                .id(params.getId().orElse(null))
                 .build();
     }
 
@@ -119,6 +119,7 @@ public class EntityMapper {
     private static List<SchedulerEntryDbEntity> map(SchedulerCreateDayParams params) {
         return params.getRecords().stream()
                 .map(record -> SchedulerEntryDbEntity.builder()
+                        .id(record.getId().orElse(null))
                         .email(params.getEmail())
                         .date(params.getDate())
                         .startTime(record.getStartTime())

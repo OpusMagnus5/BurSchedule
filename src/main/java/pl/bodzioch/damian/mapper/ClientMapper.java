@@ -12,6 +12,7 @@ import pl.bodzioch.damian.service.SecurityService;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -95,6 +96,10 @@ public class ClientMapper {
 
     private SchedulerCreateRecordParams map(CreateSchedulerRecordDTO record) {
         return SchedulerCreateRecordParams.builder()
+                .id(record.getId()
+                        .map(securityService::decryptMessage)
+                        .map(UUID::fromString)
+                        .orElse(null))
                 .subject(record.getSubject())
                 .startTime(record.getStartTime())
                 .endTime(record.getEndTime())

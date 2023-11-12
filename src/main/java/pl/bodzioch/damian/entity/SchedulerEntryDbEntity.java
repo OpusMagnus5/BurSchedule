@@ -1,9 +1,6 @@
 package pl.bodzioch.damian.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.generator.EventType;
@@ -29,6 +26,7 @@ public class SchedulerEntryDbEntity {
     private UUID id;
 
     @Column(name = "scheduler_id")
+    @JoinColumn(referencedColumnName = "id")
     private UUID schedulerId;
 
     private String subject;
@@ -44,9 +42,11 @@ public class SchedulerEntryDbEntity {
     private LocalDate date;
 
     @CurrentTimestamp(event = EventType.INSERT)
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
     @CurrentTimestamp(event = EventType.UPDATE)
+    @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 
     public Optional<LocalDateTime> getModifyDate() {

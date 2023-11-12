@@ -27,7 +27,8 @@ public class SchedulerDbEntity {
     @NaturalId
     private String name;
 
-    @OneToMany(targetEntity = SchedulerEntryDbEntity.class)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "scheduler_id")
     private List<SchedulerEntryDbEntity> entries;
 
     @CurrentTimestamp(event = EventType.INSERT)

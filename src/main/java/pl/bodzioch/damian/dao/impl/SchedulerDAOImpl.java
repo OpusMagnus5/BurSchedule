@@ -10,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
+import pl.bodzioch.damian.entity.SchedulerEntryDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +28,21 @@ public class SchedulerDAOImpl implements SchedulerDAO {
 
     @Override
     @Transactional
-    public UUID saveScheduler(SchedulerDbEntity entity) {
-        entityManager.persist(entity);
-        return entity.getId();
+    public List<UUID> saveScheduler(SchedulerDbEntity entity, List<SchedulerEntryDbEntity> entries) {
+        entityManager.merge(entity);
+        entries.stream()
+                .peek(entry -> entry.setSchedulerId(entity.getId()))
+                .forEach(entityManager::merge);
+
+        List<UUID> entriesIds = entries.stream()
+                .map(SchedulerEntryDbEntity::getId)
+                .toList();
+
+        List<UUID> ids = new ArrayList<>();
+        ids.add(entity.getId());
+        ids.addAll(entriesIds);
+        return ids;
+
     }
 
     @Override
@@ -37,8 +51,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
             SchedulerDbEntity scheduler = entityManager.createQuery(
                             "SELECT scheduler " +
                                     "FROM SchedulerDbEntity scheduler " +
-                                    "WHERE scheduler.name = :name" +
-                                    "ORDER BY scheduler.entries.date, scheduler.entries.startTime", SchedulerDbEntity.class)
+                                    "JOIN FETCH scheduler.entries entry " +
+                                    "WHERE scheduler.name = :name " +
+                                    "ORDER BY entry.date, entry.startTime", SchedulerDbEntity.class)
                     .setParameter("name", name)
                     .getSingleResult();
 

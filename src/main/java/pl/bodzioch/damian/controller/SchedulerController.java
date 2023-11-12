@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/app/scheduler")
@@ -108,17 +109,22 @@ public class SchedulerController {
 
         UUID id = request.getId()
                 .map(securityService::decryptMessage)
-                .map(UUID::fromString).orElseGet(null);
+                .map(UUID::fromString).orElse(null);
         SaveSchedulerParams params = SaveSchedulerParams.builder()
                 .schedulerDays(daysParams)
                 .schedulerName(request.getName())
                 .id(id)
                 .build();
 
-        UUID newId = schedulerService.saveScheduler(params);
-        String encryptedId = securityService.encryptMessage(newId.toString());
+        List<UUID> ids = schedulerService.saveScheduler(params);
+        List<String> encryptedIds = ids.stream()
+                .map(UUID::toString)
+                .map(securityService::encryptMessage)
+                .collect(Collectors.toList());
+
         SaveSchedulerResponseDTO response = SaveSchedulerResponseDTO.builder()
-                .id(encryptedId)
+                .schedulerId(encryptedIds.remove(0))
+                .entriesIds(encryptedIds)
                 .message(messageSource.getMessage("save.scheduler.success", new String[]{request.getName()}, LocaleContextHolder.getLocale()))
                 .build();
 
