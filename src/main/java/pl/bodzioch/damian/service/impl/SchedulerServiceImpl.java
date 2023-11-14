@@ -65,7 +65,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<SchedulerViewDTO> getSchedulerForService(InputStream inputStream) throws IOException {
+    public List<SchedulerViewDTO> getSchedulerFromFile(InputStream inputStream) throws IOException {
         BOMInputStream streamWithoutBOM = getStreamWithoutBOM(inputStream);
         List<String> lines = IOUtils.readLines(streamWithoutBOM, StandardCharsets.UTF_8);
         lines.remove(0);
@@ -86,6 +86,11 @@ public class SchedulerServiceImpl implements SchedulerService {
             return schedulerDAO.saveScheduler(schedulerDbEntity);
         }
         return saveSchedulerIfNotExists(schedulerDbEntity);
+    }
+
+    @Override
+    public List<Scheduler> getAllSchedulers() {
+        return schedulerDAO.getAll();
     }
 
     private Scheduler saveSchedulerIfNotExists(SchedulerDbEntity schedulerDbEntity) {

@@ -94,6 +94,43 @@ public class ClientMapper {
                 .build();
     }
 
+    public ListSchedulerResponseViewDTO map(List<Scheduler> schedulers) {
+        return ListSchedulerResponseViewDTO.builder()
+                .schedulers(schedulers.stream()
+                        .map(this::map)
+                        .toList())
+                .build();
+    }
+
+    private ListSchedulersViewDTO map(Scheduler scheduler) {
+        return ListSchedulersViewDTO.builder()
+                .id(securityService.encryptMessage(scheduler.getId().toString()))
+                .name(scheduler.getName())
+                .days(scheduler.getDays().stream()
+                        .map(this::map)
+                        .toList())
+                .build();
+    }
+
+    private ListSchedulerDayViewDTO map(SchedulerDay day) {
+        return ListSchedulerDayViewDTO.builder()
+                .email(day.getEmail())
+                .date(day.getEntries().get(0).getDate())
+                .records(day.getEntries().stream()
+                        .map(this::mapEntry)
+                        .toList())
+                .build();
+    }
+
+    private ListSchedulerRecordViewDTO mapEntry(SchedulerEntry entry) {
+        return ListSchedulerRecordViewDTO.builder()
+                .subject(entry.getSubject())
+                .id(securityService.encryptMessage(entry.getId().toString()))
+                .startTime(entry.getStartTime())
+                .endTime(entry.getEndTime())
+                .build();
+    }
+
     private SchedulerCreateRecordParams map(CreateSchedulerRecordDTO record) {
         return SchedulerCreateRecordParams.builder()
                 .id(record.getId()

@@ -37,5 +37,5 @@ public class SchedulerDbEntity {
 
     @CurrentTimestamp(event = EventType.UPDATE)
     @Column(name = "modify_date")
-    private LocalDateTime modifyDate;  //TODO dodanie usuwania session do strony logowania, sprobowac wylczyc kaskade i zobczyc czy zadziala
+    private LocalDateTime modifyDate;
 }

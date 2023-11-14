@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="templates/menu.js" type="module"></script>
+    <script src="util/config.js" type="module"></script>
+    <script src="scheduler-list/scheduler-list.js" type="module"></script>
+    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="scheduler-list/scheduler-list.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="filters">
+          <div class="filter-name">
+            <p class="filter-label name"></p>
+            <input type="search" class="filter-input name" />
+          </div>
+        </div>
+
+        <table class="scheduler-list">
+          <thead>
+            <tr>
+              <th class="head-number"></th>
+              <th class="head-name"></th>
+              <th class="head-days-number"></th>
+              <th class="head-create-date"></th>
+              <th class="head-modify-date"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="scheduler">
+              <td class="scheduler-number"></td>
+              <td class="scheduler-name"></td>
+              <td class="scheduler-days-number"></td>
+              <td class="scheduler-create-date"></td>
+              <td class="scheduler-modify-date"></td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
+    </div>
+  </body>
+</html>

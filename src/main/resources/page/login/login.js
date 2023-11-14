@@ -3,6 +3,7 @@ import { getMessage, loginUrl, postToApi } from "../util/config.js";
 document.addEventListener("DOMContentLoaded", setPage);
 
 function setPage() {
+  sessionStorage.clear();
   setTextData();
 }
 

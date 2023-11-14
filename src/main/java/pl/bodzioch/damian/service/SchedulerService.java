@@ -13,6 +13,7 @@ public interface SchedulerService {
 
     List<SchedulerViewDTO> getSchedulerForService(String serviceId);
     List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler);
-    List<SchedulerViewDTO> getSchedulerForService(InputStream inputStream) throws IOException;
+    List<SchedulerViewDTO> getSchedulerFromFile(InputStream inputStream) throws IOException;
     Scheduler saveScheduler(SaveSchedulerParams params);
+    List<Scheduler> getAllSchedulers();
 }

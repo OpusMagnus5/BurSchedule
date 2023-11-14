@@ -50,11 +50,21 @@ public class SchedulerController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ListSchedulerResponseViewDTO> getAllScheduler() {
+        List<Scheduler> schedulers = schedulerService.getAllSchedulers();
+        ListSchedulerResponseViewDTO response = clientMapper.map(schedulers);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/file")
     public ResponseEntity<SchedulerListViewDTO> getSchedulerFromFile(@RequestParam("file") MultipartFile file) {
-        List<SchedulerViewDTO> scheduler = new ArrayList<>();
+        List<SchedulerViewDTO> scheduler;
         try {
-            scheduler = schedulerService.getSchedulerForService(file.getInputStream());
+            scheduler = schedulerService.getSchedulerFromFile(file.getInputStream());
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new FileProcessingException(ex);

@@ -6,6 +6,7 @@ import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
@@ -14,6 +15,7 @@ import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -50,5 +52,23 @@ public class SchedulerDAOImpl implements SchedulerDAO {
             throw new AppException("scheduler.dao.scheduler.notFound", List.of(name), HttpStatus.BAD_REQUEST, ex);
 
         }
+    }
+
+    @Override
+    public List<Scheduler> getAll() {
+        List<SchedulerDbEntity> resultList = entityManager.createQuery(
+                        "SELECT scheduler " +
+                                "FROM SchedulerDbEntity scheduler " +
+                                "LEFT JOIN FETCH scheduler.entries entry " +
+                                "ORDER BY entry.date, entry.startTime, scheduler.name", SchedulerDbEntity.class)
+                .getResultList();
+
+        if (CollectionUtils.isEmpty(resultList)) {
+            throw new AppException("scheduler.dao.list.notFound", Collections.emptyList(), HttpStatus.NOT_FOUND);
+        }
+
+        return resultList.stream()
+                .map(EntityMapper::map)
+                .toList();
     }
 }
