@@ -102,6 +102,21 @@ public class ClientMapper {
                 .build();
     }
 
+    public SchedulerListResponseViewDTO mapToSchedulerListResponse(List<SchedulerInfo> schedulerInfoList) {
+        return SchedulerListResponseViewDTO.builder()
+                .schedulers(schedulerInfoList.stream()
+                        .map(scheduler -> SchedulerInfoViewDTO.builder()
+                                .id(scheduler.getId())
+                                .name(scheduler.getName())
+                                .daysNumber(scheduler.getDaysNumber())
+                                .createDate(scheduler.getCreateDate())
+                                .modifyDate(scheduler.getModifyDate())
+                                .build())
+                        .toList())
+                .build();
+    }
+
+
     private ListSchedulersViewDTO map(Scheduler scheduler) {
         return ListSchedulersViewDTO.builder()
                 .id(securityService.encryptMessage(scheduler.getId().toString()))

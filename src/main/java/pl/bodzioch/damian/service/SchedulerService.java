@@ -4,6 +4,7 @@ import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.model.SaveSchedulerParams;
 import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerEntry;
+import pl.bodzioch.damian.model.SchedulerInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,5 +16,5 @@ public interface SchedulerService {
     List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler);
     List<SchedulerViewDTO> getSchedulerFromFile(InputStream inputStream) throws IOException;
     Scheduler saveScheduler(SaveSchedulerParams params);
-    List<Scheduler> getAllSchedulers();
+    List<SchedulerInfo> getAllSchedulers();
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 
 @Getter
-@Builder
+@Builder //TODO przerobic na edycje harmonogramu
 public class ListSchedulerRecordViewDTO implements Serializable {
 
     private String id;

@@ -71,6 +71,12 @@ export const messages_pl = new Map([
   ["admin-add-user-roles-box-label", "Wybierz role:"],
   ["menu-logout", "Wyloguj"],
   ["logout-failure", "Nie udało się nam Cię wylogować. Spróbuj jeszcze raz."],
+  ["scheduler-list-filter-label-name", "Nazwa"],
+  ["scheduler-list-filter-label-create-date", "Data utworzenia"],
+  ["scheduler-list-filter-label-modify-date", "Data modyfikacji"],
+  ["cheduler-list-filter-reset-filters-button", "Wyczyść filtry"],
+  ["scheduler-list-head-name", "Nazwa"],
+  ["scheduler-list-head-days-number", "Liczba dni"],
 ]);
 
 export const messages_en = new Map();

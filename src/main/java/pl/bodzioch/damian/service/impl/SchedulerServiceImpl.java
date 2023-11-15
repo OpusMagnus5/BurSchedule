@@ -16,6 +16,7 @@ import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.SaveSchedulerParams;
 import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerEntry;
+import pl.bodzioch.damian.model.SchedulerInfo;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
 import pl.bodzioch.damian.session.SessionBean;
@@ -89,8 +90,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<Scheduler> getAllSchedulers() {
-        return schedulerDAO.getAll();
+    public List<SchedulerInfo> getAllSchedulers() {
+        return schedulerDAO.getAllSchedulersInfo();
     }
 
     private Scheduler saveSchedulerIfNotExists(SchedulerDbEntity schedulerDbEntity) {

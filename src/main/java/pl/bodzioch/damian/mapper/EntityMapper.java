@@ -70,6 +70,17 @@ public class EntityMapper {
                 .name(params.getSchedulerName())
                 .entries(map(params.getSchedulerDays()))
                 .id(params.getId().orElse(null))
+                .daysNumber(params.getSchedulerDays().size())
+                .build();
+    }
+
+    public static SchedulerInfo mapToSchedulerInfo(SchedulerDbEntity entity) {
+        return SchedulerInfo.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .daysNumber(entity.getDaysNumber())
+                .createDate(entity.getCreateDate().toLocalDate())
+                .modifyDate(entity.getModifyDate().toLocalDate())
                 .build();
     }
 

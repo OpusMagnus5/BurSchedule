@@ -28,6 +28,9 @@ public class SchedulerDbEntity {
     @NaturalId
     private String name;
 
+    @Column(name = "days_number")
+    private Integer daysNumber;
+
     @OneToMany(mappedBy = "scheduler", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SchedulerEntryDbEntity> entries;
 

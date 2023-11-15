@@ -14,6 +14,7 @@ import pl.bodzioch.damian.entity.SchedulerDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
+import pl.bodzioch.damian.model.SchedulerInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,12 +56,11 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     }
 
     @Override
-    public List<Scheduler> getAll() {
+    public List<SchedulerInfo> getAllSchedulersInfo() {
         List<SchedulerDbEntity> resultList = entityManager.createQuery(
                         "SELECT scheduler " +
                                 "FROM SchedulerDbEntity scheduler " +
-                                "LEFT JOIN FETCH scheduler.entries entry " +
-                                "ORDER BY entry.date, entry.startTime, scheduler.name", SchedulerDbEntity.class)
+                                "ORDER BY scheduler.modifyDate, scheduler.name", SchedulerDbEntity.class)
                 .getResultList();
 
         if (CollectionUtils.isEmpty(resultList)) {
@@ -68,7 +68,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         }
 
         return resultList.stream()
-                .map(EntityMapper::map)
+                .map(EntityMapper::mapToSchedulerInfo)
                 .toList();
     }
 }

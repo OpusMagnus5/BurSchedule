@@ -52,9 +52,9 @@ public class SchedulerController {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ListSchedulerResponseViewDTO> getAllScheduler() {
-        List<Scheduler> schedulers = schedulerService.getAllSchedulers();
-        ListSchedulerResponseViewDTO response = clientMapper.map(schedulers);
+    public ResponseEntity<SchedulerListResponseViewDTO> getAllScheduler() {
+        List<SchedulerInfo> schedulers = schedulerService.getAllSchedulers();
+        SchedulerListResponseViewDTO response = clientMapper.mapToSchedulerListResponse(schedulers);
 
         return ResponseEntity.ok(response);
     }
