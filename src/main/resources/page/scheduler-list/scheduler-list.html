@@ -19,13 +19,13 @@
             <p class="filter-label name"></p>
             <input type="search" class="filter-input name" />
           </div>
-          <div class="filter-create-date">
-            <p class="filter-label create-date"></p>
-            <input type="date" class="filter-input create-date" />
+          <div class="filter-start-date">
+            <p class="filter-label start-date"></p>
+            <input type="date" class="filter-input start-date" />
           </div>
-          <div class="filter-modify-date">
-            <p class="filter-label modify-date"></p>
-            <input type="date" class="filter-input modify-date" />
+          <div class="filter-end-date">
+            <p class="filter-label end-date"></p>
+            <input type="date" class="filter-input end-date" />
           </div>
           <button class="reset-filters"></button>
         </div>
@@ -37,6 +37,7 @@
               <th class="head-days-number"></th>
               <th class="head-create-date"></th>
               <th class="head-modify-date"></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +46,11 @@
               <td class="scheduler-days-number"></td>
               <td class="scheduler-create-date"></td>
               <td class="scheduler-modify-date"></td>
+              <td class="scheduler-action-buttons">
+                <button class="scheduler-save-button">⬇️</button>
+                <button class="scheduler-edit-button">✏️</button>
+                <button class="scheduler-delete-button">🗑️</button>
+              </td>
             </tr>
           </tbody>
         </table>

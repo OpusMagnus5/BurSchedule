@@ -10,6 +10,7 @@ import pl.bodzioch.damian.configuration.database.GeneratedUuidValue;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -41,4 +42,8 @@ public class SchedulerDbEntity {
     @CurrentTimestamp(event = EventType.UPDATE)
     @Column(name = "modify_date")
     private LocalDateTime modifyDate;
+
+    public Optional<LocalDateTime> getModifyDate() {
+        return Optional.ofNullable(modifyDate);
+    }
 }

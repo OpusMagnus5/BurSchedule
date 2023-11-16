@@ -6,6 +6,7 @@ import pl.bodzioch.damian.entity.*;
 import pl.bodzioch.damian.model.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.util.stream.Collectors.*;
@@ -80,7 +81,9 @@ public class EntityMapper {
                 .name(entity.getName())
                 .daysNumber(entity.getDaysNumber())
                 .createDate(entity.getCreateDate().toLocalDate())
-                .modifyDate(entity.getModifyDate().toLocalDate())
+                .modifyDate(entity.getModifyDate().
+                        map(LocalDateTime::toLocalDate)
+                        .orElse(null))
                 .build();
     }
 

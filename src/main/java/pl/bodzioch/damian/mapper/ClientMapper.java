@@ -106,7 +106,7 @@ public class ClientMapper {
         return SchedulerListResponseViewDTO.builder()
                 .schedulers(schedulerInfoList.stream()
                         .map(scheduler -> SchedulerInfoViewDTO.builder()
-                                .id(scheduler.getId())
+                                .id(securityService.encryptMessage(scheduler.getId().toString()))
                                 .name(scheduler.getName())
                                 .daysNumber(scheduler.getDaysNumber())
                                 .createDate(scheduler.getCreateDate())

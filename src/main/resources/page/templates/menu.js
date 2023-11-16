@@ -7,9 +7,14 @@ export function setMenu() {
 
 function setDisplayData() {
   document.querySelector(".menu .menu-service-list").textContent = getMessage("menu-service-list");
+  document.querySelector(".menu .menu-scheduler-list").textContent = getMessage("menu-scheduler-list");
   document.querySelector(".menu .menu-scheduler-from-file").textContent = getMessage("menu-scheduler-from-file");
   document.querySelector(".menu .menu-scheduler-create").textContent = getMessage("menu-scheduler-create");
+  setAdminPanel();
+  setLogoutPanel();
+}
 
+function setAdminPanel() {
   let adminMenu = document.querySelector(".menu .menu-admin");
   if (hasUserRole("ADMIN")) {
     adminMenu.textContent = getMessage("menu-admin");
@@ -19,39 +24,37 @@ function setDisplayData() {
   } else {
     adminMenu.remove();
   }
+}
 
+function setLogoutPanel() {
   let logoutMenu = document.querySelector(".menu .menu-logout");
-  if (hasUserRole("USER")) {
-    logoutMenu.textContent = getMessage("menu-logout");
-    logoutMenu.addEventListener("click", function () {
-      postToApi(logoutUrl, {}).then((data) => {
-        if (data) {
-          sessionStorage.clear();
-          window.location.href = "login";
-        } else {
-          alert(getMessage("logout-failure"));
-        }
-      });
+  logoutMenu.textContent = getMessage("menu-logout");
+  logoutMenu.addEventListener("click", function () {
+    postToApi(logoutUrl, {}).then((data) => {
+      if (data) {
+        sessionStorage.clear();
+        window.location.href = "login";
+      } else {
+        alert(getMessage("logout-failure"));
+      }
     });
-  }
+  });
 }
 
 function addClickListeners() {
-  document.querySelectorAll(".menu-service-list").forEach((element) => {
-    element.addEventListener("click", function () {
-      window.location.href = "services-list";
-    });
+  document.querySelector(".menu-service-list").addEventListener("click", function () {
+    window.location.href = "services-list";
   });
 
-  document.querySelectorAll(".menu-scheduler-from-file").forEach((element) => {
-    element.addEventListener("click", function () {
-      window.location.href = "scheduler-upload";
-    });
+  document.querySelector(".menu-scheduler-list").addEventListener("click", function () {
+    window.location.href = "scheduler-list";
   });
 
-  document.querySelectorAll(".menu-scheduler-create").forEach((element) => {
-    element.addEventListener("click", function () {
-      window.location.href = "scheduler-create";
-    });
+  document.querySelector(".menu-scheduler-from-file").addEventListener("click", function () {
+    window.location.href = "scheduler-upload";
+  });
+
+  document.querySelector(".menu-scheduler-create").addEventListener("click", function () {
+    window.location.href = "scheduler-create";
   });
 }

@@ -41,6 +41,7 @@ article {
 .scheduler {
   border-bottom: 1px solid #bbb;
   transition: background-color 0.3s ease-in-out;
+  text-align: center;
 }
 
 .scheduler-list tr.scheduler:hover {
@@ -93,4 +94,9 @@ article {
   padding: 5px 10px;
   width: 100%;
   font-size: 16px;
+}
+
+.scheduler-action-buttons button {
+  font-size: 16px;
+  padding: 5px;
 }

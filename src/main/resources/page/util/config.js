@@ -72,11 +72,14 @@ export const messages_pl = new Map([
   ["menu-logout", "Wyloguj"],
   ["logout-failure", "Nie udało się nam Cię wylogować. Spróbuj jeszcze raz."],
   ["scheduler-list-filter-label-name", "Nazwa"],
-  ["scheduler-list-filter-label-create-date", "Data utworzenia"],
-  ["scheduler-list-filter-label-modify-date", "Data modyfikacji"],
-  ["cheduler-list-filter-reset-filters-button", "Wyczyść filtry"],
+  ["scheduler-list-filter-label-start-date", "Od: "],
+  ["scheduler-list-filter-label-end-date", "Do: "],
+  ["scheduler-list-filter-reset-filters-button", "Wyczyść filtry"],
   ["scheduler-list-head-name", "Nazwa"],
   ["scheduler-list-head-days-number", "Liczba dni"],
+  ["scheduler-list-head-create-date", "Data uwtorzenia"],
+  ["scheduler-list-head-modify-date", "Data modyfikacji"],
+  ["menu-scheduler-list", "Lista harmonogramów"],
 ]);
 
 export const messages_en = new Map();
