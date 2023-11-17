@@ -11,13 +11,11 @@ function setPage() {
     getFromApi(schedulerUrl).then((response) => {
       sessionStorage.setItem("scheduler-list", JSON.stringify(response));
       setSchedulerList(response.schedulers);
-      colorEvenRows(Array.from(document.querySelectorAll(".scheduler")));
-      hideLoader();
+      setDataAfterFetchData();
     });
   } else {
     setSchedulerList(JSON.parse(sessionStorage.getItem("scheduler-list")).schedulers);
-    colorEvenRows(Array.from(document.querySelectorAll(".scheduler")));
-    hideLoader();
+    setDataAfterFetchData();
   }
   setMenu();
 }
@@ -63,4 +61,49 @@ function colorEvenRows(rows) {
       k++;
     }
   }
+}
+
+function setEventListeners() {
+  Array.from(document.querySelectorAll(".filter-input")).forEach((element) => {
+    element.addEventListener("change", filterSchedulers);
+  });
+  document.querySelector(".reset-filters").addEventListener("click", resetFiltersHandler);
+}
+
+function setDataAfterFetchData() {
+  colorEvenRows(Array.from(document.querySelectorAll(".scheduler")));
+  setEventListeners();
+  hideLoader();
+}
+
+function filterSchedulers() {
+  let schedulers = Array.from(document.querySelectorAll(".scheduler"));
+  let nameFilter = document.querySelector(".filter-input.name").value;
+  let startDate = new Date(document.querySelector(".filter-input.start-date").value);
+  let endDate = new Date(document.querySelector(".filter-input.end-date").value);
+
+  schedulers.forEach((row) => {
+    let schedulerName = row.querySelector(".scheduler-name").textContent;
+    let createDate = new Date(row.querySelector(".scheduler-create-date").textContent);
+    let modifyDate = new Date(row.querySelector(".scheduler-modify-date").textContent);
+
+    if (
+      (schedulerName.includes(nameFilter) || nameFilter === "") &&
+      (isNaN(startDate) || createDate >= startDate || modifyDate >= startDate) &&
+      (isNaN(endDate) || createDate <= endDate || modifyDate <= endDate)
+    ) {
+      row.style.display = "table-row";
+    } else {
+      row.style.display = "none";
+    }
+  });
+
+  colorEvenRows(schedulers);
+}
+
+function resetFiltersHandler() {
+  document.querySelectorAll(".filter-input").forEach((element) => {
+    element.value = "";
+    element.dispatchEvent(new Event("change"));
+  });
 }

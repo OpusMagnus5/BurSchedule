@@ -42,8 +42,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
                             "SELECT scheduler " +
                                     "FROM SchedulerDbEntity scheduler " +
                                     "JOIN FETCH scheduler.entries entry " +
-                                    "WHERE scheduler.name = :name " +
-                                    "ORDER BY entry.date, entry.startTime", SchedulerDbEntity.class)
+                                    "WHERE scheduler.name = :name", SchedulerDbEntity.class)
                     .setParameter("name", name)
                     .getSingleResult();
 
@@ -60,7 +59,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         List<SchedulerDbEntity> resultList = entityManager.createQuery(
                         "SELECT scheduler " +
                                 "FROM SchedulerDbEntity scheduler " +
-                                "ORDER BY scheduler.modifyDate, scheduler.name", SchedulerDbEntity.class)
+                                "ORDER BY scheduler.createDate, scheduler.modifyDate, scheduler.name DESC", SchedulerDbEntity.class)
                 .getResultList();
 
         if (CollectionUtils.isEmpty(resultList)) {
