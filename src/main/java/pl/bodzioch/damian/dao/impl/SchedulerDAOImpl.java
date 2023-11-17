@@ -18,6 +18,8 @@ import pl.bodzioch.damian.model.SchedulerInfo;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Repository
@@ -69,5 +71,12 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         return resultList.stream()
                 .map(EntityMapper::mapToSchedulerInfo)
                 .toList();
+    }
+
+    @Override
+    public Scheduler getScheduler(UUID id) {
+        return Optional.ofNullable(entityManager.find(SchedulerDbEntity.class, id))
+                .map(EntityMapper::map)
+                .orElseThrow(() -> new AppException("scheduler.dao.scheduler.notFound.byId", Collections.emptyList(), HttpStatus.NOT_FOUND));
     }
 }

@@ -92,6 +92,24 @@ public class SchedulerController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/generate")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> generateById(@RequestParam String id) {
+        UUID uuid = UUID.fromString(securityService.decryptMessage(id));
+        Scheduler scheduler = schedulerService.getScheduler(uuid);
+        List<SchedulerCreateDayParams> params = scheduler.getDays().stream()
+                .map(clientMapper::mapToCreateDayParams)
+                .sorted(Comparator.comparing(SchedulerCreateDayParams::getDate))
+                .toList();
+
+        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(params);
+
+        return ResponseEntity.ok()
+                .headers(getHeadersToSendSchedulerFile())
+                .body(fileBytes);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> createScheduler(@Valid @RequestBody CreateSchedulerRequestDTO request) {

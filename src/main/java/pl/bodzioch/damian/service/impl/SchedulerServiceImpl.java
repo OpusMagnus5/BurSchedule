@@ -30,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -94,6 +95,18 @@ public class SchedulerServiceImpl implements SchedulerService {
         return schedulerDAO.getAllSchedulersInfo();
     }
 
+    @Override
+    public Scheduler getScheduler(UUID id) {
+        return schedulerDAO.getScheduler(id);
+    }
+
+    @Override
+    public List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler) {
+        return scheduler.stream()
+                .filter(distinctByKey(SchedulerEntry::getDate))
+                .toList();
+    }
+
     private Scheduler saveSchedulerIfNotExists(SchedulerDbEntity schedulerDbEntity) {
         String schedulerName = schedulerDbEntity.getName();
         try {
@@ -102,13 +115,6 @@ public class SchedulerServiceImpl implements SchedulerService {
             return schedulerDAO.saveScheduler(schedulerDbEntity);
         }
         throw new AppException("save.scheduler.exists", List.of(schedulerName), HttpStatus.BAD_REQUEST);
-    }
-
-    @Override
-    public List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler) {
-        return scheduler.stream()
-                .filter(distinctByKey(SchedulerEntry::getDate))
-                .toList();
     }
 
     private void sortScheduler(List<SchedulerEntry> scheduler) {

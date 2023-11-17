@@ -11,6 +11,7 @@ import pl.bodzioch.damian.service.SecurityService;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,6 +114,25 @@ public class ClientMapper {
                                 .modifyDate(scheduler.getModifyDate())
                                 .build())
                         .toList())
+                .build();
+    }
+
+    public SchedulerCreateDayParams mapToCreateDayParams(SchedulerDay schedulerDay) {
+        return SchedulerCreateDayParams.builder()
+                .email(schedulerDay.getEmail())
+                .date(schedulerDay.getEntries().get(0).getDate())
+                .records(schedulerDay.getEntries().stream()
+                        .map(this::mapToRecordParams)
+                        .sorted(Comparator.comparing(SchedulerCreateRecordParams::getStartTime))
+                        .toList())
+                .build();
+    }
+
+    public SchedulerCreateRecordParams mapToRecordParams(SchedulerEntry entry) {
+        return SchedulerCreateRecordParams.builder()
+                .subject(entry.getSubject())
+                .startTime(entry.getStartTime())
+                .endTime(entry.getEndTime())
                 .build();
     }
 

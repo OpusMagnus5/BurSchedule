@@ -9,6 +9,7 @@ import pl.bodzioch.damian.model.SchedulerInfo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 public interface SchedulerService {
 
@@ -17,4 +18,5 @@ public interface SchedulerService {
     List<SchedulerViewDTO> getSchedulerFromFile(InputStream inputStream) throws IOException;
     Scheduler saveScheduler(SaveSchedulerParams params);
     List<SchedulerInfo> getAllSchedulers();
+    Scheduler getScheduler(UUID id);
 }
