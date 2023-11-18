@@ -11,6 +11,7 @@ import java.util.UUID;
 public class SchedulerInfo {
 
     private UUID id;
+    private String userName;
     private String name;
     private Integer daysNumber;
     private LocalDate createDate;

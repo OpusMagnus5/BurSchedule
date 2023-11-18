@@ -75,10 +75,12 @@ export const messages_pl = new Map([
   ["scheduler-list-filter-label-start-date", "Od: "],
   ["scheduler-list-filter-label-end-date", "Do: "],
   ["scheduler-list-filter-reset-filters-button", "Wyczyść filtry"],
+  ["scheduler-list-filter-label-user", "Użytkownik"],
   ["scheduler-list-head-name", "Nazwa"],
   ["scheduler-list-head-days-number", "Liczba dni"],
   ["scheduler-list-head-create-date", "Data uwtorzenia"],
   ["scheduler-list-head-modify-date", "Data modyfikacji"],
+  ["scheduler-list-head-user", "Użytkownik"],
   ["menu-scheduler-list", "Lista harmonogramów"],
 ]);
 

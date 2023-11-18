@@ -78,6 +78,7 @@ public class EntityMapper {
     public static SchedulerInfo mapToSchedulerInfo(SchedulerDbEntity entity) {
         return SchedulerInfo.builder()
                 .id(entity.getId())
+                .userName(entity.getUser().getUsername())
                 .name(entity.getName())
                 .daysNumber(entity.getDaysNumber())
                 .createDate(entity.getCreateDate().toLocalDate())

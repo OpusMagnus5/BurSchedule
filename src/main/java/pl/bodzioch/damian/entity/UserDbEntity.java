@@ -37,6 +37,9 @@ public class UserDbEntity {
     @Column(name = "role")
     private List<RoleDbEntity> roles;
 
+    @OneToMany(mappedBy = "user")
+    private List<SchedulerDbEntity> schedulers;
+
     @Column(name = "create_date")
     @CreationTimestamp
     private LocalDateTime createDate;

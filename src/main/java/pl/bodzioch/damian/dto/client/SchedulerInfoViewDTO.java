@@ -12,6 +12,7 @@ public class SchedulerInfoViewDTO implements Serializable {
 
     private String id;
     private String name;
+    private String userName;
     private Integer daysNumber;
     private LocalDate createDate;
     private LocalDate modifyDate;

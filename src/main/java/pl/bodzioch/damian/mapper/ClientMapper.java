@@ -109,6 +109,7 @@ public class ClientMapper {
                         .map(scheduler -> SchedulerInfoViewDTO.builder()
                                 .id(securityService.encryptMessage(scheduler.getId().toString()))
                                 .name(scheduler.getName())
+                                .userName(scheduler.getUserName())
                                 .daysNumber(scheduler.getDaysNumber())
                                 .createDate(scheduler.getCreateDate())
                                 .modifyDate(scheduler.getModifyDate())

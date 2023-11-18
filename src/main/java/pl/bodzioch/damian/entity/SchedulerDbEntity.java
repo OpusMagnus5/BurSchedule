@@ -32,6 +32,10 @@ public class SchedulerDbEntity {
     @Column(name = "days_number")
     private Integer daysNumber;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserDbEntity user;
+
     @OneToMany(mappedBy = "scheduler", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SchedulerEntryDbEntity> entries;
 

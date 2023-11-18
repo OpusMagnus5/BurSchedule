@@ -61,7 +61,8 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         List<SchedulerDbEntity> resultList = entityManager.createQuery(
                         "SELECT scheduler " +
                                 "FROM SchedulerDbEntity scheduler " +
-                                "ORDER BY scheduler.createDate, scheduler.modifyDate, scheduler.name DESC", SchedulerDbEntity.class)
+                                "LEFT JOIN FETCH UserDbEntity scheduler.user user " +
+                                "ORDER BY scheduler.createDate, scheduler.modifyDate DESC", SchedulerDbEntity.class)
                 .getResultList();
 
         if (CollectionUtils.isEmpty(resultList)) {

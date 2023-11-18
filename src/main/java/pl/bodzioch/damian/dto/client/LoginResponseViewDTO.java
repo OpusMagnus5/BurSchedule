@@ -11,4 +11,5 @@ import java.util.List;
 public class LoginResponseViewDTO implements Serializable {
 
     private List<String> userRoles;
+    private String userName;
 }

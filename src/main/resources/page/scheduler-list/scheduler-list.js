@@ -24,12 +24,14 @@ function setTextData() {
   document.querySelector(".filter-label.name").textContent = getMessage("scheduler-list-filter-label-name");
   document.querySelector(".filter-label.start-date").textContent = getMessage("scheduler-list-filter-label-start-date");
   document.querySelector(".filter-label.end-date").textContent = getMessage("scheduler-list-filter-label-end-date");
+  document.querySelector(".filter-label.user").textContent = getMessage("scheduler-list-filter-label-user");
   document.querySelector(".reset-filters").textContent = getMessage("scheduler-list-filter-reset-filters-button");
 
   document.querySelector(".head-name").textContent = getMessage("scheduler-list-head-name");
   document.querySelector(".head-days-number").textContent = getMessage("scheduler-list-head-days-number");
   document.querySelector(".head-create-date").textContent = getMessage("scheduler-list-head-create-date");
   document.querySelector(".head-modify-date").textContent = getMessage("scheduler-list-head-modify-date");
+  document.querySelector(".head-modify-user").textContent = getMessage("scheduler-list-head-user");
 }
 
 function setSchedulerList(schedulers) {
@@ -42,6 +44,7 @@ function setSchedulerList(schedulers) {
     newScheduler.querySelector(".scheduler-days-number").textContent = element.daysNumber;
     newScheduler.querySelector(".scheduler-create-date").textContent = element.createDate;
     newScheduler.querySelector(".scheduler-modify-date").textContent = element.modifyDate;
+    newScheduler.querySelector(".scheduler-user").textContent = element.userName;
     schedulerTable.appendChild(newScheduler);
   });
   schedulerTemplate.remove();
@@ -81,16 +84,19 @@ function filterSchedulers() {
   let nameFilter = document.querySelector(".filter-input.name").value;
   let startDate = new Date(document.querySelector(".filter-input.start-date").value);
   let endDate = new Date(document.querySelector(".filter-input.end-date").value);
+  let userFilter = document.querySelector(".filter-input.user").value;
 
   schedulers.forEach((row) => {
     let schedulerName = row.querySelector(".scheduler-name").textContent;
     let createDate = new Date(row.querySelector(".scheduler-create-date").textContent);
     let modifyDate = new Date(row.querySelector(".scheduler-modify-date").textContent);
+    let user = row.querySelector(".scheduler-user").textContent;
 
     if (
       (schedulerName.includes(nameFilter) || nameFilter === "") &&
       (isNaN(startDate) || createDate >= startDate || modifyDate >= startDate) &&
-      (isNaN(endDate) || createDate <= endDate || modifyDate <= endDate)
+      (isNaN(endDate) || createDate <= endDate || modifyDate <= endDate) &&
+      (user.includes(userFilter) || userFilter === "")
     ) {
       row.style.display = "table-row";
     } else {

@@ -60,7 +60,7 @@ public class SecurityController {
         List<String> roles = authenticationResponse.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseViewDTO(roles));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseViewDTO(roles, loginRequest.getUsername()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
