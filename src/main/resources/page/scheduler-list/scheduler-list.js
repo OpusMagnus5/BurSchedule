@@ -10,14 +10,20 @@ function setPage() {
   if (storedSchedulers === "undefined" || !storedSchedulers) {
     getFromApi(schedulerUrl).then((response) => {
       sessionStorage.setItem("scheduler-list", JSON.stringify(response));
-      setSchedulerList(response.schedulers);
-      setDataAfterFetchData();
     });
-  } else {
-    setSchedulerList(JSON.parse(sessionStorage.getItem("scheduler-list")).schedulers);
-    setDataAfterFetchData();
   }
-  setMenu();
+
+  try {
+    storedSchedulers = JSON.parse(sessionStorage.getItem("scheduler-list")).schedulers;
+  } catch {
+    storedSchedulers = [];
+  }
+
+  if (storedSchedulers) {
+    setSchedulerList(storedSchedulers);
+    setDataAfterFetchData();
+    setMenu();
+  }
 }
 
 function setTextData() {
@@ -31,7 +37,7 @@ function setTextData() {
   document.querySelector(".head-days-number").textContent = getMessage("scheduler-list-head-days-number");
   document.querySelector(".head-create-date").textContent = getMessage("scheduler-list-head-create-date");
   document.querySelector(".head-modify-date").textContent = getMessage("scheduler-list-head-modify-date");
-  document.querySelector(".head-modify-user").textContent = getMessage("scheduler-list-head-user");
+  document.querySelector(".head-user").textContent = getMessage("scheduler-list-head-user");
 }
 
 function setSchedulerList(schedulers) {

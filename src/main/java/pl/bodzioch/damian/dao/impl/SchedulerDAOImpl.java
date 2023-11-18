@@ -7,14 +7,17 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
+import pl.bodzioch.damian.entity.UserDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerInfo;
+import pl.bodzioch.damian.session.SessionBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,11 +30,15 @@ public class SchedulerDAOImpl implements SchedulerDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private SessionBean sessionBean;
 
     @Override
     @Transactional
     public Scheduler saveScheduler(SchedulerDbEntity entity) {
         entity.getEntries().forEach(entry -> entry.setScheduler(entity));
+        UserDbEntity user = entityManager.find(UserDbEntity.class, sessionBean.getUser().getId());
+        entity.setUser(user);
         entityManager.merge(entity);
         entityManager.flush();
         return EntityMapper.map(entity);
@@ -61,7 +68,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         List<SchedulerDbEntity> resultList = entityManager.createQuery(
                         "SELECT scheduler " +
                                 "FROM SchedulerDbEntity scheduler " +
-                                "LEFT JOIN FETCH UserDbEntity scheduler.user user " +
+                                "LEFT JOIN FETCH scheduler.user user " +
                                 "ORDER BY scheduler.createDate, scheduler.modifyDate DESC", SchedulerDbEntity.class)
                 .getResultList();
 

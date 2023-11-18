@@ -34,4 +34,9 @@ public class UserServiceImpl implements UserService {
         UserDbEntity userEntity = EntityMapper.map(userModel);
         userDAO.saveNewUser(userEntity);
     }
+
+    @Override
+    public UserModel getUser(String username) {
+        return userDAO.getUserByUsername(username);
+    }
 }
