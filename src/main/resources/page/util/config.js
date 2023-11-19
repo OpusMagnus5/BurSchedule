@@ -171,6 +171,7 @@ export function postFileToApi(url, formData) {
     method: "POST",
     headers: {
       Accept: "application/json, application/octet-stream",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
     },
     body: formData,
   })
