@@ -1,4 +1,4 @@
-package pl.bodzioch.damian.client.conf;
+package pl.bodzioch.damian.configuration.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,9 +34,9 @@ public class CustomCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHand
 
 final class CsrfCookieFilter extends OncePerRequestFilter {
 
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
         csrfToken.getToken();
 

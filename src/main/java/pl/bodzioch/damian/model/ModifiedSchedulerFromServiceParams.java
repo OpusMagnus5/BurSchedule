@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class SchedulerGenerateDayParams {
+public class ModifiedSchedulerFromServiceParams {
     private String email;
     private LocalDate date;
     private long timeDifference;

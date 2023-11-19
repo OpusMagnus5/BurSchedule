@@ -72,13 +72,15 @@ public class SchedulerController {
     @PostMapping("/generate")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> generateFile(@Valid @RequestBody GenerateFileRequestDTO request) {
-        List<SchedulerEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionBean.getScheduleEntries());
+        SchedulerModel sessionScheduler = sessionBean.getScheduler()
+                .orElseThrow(AppException::getGeneralInternalError);
+        List<SchedulerEntry> beginningsOfDays = schedulerService.getBeginningsOfDays(sessionScheduler);
         validateNumberOfDays(beginningsOfDays.size(), request.getScheduleDays());
         Iterator<SchedulerEntry> iterator = beginningsOfDays.iterator();
-        List<SchedulerGenerateDayParams> dayParams = request.getScheduleDays().stream()
+        List<ModifiedSchedulerFromServiceParams> dayParams = request.getScheduleDays().stream()
                 .map(day -> clientMapper.map(day, iterator.next()))
                 .toList();
-        byte[] fileBytes = generateFileService.generateFile(dayParams, sessionBean.getScheduleEntries());
+        byte[] fileBytes = generateFileService.generateFile(dayParams, sessionScheduler);
 
         HttpHeaders headers = getHeadersToSendSchedulerFile();
 
@@ -92,13 +94,9 @@ public class SchedulerController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> generateById(@RequestParam String id) {
         UUID uuid = UUID.fromString(securityService.decryptMessage(id));
-        Scheduler scheduler = schedulerService.getScheduler(uuid);
-        List<SchedulerCreateDayParams> params = scheduler.getDays().stream()
-                .map(clientMapper::mapToCreateDayParams)
-                .sorted(Comparator.comparing(SchedulerCreateDayParams::getDate))
-                .toList();
+        SchedulerModel scheduler = schedulerService.getScheduler(uuid);
 
-        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(params);
+        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(scheduler.getDays());
 
         return ResponseEntity.ok()
                 .headers(getHeadersToSendSchedulerFile())
@@ -109,11 +107,11 @@ public class SchedulerController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> createScheduler(@Valid @RequestBody CreateSchedulerRequestDTO request) {
-        List<SchedulerCreateDayParams> daysParams = request.getDays().stream()
+        List<SchedulerDay> days = request.getDays().stream()
                 .map(clientMapper::map)
                 .toList();
 
-        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(daysParams);
+        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(days);
 
         return ResponseEntity.ok()
                 .headers(getHeadersToSendSchedulerFile())
@@ -124,24 +122,15 @@ public class SchedulerController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SaveSchedulerResponseDTO> save(@Valid @RequestBody SaveSchedulerRequestDTO request) {
-        List<SchedulerCreateDayParams> daysParams = request.getDays().stream()
-                .map(clientMapper::map)
-                .toList();
+        SchedulerModel schedulerModel = map(request);
 
-        UUID id = request.getId()
-                .map(securityService::decryptMessage)
-                .map(UUID::fromString).orElse(null);
-        SaveSchedulerParams params = SaveSchedulerParams.builder()
-                .schedulerDays(daysParams)
-                .schedulerName(request.getName())
-                .id(id)
-                .build();
+        SchedulerModel scheduler = schedulerService.saveScheduler(schedulerModel);
 
-        Scheduler scheduler = schedulerService.saveScheduler(params);
         List<String> encryptedIds = scheduler.getDays().stream()
                 .map(SchedulerDay::getEntries)
                 .flatMap(Collection::stream)
                 .map(SchedulerEntry::getId)
+                .flatMap(Optional::stream)
                 .map(UUID::toString)
                 .map(securityService::encryptMessage)
                 .collect(Collectors.toList());
@@ -153,6 +142,22 @@ public class SchedulerController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    private SchedulerModel map(SaveSchedulerRequestDTO request) {
+        List<SchedulerDay> daysParams = request.getDays().stream()
+                .map(clientMapper::map)
+                .toList();
+
+        UUID id = request.getId()
+                .map(securityService::decryptMessage)
+                .map(UUID::fromString).orElse(null);
+
+        return SchedulerModel.builder()
+                .days(daysParams)
+                .name(request.getName())
+                .id(id)
+                .build();
     }
 
     private HttpHeaders getHeadersToSendSchedulerFile() {

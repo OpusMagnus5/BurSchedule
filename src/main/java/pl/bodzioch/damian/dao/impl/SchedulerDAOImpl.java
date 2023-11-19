@@ -15,8 +15,8 @@ import pl.bodzioch.damian.entity.SchedulerDbEntity;
 import pl.bodzioch.damian.entity.UserDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
-import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerInfo;
+import pl.bodzioch.damian.model.SchedulerModel;
 import pl.bodzioch.damian.session.SessionBean;
 
 import java.util.Collections;
@@ -35,9 +35,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
 
     @Override
     @Transactional
-    public Scheduler saveScheduler(SchedulerDbEntity entity) {
-        entity.getEntries().forEach(entry -> entry.setScheduler(entity));
-        UserDbEntity user = entityManager.find(UserDbEntity.class, sessionBean.getUser().getId());
+    public SchedulerModel saveScheduler(SchedulerDbEntity entity) {
+        UUID userId = entity.getUser().getId();
+        UserDbEntity user = entityManager.find(UserDbEntity.class, userId);
         entity.setUser(user);
         entityManager.merge(entity);
         entityManager.flush();
@@ -45,7 +45,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     }
 
     @Override
-    public Scheduler getByName(String name) {
+    public SchedulerModel getByName(String name) {
         try {
             SchedulerDbEntity scheduler = entityManager.createQuery(
                             "SELECT scheduler " +
@@ -59,6 +59,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         } catch (NoResultException | NonUniqueResultException ex) {
             log.warn("Scheduler with name {} not found", name, ex);
             throw new AppException("scheduler.dao.scheduler.notFound", List.of(name), HttpStatus.BAD_REQUEST, ex);
+            //TODO poprawic blad tworzenie harmonogramu
 
         }
     }
@@ -82,7 +83,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     }
 
     @Override
-    public Scheduler getScheduler(UUID id) {
+    public SchedulerModel getScheduler(UUID id) {
         return Optional.ofNullable(entityManager.find(SchedulerDbEntity.class, id))
                 .map(EntityMapper::map)
                 .orElseThrow(() -> new AppException("scheduler.dao.scheduler.notFound.byId", Collections.emptyList(), HttpStatus.NOT_FOUND));

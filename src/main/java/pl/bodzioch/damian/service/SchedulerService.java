@@ -1,10 +1,9 @@
 package pl.bodzioch.damian.service;
 
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
-import pl.bodzioch.damian.model.SaveSchedulerParams;
-import pl.bodzioch.damian.model.Scheduler;
 import pl.bodzioch.damian.model.SchedulerEntry;
 import pl.bodzioch.damian.model.SchedulerInfo;
+import pl.bodzioch.damian.model.SchedulerModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +13,9 @@ import java.util.UUID;
 public interface SchedulerService {
 
     List<SchedulerViewDTO> getSchedulerForService(String serviceId);
-    List<SchedulerEntry> getBeginningsOfDays(List<SchedulerEntry> scheduler);
+    List<SchedulerEntry> getBeginningsOfDays(SchedulerModel scheduler);
     List<SchedulerViewDTO> getSchedulerFromFile(InputStream inputStream) throws IOException;
-    Scheduler saveScheduler(SaveSchedulerParams params);
+    SchedulerModel saveScheduler(SchedulerModel schedulerModel);
     List<SchedulerInfo> getAllSchedulers();
-    Scheduler getScheduler(UUID id);
+    SchedulerModel getScheduler(UUID id);
 }

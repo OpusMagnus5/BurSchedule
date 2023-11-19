@@ -12,5 +12,5 @@ public class SchedulerCreateDayParams {
 
     private String email;
     private LocalDate date;
-    private List<SchedulerCreateRecordParams> records;
+    private List<SchedulerCreateRecordParams> entries;
 }

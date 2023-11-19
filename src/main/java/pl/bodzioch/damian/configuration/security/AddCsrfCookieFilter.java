@@ -9,12 +9,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class CsrfCookieFilter extends OncePerRequestFilter {
+public class AddCsrfCookieFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
         csrfToken.getToken();
 
         filterChain.doFilter(request, response);

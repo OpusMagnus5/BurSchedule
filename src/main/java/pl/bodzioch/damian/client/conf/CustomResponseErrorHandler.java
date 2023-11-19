@@ -30,7 +30,7 @@ public class CustomResponseErrorHandler implements ResponseErrorHandler {
         if (response.getStatusCode().is4xxClientError()) {
             throw new AppException("general.error", Collections.emptyList(), HttpStatus.BAD_REQUEST);
         } else if (response.getStatusCode().is5xxServerError()) {
-            throw new AppException("general.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw AppException.getGeneralInternalError();
         }
     }
 

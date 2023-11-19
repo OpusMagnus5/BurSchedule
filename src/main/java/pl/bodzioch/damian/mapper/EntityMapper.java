@@ -3,6 +3,7 @@ package pl.bodzioch.damian.mapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.entity.*;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.model.*;
 
 import java.time.LocalDate;
@@ -66,15 +67,6 @@ public class EntityMapper {
                 .build();
     }
 
-    public static SchedulerDbEntity map(SaveSchedulerParams params) {
-        return SchedulerDbEntity.builder()
-                .name(params.getSchedulerName())
-                .entries(map(params.getSchedulerDays()))
-                .id(params.getId().orElse(null))
-                .daysNumber(params.getSchedulerDays().size())
-                .build();
-    }
-
     public static SchedulerInfo mapToSchedulerInfo(SchedulerDbEntity entity) {
         return SchedulerInfo.builder()
                 .id(entity.getId())
@@ -88,61 +80,74 @@ public class EntityMapper {
                 .build();
     }
 
-    public static Scheduler map(SchedulerDbEntity entity) {
-        Map<LocalDate, List<SchedulerEntry>> mapEntriesToDate = entity.getEntries().stream()
-                .map(EntityMapper::map)
-                .collect(groupingBy(SchedulerEntry::getDate));
+    public static SchedulerModel map(SchedulerDbEntity entity) {
+        Map<LocalDate, List<SchedulerEntryDbEntity>> entriesByDate = entity.getEntries().stream()
+                .collect(groupingBy(SchedulerEntryDbEntity::getDate));
 
-        List<SchedulerDay> days = mapEntriesToDate.values().stream()
-                .map(entries -> SchedulerDay.builder().entries(entries).build())
-                .map(day -> {
-                    LocalDate date = day.getEntries().get(0).getDate();
-                    String email = entity.getEntries().stream()
-                            .filter(entry -> entry.getDate().equals(date))
-                            .map(SchedulerEntryDbEntity::getEmail)
-                            .reduce("", String::concat);
-                    return SchedulerDay.builder().entries(day.getEntries()).email(email).build();
-                })
+        List<SchedulerDay> days = entriesByDate.entrySet().stream()
+                .map(EntityMapper::map)
+                .sorted(Comparator.comparing(SchedulerDay::getDate))
                 .toList();
 
 
-        return Scheduler.builder()
+        return SchedulerModel.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .days(days)
                 .build();
     }
 
-    private static SchedulerEntry map(SchedulerEntryDbEntity entry) {
-        return SchedulerEntry.builder()
+    public static SchedulerDbEntity map(SchedulerModel schedulerModel, UserModel userModel) {
+        SchedulerDbEntity entity = SchedulerDbEntity.builder()
+                .id(schedulerModel.getId().orElse(null))
+                .daysNumber(schedulerModel.getDays().size())
+                .createDate(schedulerModel.getCreateDate().orElse(null))
+                .modifyDate(schedulerModel.getModifyDate().orElse(null))
+                .user(EntityMapper.map(userModel))
+                .entries(schedulerModel.getDays().stream()
+                        .map(day -> day.getEntries().stream()
+                                .map(entry -> map(day, entry))
+                                .toList())
+                        .flatMap(Collection::stream)
+                        .toList())
+                .build();
+
+        entity.getEntries().forEach(entry -> entry.setScheduler(entity));
+
+        return entity;
+    }
+
+    private static SchedulerEntryDbEntity map(SchedulerDay day, SchedulerEntry entry) {
+        return SchedulerEntryDbEntity.builder()
+                .id(entry.getId().orElse(null))
+                .email(day.getEmail().orElseThrow(AppException::getGeneralInternalError))
+                .date(day.getDate())
                 .subject(entry.getSubject())
-                .date(entry.getDate())
                 .startTime(entry.getStartTime())
                 .endTime(entry.getEndTime())
-                .id(entry.getId())
+                .createDate(entry.getCreateDate().orElse(null))
+                .modifyDate(entry.getModifyDate().orElse(null))
                 .build();
     }
 
-
-    private static List<SchedulerEntryDbEntity> map(List<SchedulerCreateDayParams> params) {
-        return params.stream()
-                .map(EntityMapper::map)
-                .flatMap(Collection::stream)
-                .toList();
-
+    private static SchedulerDay map(Map.Entry<LocalDate, List<SchedulerEntryDbEntity>> dayEntries) {
+        return SchedulerDay.builder()
+                .email(dayEntries.getValue().get(0).getEmail())
+                .date(dayEntries.getKey())
+                .entries(dayEntries.getValue().stream()
+                        .map(EntityMapper::map)
+                        .sorted(Comparator.comparing(SchedulerEntry::getStartTime))
+                        .toList())
+                .build();
     }
 
-    private static List<SchedulerEntryDbEntity> map(SchedulerCreateDayParams params) {
-        return params.getRecords().stream()
-                .map(record -> SchedulerEntryDbEntity.builder()
-                        .id(record.getId().orElse(null))
-                        .email(params.getEmail())
-                        .date(params.getDate())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .subject(record.getSubject())
-                        .build())
-                .toList();
+    private static SchedulerEntry map(SchedulerEntryDbEntity entry) {
+        return SchedulerEntry.builder()
+                .id(entry.getId())
+                .subject(entry.getSubject())
+                .startTime(entry.getStartTime())
+                .endTime(entry.getEndTime())
+                .build();
     }
 
     private static ServiceProviderDb mapServiceProviderName(Long serviceProviderId) {

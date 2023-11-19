@@ -6,12 +6,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.dto.client.*;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.SecurityService;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,37 +41,37 @@ public class ClientMapper {
         return messageSource.getMessage("service.status." + statusCode, null, LocaleContextHolder.getLocale());
     }
 
-    public SchedulerViewDTO map(SchedulerEntry schedulerEntry) {
+    public SchedulerViewDTO mapToSchedulerView(SchedulerDay schedulerDay) {
         return SchedulerViewDTO.builder()
-                .date(schedulerEntry.getDate())
-                .startTime(schedulerEntry.getStartTime())
-                .endTime(schedulerEntry.getEndTime())
+                .date(schedulerDay.getDate())
+                .startTime(schedulerDay.getEntries().get(0).getStartTime())
+                .endTime(schedulerDay.getEntries().get(0).getEndTime())
                 .build();
     }
 
-    public SchedulerGenerateDayParams map(SchedulerDayDTO schedulerDay, SchedulerEntry schedulerEntry) {
-        return SchedulerGenerateDayParams.builder()
+    public ModifiedSchedulerFromServiceParams map(SchedulerDayDTO schedulerDay, SchedulerEntry schedulerEntry) {
+        return ModifiedSchedulerFromServiceParams.builder()
                 .email(schedulerDay.getEmail())
                 .date(schedulerDay.getDate())
                 .timeDifference(schedulerEntry.getStartTime().until(schedulerDay.getStartTime(), ChronoUnit.MINUTES))
                 .build();
     }
 
-    public SchedulerCreateDayParams map(CreateSchedulerDayDTO day) {
-        return SchedulerCreateDayParams.builder()
+    public SchedulerDay map(CreateSchedulerDayDTO day) {
+        return SchedulerDay.builder()
                 .email(day.getEmail())
                 .date(day.getDate())
-                .records(day.getRecords().stream()
+                .entries(day.getRecords().stream()
                         .map(this::map)
                         .toList())
                 .build();
     }
 
-    public SchedulerCreateDayParams map(SaveSchedulerDayDTO day) {
-        return SchedulerCreateDayParams.builder()
+    public SchedulerDay map(SaveSchedulerDayDTO day) {
+        return SchedulerDay.builder()
                 .email(day.getEmail())
                 .date(day.getDate())
-                .records(day.getRecords().stream()
+                .entries(day.getRecords().stream()
                         .map(this::map)
                         .toList())
                 .build();
@@ -95,7 +95,7 @@ public class ClientMapper {
                 .build();
     }
 
-    public ListSchedulerResponseViewDTO map(List<Scheduler> schedulers) {
+    public ListSchedulerResponseViewDTO map(List<SchedulerModel> schedulers) {
         return ListSchedulerResponseViewDTO.builder()
                 .schedulers(schedulers.stream()
                         .map(this::map)
@@ -118,30 +118,10 @@ public class ClientMapper {
                 .build();
     }
 
-    public SchedulerCreateDayParams mapToCreateDayParams(SchedulerDay schedulerDay) {
-        return SchedulerCreateDayParams.builder()
-                .email(schedulerDay.getEmail())
-                .date(schedulerDay.getEntries().get(0).getDate())
-                .records(schedulerDay.getEntries().stream()
-                        .map(this::mapToRecordParams)
-                        .sorted(Comparator.comparing(SchedulerCreateRecordParams::getStartTime))
-                        .toList())
-                .build();
-    }
-
-    public SchedulerCreateRecordParams mapToRecordParams(SchedulerEntry entry) {
-        return SchedulerCreateRecordParams.builder()
-                .subject(entry.getSubject())
-                .startTime(entry.getStartTime())
-                .endTime(entry.getEndTime())
-                .build();
-    }
-
-
-    private ListSchedulersViewDTO map(Scheduler scheduler) {
+    private ListSchedulersViewDTO map(SchedulerModel scheduler) {
         return ListSchedulersViewDTO.builder()
                 .id(securityService.encryptMessage(scheduler.getId().toString()))
-                .name(scheduler.getName())
+                .name(scheduler.getName().orElseThrow(AppException::getGeneralInternalError))
                 .days(scheduler.getDays().stream()
                         .map(this::map)
                         .toList())
@@ -150,8 +130,8 @@ public class ClientMapper {
 
     private ListSchedulerDayViewDTO map(SchedulerDay day) {
         return ListSchedulerDayViewDTO.builder()
-                .email(day.getEmail())
-                .date(day.getEntries().get(0).getDate())
+                .email(day.getEmail().orElseThrow(AppException::getGeneralInternalError))
+                .date(day.getDate())
                 .records(day.getEntries().stream()
                         .map(this::mapEntry)
                         .toList())
@@ -167,8 +147,8 @@ public class ClientMapper {
                 .build();
     }
 
-    private SchedulerCreateRecordParams map(CreateSchedulerRecordDTO record) {
-        return SchedulerCreateRecordParams.builder()
+    private SchedulerEntry map(CreateSchedulerRecordDTO record) {
+        return SchedulerEntry.builder()
                 .id(record.getId()
                         .map(securityService::decryptMessage)
                         .map(UUID::fromString)

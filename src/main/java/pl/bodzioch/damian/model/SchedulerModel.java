@@ -4,20 +4,27 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Builder
 @Getter
-public class SchedulerEntry {
+public class SchedulerModel {
 
-    private String subject;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private List<SchedulerDay> days;
+    private String name;
     private UUID id;
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
+
+    public Optional<UUID> getId() {
+        return Optional.ofNullable(id);
+    }
+
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
+    }
 
     public Optional<LocalDateTime> getCreateDate() {
         return Optional.ofNullable(createDate);
@@ -25,9 +32,5 @@ public class SchedulerEntry {
 
     public Optional<LocalDateTime> getModifyDate() {
         return Optional.ofNullable(modifyDate);
-    }
-
-    public Optional<UUID> getId() {
-        return Optional.ofNullable(id);
     }
 }

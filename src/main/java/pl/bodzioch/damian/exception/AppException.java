@@ -35,4 +35,8 @@ public class AppException extends RuntimeException {
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         this.messageParams = Collections.emptyList();
     }
+
+    public static AppException getGeneralInternalError() {
+        return new AppException("general.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

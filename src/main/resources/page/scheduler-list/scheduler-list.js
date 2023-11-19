@@ -9,21 +9,23 @@ function setPage() {
   let storedSchedulers = sessionStorage.getItem("scheduler-list");
   if (storedSchedulers === "undefined" || !storedSchedulers) {
     getFromApi(schedulerUrl).then((response) => {
-      sessionStorage.setItem("scheduler-list", JSON.stringify(response));
+      sessionStorage.setItem("scheduler-list", JSON.stringify(response.schedulers));
+      setPageDependsOfFetchedData();
     });
+  } else {
+    setPageDependsOfFetchedData();
   }
+}
 
+function setPageDependsOfFetchedData() {
+  let storedSchedulers = [];
   try {
-    storedSchedulers = JSON.parse(sessionStorage.getItem("scheduler-list")).schedulers;
-  } catch {
-    storedSchedulers = [];
-  }
+    storedSchedulers = JSON.parse(sessionStorage.getItem("scheduler-list"));
+  } catch {}
 
-  if (storedSchedulers) {
-    setSchedulerList(storedSchedulers);
-    setDataAfterFetchData();
-    setMenu();
-  }
+  setSchedulerList(storedSchedulers);
+  setDataAfterFetchData();
+  setMenu();
 }
 
 function setTextData() {
