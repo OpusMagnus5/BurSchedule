@@ -10,7 +10,6 @@ import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.dto.client.SchedulerViewDTO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
 import pl.bodzioch.damian.exception.AppException;
-import pl.bodzioch.damian.exception.SchedulerNotFoundException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.SaveSchedulerParams;
@@ -27,10 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -55,7 +51,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         String encryptedId = securityService.decryptMessage(serviceId);
         List<SchedulerEntry> scheduler = burClient.getScheduleForService(Long.parseLong(encryptedId));
         if (scheduler.isEmpty()) {
-            throw new SchedulerNotFoundException();
+            throw new AppException("scheduler.not.found", Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
 
         sortScheduler(scheduler);

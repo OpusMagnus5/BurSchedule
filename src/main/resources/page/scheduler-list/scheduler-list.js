@@ -1,5 +1,5 @@
 import { setMenu } from "../templates/menu.js";
-import { getFromApi, getMessage, hideLoader, schedulerUrl, schowLoader } from "../util/config.js";
+import { generateUrl, getFromApi, getMessage, hideLoader, schedulerUrl, schowLoader } from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
 
@@ -77,6 +77,14 @@ function setEventListeners() {
     element.addEventListener("change", filterSchedulers);
   });
   document.querySelector(".reset-filters").addEventListener("click", resetFiltersHandler);
+  document.querySelectorAll(".scheduler-save-button").forEach((element) => {
+    element.addEventListener("click", downloadScheduler);
+  });
+}
+
+function downloadScheduler(event) {
+  let scheduler = event.target.parentElement.parentElement;
+  getFromApi(generateUrl + "?id=" + scheduler.id);
 }
 
 function setDataAfterFetchData() {

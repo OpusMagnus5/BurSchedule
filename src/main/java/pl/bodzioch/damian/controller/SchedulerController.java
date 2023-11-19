@@ -2,7 +2,6 @@ package pl.bodzioch.damian.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.bodzioch.damian.dto.client.*;
-import pl.bodzioch.damian.exception.FileProcessingException;
-import pl.bodzioch.damian.exception.SchedulerNotFoundException;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.GenerateFileFromCreatedSchedulerService;
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/app/scheduler")
 @AllArgsConstructor
-@Slf4j
 public class SchedulerController {
 
     private final MessageSource messageSource;
@@ -66,8 +63,7 @@ public class SchedulerController {
         try {
             scheduler = schedulerService.getSchedulerFromFile(file.getInputStream());
         } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new FileProcessingException(ex);
+            throw new AppException("scheduler.file.processing.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
         return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
     }
@@ -168,27 +164,7 @@ public class SchedulerController {
 
     private void validateNumberOfDays(Integer days, List<SchedulerDayDTO> schedulerDays) {
         if (days != schedulerDays.size()) {
-            throw new SecurityException("scheduler.generate.scheduleDays.size");
+            throw new AppException("scheduler.generate.scheduleDays.size", Collections.emptyList(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @ExceptionHandler(SchedulerNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiError> handleServicesNotFound(SchedulerNotFoundException ex) {
-        log.error(ex.getMessage(), ex);
-        ApiError response = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("scheduler.not.found", null, LocaleContextHolder.getLocale())))
-                .build();
-        return ResponseEntity.ofNullable(response);
-    }
-
-    @ExceptionHandler(FileProcessingException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ApiError> handleFileProcessingException(FileProcessingException ex) {
-        log.error(ex.getMessage(), ex);
-        ApiError response = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("scheduler.file.processing.error", null, LocaleContextHolder.getLocale())))
-                .build();
-        return ResponseEntity.ofNullable(response);
     }
 }

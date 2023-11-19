@@ -4,13 +4,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.ServiceDAO;
 import pl.bodzioch.damian.entity.ServiceDbEntity;
-import pl.bodzioch.damian.exception.ServicesNotFoundException;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.ServiceModel;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -36,7 +38,7 @@ public class ServiceDAOImpl implements ServiceDAO {
             List<ServiceDbEntity> services = entityManager.createQuery("SELECT service FROM ServiceDbEntity service", ServiceDbEntity.class).getResultList();
         if (services.isEmpty()) {
             log.info("Services not found");
-            throw new ServicesNotFoundException();
+            throw new AppException("services.not.found", Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
         return services.stream()
                 .map(EntityMapper::map)

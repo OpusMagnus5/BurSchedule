@@ -2,13 +2,14 @@ package pl.bodzioch.damian.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dao.ServiceDAO;
 import pl.bodzioch.damian.dto.client.ServiceListViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceViewDTO;
 import pl.bodzioch.damian.entity.ServiceDbEntity;
-import pl.bodzioch.damian.exception.ServicesNotFoundException;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.mapper.EntityMapper;
 import pl.bodzioch.damian.model.ServiceModel;
@@ -16,6 +17,7 @@ import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.service.ServiceForBurClient;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,27 +30,11 @@ public class ServiceForBurClientImpl implements ServiceForBurClient {
     private final ServiceDAO serviceDAO;
 
     @Override
-    public ServiceListViewDTO getAllServicesForAllProviders() throws ServicesNotFoundException {
-        List<ServiceModel> serviceModels = getAllServicesFromApi();
-        if (serviceModels.isEmpty()) {
-            log.info("Services not found");
-            throw new ServicesNotFoundException();
-        }
-
-        List<ServiceViewDTO> services = serviceModels.stream()
-                .map(clientMapper::map)
-                .toList();
-        return ServiceListViewDTO.builder()
-                .services(services)
-                .build();
-    }
-
-    @Override
     public void synchronizeServices() {
         List<ServiceModel> servicesFromApi = getAllServicesFromApi();
         if (servicesFromApi.isEmpty()) {
             log.info("Services not found");
-            throw new ServicesNotFoundException();
+            throw new AppException("services.not.found", Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
 
         List<Long> serviceIds = serviceDAO.getAllServiceIds();

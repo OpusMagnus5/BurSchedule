@@ -7,12 +7,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.bodzioch.damian.dto.client.ProviderListViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceListViewDTO;
 import pl.bodzioch.damian.dto.client.ServiceStatusListViewDTO;
-import pl.bodzioch.damian.exception.ServicesNotFoundException;
-import pl.bodzioch.damian.model.ApiError;
 import pl.bodzioch.damian.model.ServiceProvider;
 import pl.bodzioch.damian.model.ServiceStatus;
 import pl.bodzioch.damian.service.ServiceForBurClient;
@@ -63,14 +63,5 @@ public class ServiceController {
                 .toList();
 
         return ResponseEntity.ok(new ServiceStatusListViewDTO(statuses));
-    }
-
-    @ExceptionHandler(ServicesNotFoundException.class)
-    public ResponseEntity<ApiError> handleServicesNotFound(ServicesNotFoundException ex) {
-        log.error(ex.getMessage(), ex);
-        ApiError response = ApiError.builder()
-                .messages(List.of(messageSource.getMessage("services.not.found", new Object[]{}, LocaleContextHolder.getLocale())))
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

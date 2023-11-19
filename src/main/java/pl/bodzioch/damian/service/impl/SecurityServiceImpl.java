@@ -1,8 +1,9 @@
 package pl.bodzioch.damian.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import pl.bodzioch.damian.exception.CipherException;
+import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.service.SecurityService;
 
 import javax.crypto.Cipher;
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Collections;
 
 @Service
 @Slf4j
@@ -27,7 +29,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public String encryptMessage(String text) throws CipherException {
+    public String encryptMessage(String text) {
         try {
             byte[] iv = generateIv();
             GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
@@ -38,12 +40,12 @@ public class SecurityServiceImpl implements SecurityService {
             return Base64.getUrlEncoder().encodeToString(outputBytes);
         } catch (GeneralSecurityException ex) {
             log.error("Cipher exception during encrypt message: {}", text, ex);
-            throw new CipherException("Cipher exception during encrypt message", ex);
+            throw new AppException("general.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Override
-    public String decryptMessage(String encryptedText) throws CipherException {
+    public String decryptMessage(String encryptedText) {
         try {
             byte[] encryptedBytes = Base64.getUrlDecoder().decode(encryptedText);
             byte[] iv = extractIv(encryptedBytes);
@@ -55,7 +57,7 @@ public class SecurityServiceImpl implements SecurityService {
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (GeneralSecurityException ex) {
             log.error("Cipher exception during decrypt message: {}", encryptedText, ex);
-            throw new CipherException("Cipher exception during decrypt message", ex);
+            throw new AppException("general.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
