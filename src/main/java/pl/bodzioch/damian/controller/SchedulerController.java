@@ -15,8 +15,7 @@ import pl.bodzioch.damian.dto.client.*;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.ClientMapper;
 import pl.bodzioch.damian.model.*;
-import pl.bodzioch.damian.service.GenerateFileFromCreatedSchedulerService;
-import pl.bodzioch.damian.service.GenerateFileService;
+import pl.bodzioch.damian.service.GenerateSchedulerFileService;
 import pl.bodzioch.damian.service.SchedulerService;
 import pl.bodzioch.damian.service.SecurityService;
 import pl.bodzioch.damian.session.SessionBean;
@@ -32,8 +31,7 @@ public class SchedulerController {
 
     private final MessageSource messageSource;
     private final SchedulerService schedulerService;
-    private final GenerateFileService generateFileService;
-    private final GenerateFileFromCreatedSchedulerService generateFileFromCreatedSchedulerService;
+    private final GenerateSchedulerFileService generateSchedulerFileService;
     private final SessionBean sessionBean;
     private final ClientMapper clientMapper;
     private final SecurityService securityService;
@@ -80,7 +78,7 @@ public class SchedulerController {
         List<ModifiedSchedulerFromServiceParams> dayParams = request.getScheduleDays().stream()
                 .map(day -> clientMapper.map(day, iterator.next()))
                 .toList();
-        byte[] fileBytes = generateFileService.generateFile(dayParams, sessionScheduler);
+        byte[] fileBytes = generateSchedulerFileService.generateFile(dayParams, sessionScheduler);
 
         HttpHeaders headers = getHeadersToSendSchedulerFile();
 
@@ -96,7 +94,7 @@ public class SchedulerController {
         UUID uuid = UUID.fromString(securityService.decryptMessage(id));
         SchedulerModel scheduler = schedulerService.getScheduler(uuid);
 
-        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(scheduler.getDays());
+        byte[] fileBytes = generateSchedulerFileService.generateFile(scheduler.getDays());
 
         return ResponseEntity.ok()
                 .headers(getHeadersToSendSchedulerFile())
@@ -111,7 +109,7 @@ public class SchedulerController {
                 .map(clientMapper::map)
                 .toList();
 
-        byte[] fileBytes = generateFileFromCreatedSchedulerService.generateFile(days);
+        byte[] fileBytes = generateSchedulerFileService.generateFile(days);
 
         return ResponseEntity.ok()
                 .headers(getHeadersToSendSchedulerFile())

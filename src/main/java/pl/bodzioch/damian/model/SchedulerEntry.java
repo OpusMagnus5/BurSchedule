@@ -2,6 +2,7 @@ package pl.bodzioch.damian.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Builder
 @Getter
+@Setter
 public class SchedulerEntry {
 
     private String subject;

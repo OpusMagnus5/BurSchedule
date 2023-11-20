@@ -59,6 +59,7 @@ public class EntityMapper {
 
     public static UserDbEntity map(UserModel user) {
         return UserDbEntity.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .password(passwordEncoder.encode(user.getPassword()))
                 .roles(user.getRoles().stream()
@@ -100,6 +101,7 @@ public class EntityMapper {
     public static SchedulerDbEntity map(SchedulerModel schedulerModel, UserModel userModel) {
         SchedulerDbEntity entity = SchedulerDbEntity.builder()
                 .id(schedulerModel.getId().orElse(null))
+                .name(schedulerModel.getName().orElseThrow(AppException::getGeneralInternalError))
                 .daysNumber(schedulerModel.getDays().size())
                 .createDate(schedulerModel.getCreateDate().orElse(null))
                 .modifyDate(schedulerModel.getModifyDate().orElse(null))

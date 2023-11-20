@@ -41,6 +41,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         entity.setUser(user);
         entityManager.merge(entity);
         entityManager.flush();
+        entityManager.clear();
         return EntityMapper.map(entity);
     }
 
@@ -59,7 +60,6 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         } catch (NoResultException | NonUniqueResultException ex) {
             log.warn("Scheduler with name {} not found", name, ex);
             throw new AppException("scheduler.dao.scheduler.notFound", List.of(name), HttpStatus.BAD_REQUEST, ex);
-            //TODO poprawic blad tworzenie harmonogramu
 
         }
     }
