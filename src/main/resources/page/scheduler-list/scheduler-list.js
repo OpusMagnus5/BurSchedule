@@ -1,5 +1,5 @@
 import { setMenu } from "../templates/menu.js";
-import { generateUrl, getFromApi, getMessage, hideLoader, schedulerUrl, schowLoader } from "../util/config.js";
+import { deleteToApi, generateUrl, getFromApi, getMessage, hideLoader, schedulerUrl, schowLoader } from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
 
@@ -82,11 +82,19 @@ function setEventListeners() {
   document.querySelectorAll(".scheduler-save-button").forEach((element) => {
     element.addEventListener("click", downloadScheduler);
   });
+  document.querySelectorAll(".scheduler-delete-button").forEach((element) => {
+    element.addEventListener("click", deleteScheduler);
+  });
 }
 
 function downloadScheduler(event) {
   let scheduler = event.target.parentElement.parentElement;
   getFromApi(generateUrl + "?id=" + scheduler.id);
+}
+
+function deleteScheduler(event) {
+  let scheduler = event.target.parentElement.parentElement;
+  deleteToApi(schedulerUrl + "/" + scheduler.id);
 }
 
 function setDataAfterFetchData() {

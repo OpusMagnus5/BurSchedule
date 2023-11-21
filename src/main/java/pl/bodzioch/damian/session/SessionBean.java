@@ -21,8 +21,4 @@ public class SessionBean {
     public Optional<SchedulerModel> getScheduler() {
         return Optional.ofNullable(scheduler);
     }
-
-    public Optional<UserModel> getUser() {
-        return Optional.ofNullable(user);
-    }
 }

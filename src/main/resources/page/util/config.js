@@ -218,6 +218,37 @@ export function postFileToApi(url, formData) {
     .catch((error) => {});
 }
 
+export function deleteToApi(url, request) {
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
+    },
+    body: JSON.stringify(request),
+  })
+    .then((response) => {
+      let contentType = response.headers.get("Content-Type");
+      if (contentType === "application/json") {
+        return response.json().then((json) => {
+          if (response.ok) {
+            return json;
+          } else if (!response.ok && json.hasOwnProperty("messages")) {
+            alert(json.messages[0]);
+          }
+        });
+      } else if (response.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      return false;
+    });
+}
+
 let loader;
 let overlay;
 

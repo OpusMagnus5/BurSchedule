@@ -88,4 +88,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
                 .map(EntityMapper::map)
                 .orElseThrow(() -> new AppException("scheduler.dao.scheduler.notFound.byId", Collections.emptyList(), HttpStatus.NOT_FOUND));
     }
+
+    @Override
+    public void deleteScheduler(SchedulerDbEntity scheduler) {
+        entityManager.remove(scheduler);
+    }
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 public class SchedulerModel {
 
     private List<SchedulerDay> days;
+    private UserModel userModel;
     private String name;
     private UUID id;
     private LocalDateTime createDate;

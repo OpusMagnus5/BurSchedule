@@ -72,8 +72,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     public SchedulerModel saveScheduler(SchedulerModel scheduler) {
-        SchedulerDbEntity schedulerDbEntity = EntityMapper.map(scheduler, sessionBean.getUser()
-                .orElseThrow(AppException::getGeneralInternalError));
+        SchedulerDbEntity schedulerDbEntity = EntityMapper.map(scheduler, sessionBean.getUser());
 
         if (scheduler.getId().isPresent()) {
             return schedulerDAO.saveScheduler(schedulerDbEntity);
@@ -89,6 +88,18 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public SchedulerModel getScheduler(UUID id) {
         return schedulerDAO.getScheduler(id);
+    }
+
+    @Override
+    public String deleteScheduler(UUID id) {
+        SchedulerModel scheduler = schedulerDAO.getScheduler(id);
+        UUID ownerId = scheduler.getUserModel().getId();
+        UUID loggedUser = sessionBean.getUser().getId();
+        if (!ownerId.equals(loggedUser)) {
+            throw new AppException("delete.scheduler.notByOwner", List.of(scheduler.getUserModel().getUsername()), HttpStatus.FORBIDDEN);
+        }
+        schedulerDAO.deleteScheduler(EntityMapper.map(scheduler, scheduler.getUserModel()));
+        return scheduler.getName().orElseThrow(AppException::getGeneralInternalError);
     }
 
     @Override

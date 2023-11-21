@@ -93,6 +93,7 @@ public class EntityMapper {
 
         return SchedulerModel.builder()
                 .id(entity.getId())
+                .userModel(EntityMapper.map(entity.getUser()))
                 .name(entity.getName())
                 .days(days)
                 .build();

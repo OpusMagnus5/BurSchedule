@@ -13,4 +13,5 @@ public interface SchedulerDAO {
     SchedulerModel getByName(String name);
     List<SchedulerInfo> getAllSchedulersInfo();
     SchedulerModel getScheduler(UUID id);
+    void deleteScheduler(SchedulerDbEntity scheduler);
 }

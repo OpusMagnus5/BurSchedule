@@ -142,6 +142,18 @@ public class SchedulerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<DeleteSchedulerResponseViewDTO> deleteScheduler(@PathVariable String id) {
+        UUID decryptedId = UUID.fromString(securityService.decryptMessage(id));
+        String schedulerName = schedulerService.deleteScheduler(decryptedId);
+        DeleteSchedulerResponseViewDTO response = DeleteSchedulerResponseViewDTO.builder()
+                .message(messageSource.getMessage("delete.scheduler.successful", List.of(schedulerName).toArray(), LocaleContextHolder.getLocale()))
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     private SchedulerModel map(SaveSchedulerRequestDTO request) {
         List<SchedulerDay> daysParams = request.getDays().stream()
                 .map(clientMapper::map)

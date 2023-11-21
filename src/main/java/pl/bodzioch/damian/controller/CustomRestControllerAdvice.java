@@ -26,12 +26,12 @@ import java.util.Locale;
 public class CustomRestControllerAdvice {
 
     private final MessageSource messageSource;
-    private final Locale locale = LocaleContextHolder.getLocale();
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest webRequest) {
         log.error(ex.getMessage(), ex);
+        Locale locale = LocaleContextHolder.getLocale();
         List<String> errorMessages = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> errorMessages.add(messageSource.getMessage(error.getDefaultMessage(),
                 null, locale)));
@@ -44,6 +44,7 @@ public class CustomRestControllerAdvice {
     @ExceptionHandler({AppException.class})
     public ResponseEntity<ApiError> handleAppException(AppException ex, WebRequest webRequest) {
         log.warn("Error message: {}", ex.getMessage(), ex);
+        Locale locale = LocaleContextHolder.getLocale();
         ApiError apiError = ApiError.builder()
                 .messages(List.of(messageSource.getMessage(ex.getMessage(), ex.getMessageParams().toArray(), locale)))
                 .build();

@@ -18,4 +18,5 @@ public interface SchedulerService {
     SchedulerModel saveScheduler(SchedulerModel schedulerModel);
     List<SchedulerInfo> getAllSchedulers();
     SchedulerModel getScheduler(UUID id);
+    String deleteScheduler(UUID id);
 }
