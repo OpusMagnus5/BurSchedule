@@ -220,7 +220,7 @@ export function postFileToApi(url, formData) {
 
 export function deleteToApi(url, request) {
   return fetch(url, {
-    method: "POST",
+    method: "DELETE",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

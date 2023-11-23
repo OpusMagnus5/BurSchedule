@@ -90,7 +90,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     }
 
     @Override
+    @Transactional
     public void deleteScheduler(SchedulerDbEntity scheduler) {
-        entityManager.remove(scheduler);
+        SchedulerDbEntity mergedEntity = entityManager.merge(scheduler);
+        entityManager.remove(mergedEntity);
     }
 }

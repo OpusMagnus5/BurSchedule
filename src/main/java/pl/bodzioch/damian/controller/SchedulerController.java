@@ -143,7 +143,7 @@ public class SchedulerController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @DeleteMapping("")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<DeleteSchedulerResponseViewDTO> deleteScheduler(@PathVariable String id) {
         UUID decryptedId = UUID.fromString(securityService.decryptMessage(id));

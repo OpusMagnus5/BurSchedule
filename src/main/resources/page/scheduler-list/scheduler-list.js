@@ -94,7 +94,14 @@ function downloadScheduler(event) {
 
 function deleteScheduler(event) {
   let scheduler = event.target.parentElement.parentElement;
-  deleteToApi(schedulerUrl + "/" + scheduler.id);
+  deleteToApi(schedulerUrl + "/" + scheduler.id).then((response) => {
+    if (response.hasOwnProperty("message")) {
+      alert(response.message);
+      event.target.parentElement.parentElement.remove();
+      colorEvenRows();
+      sessionStorage.removeItem("scheduler-list");
+    }
+  });
 }
 
 function setDataAfterFetchData() {
