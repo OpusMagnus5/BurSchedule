@@ -45,7 +45,7 @@ public class SchedulerController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("")
+    @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SchedulerListResponseViewDTO> getAllScheduler() {
         List<SchedulerInfo> schedulers = schedulerService.getAllSchedulers();
@@ -151,6 +151,17 @@ public class SchedulerController {
         DeleteSchedulerResponseViewDTO response = DeleteSchedulerResponseViewDTO.builder()
                 .message(messageSource.getMessage("delete.scheduler.successful", List.of(schedulerName).toArray(), LocaleContextHolder.getLocale()))
                 .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GetSchedulerResponseViewDTO> getSchedulerById(@RequestParam String id) {
+        String decryptId = securityService.decryptMessage(id);
+        UUID uuid = UUID.fromString(decryptId);
+        SchedulerModel scheduler = schedulerService.getScheduler(uuid);
+        GetSchedulerResponseViewDTO response = clientMapper.mapToGetSchedulerResponse(scheduler);
         return ResponseEntity.ok(response);
     }
 

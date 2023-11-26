@@ -1,5 +1,14 @@
 import { setMenu } from "../templates/menu.js";
-import { deleteToApi, generateUrl, getFromApi, getMessage, hideLoader, schedulerUrl, schowLoader } from "../util/config.js";
+import {
+  allSchedulersUrl,
+  deleteToApi,
+  generateUrl,
+  getFromApi,
+  getMessage,
+  hideLoader,
+  schedulerUrl,
+  schowLoader,
+} from "../util/config.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
 
@@ -8,7 +17,7 @@ function setPage() {
   setTextData();
   let storedSchedulers = sessionStorage.getItem("scheduler-list");
   if (storedSchedulers === "undefined" || !storedSchedulers) {
-    getFromApi(schedulerUrl).then((response) => {
+    getFromApi(allSchedulersUrl).then((response) => {
       sessionStorage.setItem("scheduler-list", JSON.stringify(response.schedulers));
       setPageDependsOfFetchedData();
     });
@@ -85,6 +94,9 @@ function setEventListeners() {
   document.querySelectorAll(".scheduler-delete-button").forEach((element) => {
     element.addEventListener("click", deleteScheduler);
   });
+  document.querySelectorAll(".scheduler-edit-button").forEach((element) => {
+    element.addEventListener("click", editScheduler);
+  });
 }
 
 function downloadScheduler(event) {
@@ -100,6 +112,18 @@ function deleteScheduler(event) {
       event.target.parentElement.parentElement.remove();
       colorEvenRows();
       sessionStorage.removeItem("scheduler-list");
+    }
+  });
+}
+
+function editScheduler(event) {
+  schowLoader();
+  let scheduler = event.target.parentElement.parentElement;
+  getFromApi(schedulerUrl + "?id=" + scheduler.id).then((response) => {
+    if (response.hasOwnProperty("id")) {
+      sessionStorage.setItem("scheduler-to-edit", JSON.stringify(response));
+      hideLoader();
+      window.location.href = "scheduler-create";
     }
   });
 }

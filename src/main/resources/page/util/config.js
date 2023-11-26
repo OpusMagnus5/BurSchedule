@@ -8,6 +8,7 @@ export const generateUrl = schedulerUrl + "/generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
 export const fileUrl = schedulerUrl + "/file";
 export const createSchedulerUrl = schedulerUrl + "/create";
+export const allSchedulersUrl = schedulerUrl + "/all";
 export const securityUrl = baseUrl + "security";
 export const loginUrl = securityUrl + "/login";
 export const rolesUrl = securityUrl + "/roles";

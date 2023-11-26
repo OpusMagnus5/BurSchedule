@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@Builder //TODO przerobic na edycje harmonogramu
-public class ListSchedulerDayViewDTO implements Serializable {
+@Builder
+public class GetSchedulerDayViewDTO implements Serializable {
 
     private String email;
     private LocalDate date;
-    private List<ListSchedulerRecordViewDTO> records;
+    private List<GetSchedulerRecordViewDTO> records;
 }

@@ -95,14 +95,6 @@ public class ClientMapper {
                 .build();
     }
 
-    public ListSchedulerResponseViewDTO map(List<SchedulerModel> schedulers) {
-        return ListSchedulerResponseViewDTO.builder()
-                .schedulers(schedulers.stream()
-                        .map(this::map)
-                        .toList())
-                .build();
-    }
-
     public SchedulerListResponseViewDTO mapToSchedulerListResponse(List<SchedulerInfo> schedulerInfoList) {
         return SchedulerListResponseViewDTO.builder()
                 .schedulers(schedulerInfoList.stream()
@@ -118,28 +110,28 @@ public class ClientMapper {
                 .build();
     }
 
-    private ListSchedulersViewDTO map(SchedulerModel scheduler) {
-        return ListSchedulersViewDTO.builder()
-                .id(securityService.encryptMessage(scheduler.getId().toString()))
-                .name(scheduler.getName().orElseThrow(AppException::getGeneralInternalError))
-                .days(scheduler.getDays().stream()
-                        .map(this::map)
+    public GetSchedulerResponseViewDTO mapToGetSchedulerResponse(SchedulerModel schedulerModel) {
+        return GetSchedulerResponseViewDTO.builder()
+                .name(schedulerModel.getName().orElseThrow(AppException::getGeneralInternalError))
+                .id(securityService.encryptMessage(schedulerModel.getId().toString()))
+                .days(schedulerModel.getDays().stream()
+                        .map(this::mapToGetSchedulerDayView)
                         .toList())
                 .build();
     }
 
-    private ListSchedulerDayViewDTO map(SchedulerDay day) {
-        return ListSchedulerDayViewDTO.builder()
-                .email(day.getEmail().orElseThrow(AppException::getGeneralInternalError))
+    private GetSchedulerDayViewDTO mapToGetSchedulerDayView(SchedulerDay day) {
+        return GetSchedulerDayViewDTO.builder()
                 .date(day.getDate())
+                .email(day.getEmail().orElse(null))
                 .records(day.getEntries().stream()
-                        .map(this::mapEntry)
+                        .map(this::mapToGetSchedulerRecordView)
                         .toList())
                 .build();
     }
 
-    private ListSchedulerRecordViewDTO mapEntry(SchedulerEntry entry) {
-        return ListSchedulerRecordViewDTO.builder()
+    private GetSchedulerRecordViewDTO mapToGetSchedulerRecordView(SchedulerEntry entry) {
+        return GetSchedulerRecordViewDTO.builder()
                 .subject(entry.getSubject())
                 .id(securityService.encryptMessage(entry.getId().toString()))
                 .startTime(entry.getStartTime())

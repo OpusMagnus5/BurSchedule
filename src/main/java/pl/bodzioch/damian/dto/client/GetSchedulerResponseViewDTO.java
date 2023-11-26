@@ -7,10 +7,10 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
-@Builder //TODO przerobic na edycje harmonogramu
-public class ListSchedulersViewDTO implements Serializable {
+@Builder
+public class GetSchedulerResponseViewDTO implements Serializable {
 
-    private List<ListSchedulerDayViewDTO> days;
+    private List<GetSchedulerDayViewDTO> days;
 
     private String name;
 
