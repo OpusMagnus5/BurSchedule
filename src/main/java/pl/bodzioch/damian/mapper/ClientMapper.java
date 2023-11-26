@@ -113,7 +113,10 @@ public class ClientMapper {
     public GetSchedulerResponseViewDTO mapToGetSchedulerResponse(SchedulerModel schedulerModel) {
         return GetSchedulerResponseViewDTO.builder()
                 .name(schedulerModel.getName().orElseThrow(AppException::getGeneralInternalError))
-                .id(securityService.encryptMessage(schedulerModel.getId().toString()))
+                .id(schedulerModel.getId()
+                        .map(UUID::toString)
+                        .map(securityService::encryptMessage)
+                        .orElseThrow(AppException::getGeneralInternalError))
                 .days(schedulerModel.getDays().stream()
                         .map(this::mapToGetSchedulerDayView)
                         .toList())
@@ -133,7 +136,10 @@ public class ClientMapper {
     private GetSchedulerRecordViewDTO mapToGetSchedulerRecordView(SchedulerEntry entry) {
         return GetSchedulerRecordViewDTO.builder()
                 .subject(entry.getSubject())
-                .id(securityService.encryptMessage(entry.getId().toString()))
+                .id(entry.getId()
+                        .map(UUID::toString)
+                        .map(securityService::encryptMessage)
+                        .orElseThrow(AppException::getGeneralInternalError))
                 .startTime(entry.getStartTime())
                 .endTime(entry.getEndTime())
                 .build();

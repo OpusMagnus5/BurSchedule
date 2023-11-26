@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import pl.bodzioch.damian.dao.SchedulerDAO;
 import pl.bodzioch.damian.entity.SchedulerDbEntity;
+import pl.bodzioch.damian.entity.SchedulerEntryDbEntity;
 import pl.bodzioch.damian.entity.UserDbEntity;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.EntityMapper;
@@ -19,10 +20,7 @@ import pl.bodzioch.damian.model.SchedulerInfo;
 import pl.bodzioch.damian.model.SchedulerModel;
 import pl.bodzioch.damian.session.SessionBean;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Repository
@@ -36,6 +34,7 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     @Override
     @Transactional
     public SchedulerModel saveScheduler(SchedulerDbEntity entity) {
+        removeEntriesRemovedByUser(entity);
         UUID userId = entity.getUser().getId();
         UserDbEntity user = entityManager.find(UserDbEntity.class, userId);
         entity.setUser(user);
@@ -43,6 +42,20 @@ public class SchedulerDAOImpl implements SchedulerDAO {
         entityManager.flush();
         entityManager.clear();
         return EntityMapper.map(entity);
+    }
+
+    private void removeEntriesRemovedByUser(SchedulerDbEntity entity) {
+        SchedulerDbEntity existedEntity = entityManager.find(SchedulerDbEntity.class, entity.getId());
+        entity.setCreateDate(existedEntity.getCreateDate());
+        List<SchedulerEntryDbEntity> entriesToRemove = existedEntity.getEntries().stream()
+                .filter(entry -> !entity.getEntries().stream()
+                        .map(SchedulerEntryDbEntity::getId)
+                        .filter(Objects::nonNull)
+                        .toList().contains(entry.getId()))
+                .toList();
+        entriesToRemove.forEach(entityManager::remove);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Override

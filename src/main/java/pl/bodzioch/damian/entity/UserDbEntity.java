@@ -31,7 +31,7 @@ public class UserDbEntity {
 
     private String password;
 
-    @ElementCollection(targetClass = RoleDbEntity.class)
+    @ElementCollection(targetClass = RoleDbEntity.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "users_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")

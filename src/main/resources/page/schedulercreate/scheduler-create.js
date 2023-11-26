@@ -24,7 +24,7 @@ function showScheduler(days) {
   for (let i = 0; i < days.length; i++) {
     let emptyDay = document.querySelector(".hidden");
     let cloneDay = emptyDay.cloneNode(true);
-
+    cloneDay.querySelector(".hidden .record-day").remove();
     cloneDay.querySelector(".day-number").textContent = getMessage("scheduler-create-day-number-label") + (i + 1);
     cloneDay.querySelector(".email-input").value = days[i].email;
     cloneDay.querySelector(".date-input").value = days[i].date;
@@ -39,7 +39,6 @@ function showScheduler(days) {
       emptyRecord.querySelector(".record-start-time").value = records[j].startTime;
       emptyRecord.querySelector(".record-end-time").value = records[j].endTime;
 
-      cloneDay.querySelector(".hidden .record-day").remove();
       cloneDay.classList.add("day");
       cloneDay.classList.remove("hidden");
       cloneDay.appendChild(emptyRecord);
@@ -127,6 +126,7 @@ function handleSaveSchedulerEvent() {
       records[i].id = response.entriesIds[i];
     }
     alert(response.message);
+    sessionStorage.removeItem("scheduler-list");
   });
 }
 
@@ -256,6 +256,7 @@ function handleCopyDay(event) {
   let copiedDay = event.target.parentElement.parentElement.cloneNode(true);
   copiedDay.querySelectorAll(".record-day").forEach((element) => {
     element.querySelector(".record-subject").value = "";
+    element.id = "";
   });
   let scheduler = event.target.parentElement.parentElement.parentElement;
 
