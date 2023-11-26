@@ -50,4 +50,8 @@ public class SchedulerDbEntity {
     public Optional<LocalDateTime> getModifyDate() {
         return Optional.ofNullable(modifyDate);
     }
+
+    public Optional<UUID> getId() {
+        return Optional.ofNullable(id);
+    }
 }

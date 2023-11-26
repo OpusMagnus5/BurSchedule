@@ -34,7 +34,9 @@ public class SchedulerDAOImpl implements SchedulerDAO {
     @Override
     @Transactional
     public SchedulerModel saveScheduler(SchedulerDbEntity entity) {
-        removeEntriesRemovedByUser(entity);
+        if (entity.getId().isPresent()) {
+            removeEntriesRemovedByUser(entity);
+        }
         UUID userId = entity.getUser().getId();
         UserDbEntity user = entityManager.find(UserDbEntity.class, userId);
         entity.setUser(user);

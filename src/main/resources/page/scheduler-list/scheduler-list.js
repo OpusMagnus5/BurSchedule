@@ -18,8 +18,14 @@ function setPage() {
   let storedSchedulers = sessionStorage.getItem("scheduler-list");
   if (storedSchedulers === "undefined" || !storedSchedulers) {
     getFromApi(allSchedulersUrl).then((response) => {
-      sessionStorage.setItem("scheduler-list", JSON.stringify(response.schedulers));
-      setPageDependsOfFetchedData();
+      if (response) {
+        sessionStorage.setItem("scheduler-list", JSON.stringify(response.schedulers));
+        setPageDependsOfFetchedData();
+      } else {
+        hideLoader();
+        setMenu();
+        setSchedulerList([]);
+      }
     });
   } else {
     setPageDependsOfFetchedData();
@@ -110,8 +116,11 @@ function deleteScheduler(event) {
     if (response.hasOwnProperty("message")) {
       alert(response.message);
       event.target.parentElement.parentElement.remove();
-      colorEvenRows();
       sessionStorage.removeItem("scheduler-list");
+      let schedulers = Array.from(document.querySelectorAll(".scheduler"));
+      if (schedulers !== "undefined" && schedulers) {
+        colorEvenRows(schedulers);
+      }
     }
   });
 }

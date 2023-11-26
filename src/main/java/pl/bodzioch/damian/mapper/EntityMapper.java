@@ -70,7 +70,7 @@ public class EntityMapper {
 
     public static SchedulerInfo mapToSchedulerInfo(SchedulerDbEntity entity) {
         return SchedulerInfo.builder()
-                .id(entity.getId())
+                .id(entity.getId().orElseThrow(AppException::getGeneralInternalError))
                 .userName(entity.getUser().getUsername())
                 .name(entity.getName())
                 .daysNumber(entity.getDaysNumber())
@@ -92,7 +92,7 @@ public class EntityMapper {
 
 
         return SchedulerModel.builder()
-                .id(entity.getId())
+                .id(entity.getId().orElseThrow(AppException::getGeneralInternalError))
                 .userModel(EntityMapper.map(entity.getUser()))
                 .name(entity.getName())
                 .days(days)
