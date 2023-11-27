@@ -37,6 +37,7 @@ export const messages_pl = new Map([
   ["scheduler-email-checkbox", "Powiel email"],
   ["scheduler-time-checkbox", "Powiel czas rozpoczęcia"],
   ["scheduler-send-button", "Generuj harmonogram"],
+  ["scheduler-edit-button", "Edytuj całość"],
   ["synchronization", "Synchronizuj usługi"],
   ["menu-service-list", "Lista usług"],
   ["menu-scheduler-from-file", "Generowanie z pliku"],

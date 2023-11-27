@@ -208,7 +208,8 @@ function addClickListenerForServices() {
     element.addEventListener("click", function () {
       schowLoader();
       getFromApi(schedulerUrl + "/" + element.id).then((data) => {
-        sessionStorage.setItem("scheduler", JSON.stringify(data));
+        sessionStorage.setItem("scheduler", JSON.stringify(data.schedulerEntries));
+        sessionStorage.setItem("scheduler-to-edit", JSON.stringify(data.schedulerToEdit));
         hideLoader();
         window.location.href = "scheduler-edit";
       });

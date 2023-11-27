@@ -11,4 +11,6 @@ import java.util.List;
 public class SchedulerListViewDTO implements Serializable {
 
     private List<SchedulerViewDTO> schedulerEntries;
+
+    private GetSchedulerResponseViewDTO schedulerToEdit;
 }

@@ -6,7 +6,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import pl.bodzioch.damian.configuration.security.UserRoles;
 import pl.bodzioch.damian.dto.client.*;
-import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.model.*;
 import pl.bodzioch.damian.service.SecurityService;
 
@@ -112,11 +111,11 @@ public class ClientMapper {
 
     public GetSchedulerResponseViewDTO mapToGetSchedulerResponse(SchedulerModel schedulerModel) {
         return GetSchedulerResponseViewDTO.builder()
-                .name(schedulerModel.getName().orElseThrow(AppException::getGeneralInternalError))
+                .name(schedulerModel.getName().orElse(null))
                 .id(schedulerModel.getId()
                         .map(UUID::toString)
                         .map(securityService::encryptMessage)
-                        .orElseThrow(AppException::getGeneralInternalError))
+                        .orElse(null))
                 .days(schedulerModel.getDays().stream()
                         .map(this::mapToGetSchedulerDayView)
                         .toList())
@@ -139,7 +138,7 @@ public class ClientMapper {
                 .id(entry.getId()
                         .map(UUID::toString)
                         .map(securityService::encryptMessage)
-                        .orElseThrow(AppException::getGeneralInternalError))
+                        .orElse(null))
                 .startTime(entry.getStartTime())
                 .endTime(entry.getEndTime())
                 .build();
