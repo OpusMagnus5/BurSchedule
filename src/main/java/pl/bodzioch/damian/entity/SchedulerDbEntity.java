@@ -13,42 +13,45 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Entity
+@Table(name = "schedulers")
 @Getter
 @Setter
 @Builder
-@Entity
-@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDbEntity {
+public class SchedulerDbEntity {
 
-    @Id
     @GeneratedUuidValue(types = EventType.INSERT)
+    @Id
     private UUID id;
 
     @NaturalId
-    private String username;
+    private String name;
 
-    private String password;
+    @Column(name = "days_number")
+    private Integer daysNumber;
 
-    @ElementCollection(targetClass = RoleDbEntity.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "users_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private List<RoleDbEntity> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserDbEntity user;
 
-    @OneToMany(mappedBy = "user")
-    private List<SchedulerDbEntity> schedulers;
+    @OneToMany(mappedBy = "scheduler", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SchedulerEntryDbEntity> entries;
 
-    @Column(name = "create_date")
     @CreationTimestamp
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
-    @Column(name = "modify_date")
     @CurrentTimestamp(event = EventType.UPDATE)
+    @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 
     public Optional<LocalDateTime> getModifyDate() {
         return Optional.ofNullable(modifyDate);
+    }
+
+    public Optional<UUID> getId() {
+        return Optional.ofNullable(id);
     }
 }

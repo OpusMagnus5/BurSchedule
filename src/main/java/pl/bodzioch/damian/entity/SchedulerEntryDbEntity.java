@@ -4,48 +4,50 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.CurrentTimestamp;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.generator.EventType;
 import pl.bodzioch.damian.configuration.database.GeneratedUuidValue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Entity
+@Table(name = "scheduler_entries")
+@Builder
 @Getter
 @Setter
-@Builder
-@Entity
-@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDbEntity {
+public class SchedulerEntryDbEntity {
 
     @Id
     @GeneratedUuidValue(types = EventType.INSERT)
     private UUID id;
 
-    @NaturalId
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "scheduler_id")
+    private SchedulerDbEntity scheduler;
 
-    private String password;
+    private String subject;
 
-    @ElementCollection(targetClass = RoleDbEntity.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "users_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private List<RoleDbEntity> roles;
+    private String email;
 
-    @OneToMany(mappedBy = "user")
-    private List<SchedulerDbEntity> schedulers;
+    @Column(name = "start_time")
+    private LocalTime startTime;
 
-    @Column(name = "create_date")
+    @Column(name = "end_time")
+    private LocalTime endTime;
+
+    private LocalDate date;
+
     @CreationTimestamp
+    @Column(name = "create_date")
     private LocalDateTime createDate;
 
-    @Column(name = "modify_date")
     @CurrentTimestamp(event = EventType.UPDATE)
+    @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 
     public Optional<LocalDateTime> getModifyDate() {

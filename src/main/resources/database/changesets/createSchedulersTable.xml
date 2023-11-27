@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="4" author="Damian Bodzioch">
+        <createTable tableName="schedulers">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="pk_schedulers_id"
+                             nullable="false" notNullConstraintName="nn_schedulers_id" />
+            </column>
+            <column name="name" type="varchar" >
+                <constraints nullable="false" notNullConstraintName="nn_schedulers_name"
+                             unique="true" uniqueConstraintName="uq_schedulers_name" />
+            </column>
+            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="modify_date" type="timestamp"/>
+        </createTable>
+        <createIndex tableName="schedulers" indexName="idx_schedulers_id">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="schedulers" indexName="idx_schedulers_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

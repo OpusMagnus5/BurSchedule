@@ -3,26 +3,64 @@ package pl.bodzioch.damian.mapper;
 import pl.bodzioch.damian.dto.bur.AddressDTO;
 import pl.bodzioch.damian.dto.bur.ServiceDTO;
 import pl.bodzioch.damian.dto.bur.ServiceScheduleDTO;
-import pl.bodzioch.damian.model.ScheduleEntry;
-import pl.bodzioch.damian.model.ServiceModel;
-import pl.bodzioch.damian.model.ServiceProvider;
-import pl.bodzioch.damian.model.ServiceStatus;
+import pl.bodzioch.damian.model.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BurMapper {
 
-    public static ScheduleEntry map(ServiceScheduleDTO dto) {
+    public static SchedulerModel map(List<ServiceScheduleDTO> burSchedulerEntries) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        return ScheduleEntry.builder()
+        Set<Map.Entry<String, List<ServiceScheduleDTO>>> entriesByDay = burSchedulerEntries.stream()
+                .collect(Collectors.groupingBy(ServiceScheduleDTO::getData))
+                .entrySet();
+
+        Map<LocalDate, List<SchedulerEntry>> mappedEntriesByDay = mapToEntriesModel(entriesByDay);
+
+        List<SchedulerDay> days = mapToDayModel(mappedEntriesByDay);
+
+        return SchedulerModel.builder()
+                .days(days)
+                .build();
+    }
+
+    private static Map<LocalDate, List<SchedulerEntry>> mapToEntriesModel(Set<Map.Entry<String, List<ServiceScheduleDTO>>> entriesByDay) {
+        Map<LocalDate, List<SchedulerEntry>> mappedEntriesByDay = new HashMap<>();
+
+        for (Map.Entry<String, List<ServiceScheduleDTO>> entry : entriesByDay) {
+            List<SchedulerEntry> entries = entry.getValue().stream()
+                    .map(BurMapper::map)
+                    .sorted(Comparator.comparing(SchedulerEntry::getStartTime))
+                    .toList();
+            LocalDate date = ZonedDateTime.parse(entry.getKey()).toLocalDate();
+            mappedEntriesByDay.put(date, entries);
+        }
+        return mappedEntriesByDay;
+    }
+
+    private static List<SchedulerDay> mapToDayModel(Map<LocalDate, List<SchedulerEntry>> mappedEntriesByDay) {
+        return mappedEntriesByDay.entrySet().stream()
+                .map(entry -> SchedulerDay.builder()
+                        .date(entry.getKey())
+                        .entries(entry.getValue())
+                        .build())
+                .sorted(Comparator.comparing(SchedulerDay::getDate))
+                .toList();
+    }
+
+    private static SchedulerEntry map(ServiceScheduleDTO dto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        return SchedulerEntry.builder()
                 .subject(dto.getTemat())
-                .date(ZonedDateTime.parse(dto.getData()).toLocalDate())
                 .startTime(LocalTime.parse(dto.getGodzinaRozpoczecia(), formatter))
-                .endTime(LocalTime.parse(dto.getGodzinaRozpoczecia(), formatter))
+                .endTime(LocalTime.parse(dto.getGodzinaZakonczenia(), formatter))
                 .build();
     }
 

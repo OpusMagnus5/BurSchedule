@@ -1,27 +1,24 @@
 package pl.bodzioch.damian.client.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.bodzioch.damian.client.BurClient;
 import pl.bodzioch.damian.dto.bur.*;
 import pl.bodzioch.damian.mapper.BurMapper;
-import pl.bodzioch.damian.model.ScheduleEntry;
+import pl.bodzioch.damian.model.SchedulerModel;
 import pl.bodzioch.damian.model.ServiceModel;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -52,7 +49,7 @@ public class BurClientImpl implements BurClient {
     }
 
     @Override
-    public List<ScheduleEntry> getScheduleForService(long serviceId) {
+    public Optional<SchedulerModel> getScheduleForService(long serviceId) {
         int page = 1;
         int downloadedElements = 0;
         List<ListOfServiceScheduleEntriesDTO> responses = new ArrayList<>();
@@ -65,11 +62,16 @@ public class BurClientImpl implements BurClient {
             page++;
         } while (downloadedElements < response.getWszystkieElementy());
 
-        return responses.stream()
+        if (CollectionUtils.isEmpty(responses)) {
+            return Optional.empty();
+        }
+
+        List<ServiceScheduleDTO> burScheduleEntry = responses.stream()
                 .map(ListOfServiceScheduleEntriesDTO::getLista)
                 .flatMap(List::stream)
-                .map(BurMapper::map)
-                .collect(Collectors.toList());
+                .toList();
+
+        return Optional.ofNullable(BurMapper.map(burScheduleEntry));
     }
 
     @Override

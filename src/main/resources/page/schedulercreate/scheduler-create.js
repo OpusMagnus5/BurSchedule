@@ -1,12 +1,64 @@
-import { createSchedulerUrl, getMessage, postToApi } from "../util/config.js";
+import { createSchedulerUrl, getMessage, postToApi, schedulerUrl } from "../util/config.js";
 import { setMenu } from "../templates/menu.js";
 
 document.addEventListener("DOMContentLoaded", setPage);
 
+let schedulerId = null;
+let schedulerName = null;
+
 function setPage() {
+  let schedulerToEdit = JSON.parse(sessionStorage.getItem("scheduler-to-edit"));
   setTextData();
   setMenu();
   document.querySelector(".send-scheduler").addEventListener("click", handleSendSchedulerEvent);
+  document.querySelector(".save-scheduler").addEventListener("click", handleSaveSchedulerEvent);
+  if (schedulerToEdit !== "undefined" && schedulerToEdit) {
+    schedulerId = schedulerToEdit.id;
+    schedulerName = schedulerToEdit.name;
+    let days = schedulerToEdit.days;
+    showScheduler(days);
+  }
+}
+
+function showScheduler(days) {
+  for (let i = 0; i < days.length; i++) {
+    let emptyDay = document.querySelector(".hidden");
+    let cloneDay = emptyDay.cloneNode(true);
+    cloneDay.querySelector(".hidden .record-day").remove();
+    cloneDay.querySelector(".day-number").textContent = getMessage("scheduler-create-day-number-label") + (i + 1);
+    cloneDay.querySelector(".email-input").value = days[i].email;
+    cloneDay.querySelector(".date-input").value = days[i].date;
+
+    let records = days[i].records;
+    for (let j = 0; j < records.length; j++) {
+      let emptyRecord = document.querySelector(".hidden .record-day").cloneNode(true);
+      emptyRecord.querySelector(".record-number").textContent = j + 1;
+
+      emptyRecord.id = records[j].id;
+      emptyRecord.querySelector(".record-subject").value = records[j].subject;
+      emptyRecord.querySelector(".record-start-time").value = records[j].startTime;
+      emptyRecord.querySelector(".record-end-time").value = records[j].endTime;
+
+      cloneDay.classList.add("day");
+      cloneDay.classList.remove("hidden");
+      cloneDay.appendChild(emptyRecord);
+
+      emptyRecord.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
+      emptyRecord.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+      emptyRecord.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
+    }
+
+    document.querySelector(".scheduler").appendChild(cloneDay);
+
+    cloneDay.querySelector(".add-record").addEventListener("click", handleAddRecordEvent);
+    cloneDay.querySelector(".record-start-time").addEventListener("change", calculateDayHour);
+    cloneDay.querySelector(".record-end-time").addEventListener("change", calculateDayHour);
+    cloneDay.querySelector(".remove-day").addEventListener("click", handleRemoveDay);
+    cloneDay.querySelector(".clone-day").addEventListener("click", handleCopyDay);
+    cloneDay.querySelector(".remove-record").addEventListener("click", handleRemoveRecord);
+
+    calculateDayHourByDay(cloneDay);
+  }
 }
 
 function setTextData() {
@@ -21,6 +73,7 @@ function setTextData() {
   document.querySelector(".remove-record").textContent = getMessage("scheduler-create-remove-record-button");
   document.querySelector(".add-day").textContent = getMessage("scheduler-create-add-day-button");
   document.querySelector(".send-scheduler").textContent = getMessage("scheduler-create-send-scheduler-button");
+  document.querySelector(".save-scheduler").textContent = getMessage("scheduler-create-save-scheduler-button");
   document.querySelector(".scheduler-hours-label").textContent = getMessage("scheduler-create-scheduler-hours-label");
   document.querySelector(".scheduler-hours-value").textContent = "00:00";
 }
@@ -59,9 +112,29 @@ function handleSendSchedulerEvent() {
   postToApi(createSchedulerUrl, schedulerDTO);
 }
 
+function handleSaveSchedulerEvent() {
+  let days = document.querySelectorAll(".day");
+  let schedulerDTO = getSchedulerDTO(days);
+  if (!schedulerName) {
+    schedulerName = prompt(getMessage("scheduler-create-save-scheduler-name-prompt"));
+    schedulerDTO.name = schedulerName;
+  }
+  postToApi(schedulerUrl, schedulerDTO).then((response) => {
+    schedulerId = response.schedulerId;
+    let records = document.querySelectorAll(".day .record-day");
+    for (let i = 0; records[i]; i++) {
+      records[i].id = response.entriesIds[i];
+    }
+    alert(response.message);
+    sessionStorage.removeItem("scheduler-list");
+  });
+}
+
 function getSchedulerDTO(days) {
   let schedulerDTO = {
     days: [],
+    id: schedulerId,
+    name: schedulerName,
   };
 
   days.forEach((dayNode) => {
@@ -73,6 +146,7 @@ function getSchedulerDTO(days) {
     };
     records.forEach((recordNode) => {
       let recordDTO = {
+        id: recordNode.id && recordNode.id.length > 0 ? recordNode.id : null,
         subject: recordNode.querySelector(".record-subject").value,
         startTime: recordNode.querySelector(".record-start-time").value,
         endTime: recordNode.querySelector(".record-end-time").value,
@@ -182,6 +256,7 @@ function handleCopyDay(event) {
   let copiedDay = event.target.parentElement.parentElement.cloneNode(true);
   copiedDay.querySelectorAll(".record-day").forEach((element) => {
     element.querySelector(".record-subject").value = "";
+    element.id = "";
   });
   let scheduler = event.target.parentElement.parentElement.parentElement;
 

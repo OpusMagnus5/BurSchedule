@@ -3,6 +3,7 @@ import { getMessage, loginUrl, postToApi } from "../util/config.js";
 document.addEventListener("DOMContentLoaded", setPage);
 
 function setPage() {
+  sessionStorage.clear();
   setTextData();
 }
 
@@ -23,6 +24,7 @@ function handleSendLoginForm() {
   postToApi(loginUrl, request).then((response) => {
     if (response) {
       sessionStorage.setItem("userRoles", JSON.stringify(response.userRoles));
+      sessionStorage.setItem("loggedUser", JSON.stringify(response.userName));
       window.location.href = "services-list";
     }
   });

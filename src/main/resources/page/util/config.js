@@ -3,11 +3,12 @@ const baseUrl = "/app/";
 export const servicesUrl = baseUrl + "services";
 export const providersUrl = servicesUrl + "/providers";
 export const statusesUrl = servicesUrl + "/statuses";
-export const schedulerUrl = baseUrl + "scheduler/";
-export const generateUrl = schedulerUrl + "generate";
+export const schedulerUrl = baseUrl + "scheduler";
+export const generateUrl = schedulerUrl + "/generate";
 export const synchronizationUrl = servicesUrl + "/synchronization";
-export const fileUrl = schedulerUrl + "file";
-export const createSchedulerUrl = schedulerUrl + "create";
+export const fileUrl = schedulerUrl + "/file";
+export const createSchedulerUrl = schedulerUrl + "/create";
+export const allSchedulersUrl = schedulerUrl + "/all";
 export const securityUrl = baseUrl + "security";
 export const loginUrl = securityUrl + "/login";
 export const rolesUrl = securityUrl + "/roles";
@@ -56,6 +57,8 @@ export const messages_pl = new Map([
   ["scheduler-create-remove-record-button", "Usuń wpis"],
   ["scheduler-create-add-day-button", "Dodaj dzień"],
   ["scheduler-create-send-scheduler-button", "Wyślij"],
+  ["scheduler-create-save-scheduler-button", "Zapisz"],
+  ["scheduler-create-save-scheduler-name-prompt", "Podaj nazwę dla harmonogramu"],
   ["scheduler-create-day-number-label", "Dzień "],
   ["scheduler-create-scheduler-hours-label", "Suma godzin:"],
   ["login.username.input.placeholder", "Nazwa użytkownika"],
@@ -69,6 +72,17 @@ export const messages_pl = new Map([
   ["admin-add-user-roles-box-label", "Wybierz role:"],
   ["menu-logout", "Wyloguj"],
   ["logout-failure", "Nie udało się nam Cię wylogować. Spróbuj jeszcze raz."],
+  ["scheduler-list-filter-label-name", "Nazwa"],
+  ["scheduler-list-filter-label-start-date", "Od: "],
+  ["scheduler-list-filter-label-end-date", "Do: "],
+  ["scheduler-list-filter-reset-filters-button", "Wyczyść filtry"],
+  ["scheduler-list-filter-label-user", "Użytkownik"],
+  ["scheduler-list-head-name", "Nazwa"],
+  ["scheduler-list-head-days-number", "Liczba dni"],
+  ["scheduler-list-head-create-date", "Data uwtorzenia"],
+  ["scheduler-list-head-modify-date", "Data modyfikacji"],
+  ["scheduler-list-head-user", "Użytkownik"],
+  ["menu-scheduler-list", "Lista harmonogramów"],
 ]);
 
 export const messages_en = new Map();
@@ -171,6 +185,7 @@ export function postFileToApi(url, formData) {
     method: "POST",
     headers: {
       Accept: "application/json, application/octet-stream",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
     },
     body: formData,
   })
@@ -202,6 +217,37 @@ export function postFileToApi(url, formData) {
       }
     })
     .catch((error) => {});
+}
+
+export function deleteToApi(url, request) {
+  return fetch(url, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
+    },
+    body: JSON.stringify(request),
+  })
+    .then((response) => {
+      let contentType = response.headers.get("Content-Type");
+      if (contentType === "application/json") {
+        return response.json().then((json) => {
+          if (response.ok) {
+            return json;
+          } else if (!response.ok && json.hasOwnProperty("messages")) {
+            alert(json.messages[0]);
+          }
+        });
+      } else if (response.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      return false;
+    });
 }
 
 let loader;

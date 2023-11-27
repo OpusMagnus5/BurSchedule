@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="templates/menu.js" type="module"></script>
+    <script src="util/config.js" type="module"></script>
+    <script src="scheduler-list/scheduler-list.js" type="module"></script>
+    <link rel="stylesheet" href="templates/menu.css" />
+    <link rel="stylesheet" href="util/util.css" />
+    <link rel="stylesheet" href="scheduler-list/scheduler-list.css" />
+    <title>Harmonogram BUR</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <article>
+        <div class="filters">
+          <div class="filter-name">
+            <p class="filter-label name"></p>
+            <input type="search" class="filter-input name" />
+          </div>
+          <div class="filter-start-date">
+            <p class="filter-label start-date"></p>
+            <input type="date" class="filter-input start-date" />
+          </div>
+          <div class="filter-end-date">
+            <p class="filter-label end-date"></p>
+            <input type="date" class="filter-input end-date" />
+          </div>
+          <div class="filter-user">
+            <p class="filter-label user"></p>
+            <input type="search" class="filter-input user" />
+          </div>
+          <button class="reset-filters"></button>
+        </div>
+
+        <table class="scheduler-list">
+          <thead>
+            <tr>
+              <th class="head-name"></th>
+              <th class="head-days-number"></th>
+              <th class="head-create-date"></th>
+              <th class="head-modify-date"></th>
+              <th class="head-user"></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="scheduler">
+              <td class="scheduler-name"></td>
+              <td class="scheduler-days-number"></td>
+              <td class="scheduler-create-date"></td>
+              <td class="scheduler-modify-date"></td>
+              <td class="scheduler-user"></td>
+              <td class="scheduler-action-buttons">
+                <button class="scheduler-save-button">⬇️</button>
+                <button class="scheduler-edit-button">✏️</button>
+                <button class="scheduler-delete-button">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <div th:replace="~{templates/menu.html :: menu}"></div>
+    </div>
+  </body>
+</html>

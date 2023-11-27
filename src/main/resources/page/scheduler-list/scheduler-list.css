@@ -1,0 +1,124 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+article {
+  width: 85%;
+  margin-left: 50px;
+}
+
+.main-container {
+  display: flex;
+  gap: 50px;
+  align-items: start;
+}
+
+.white-background {
+  background-color: white;
+}
+
+.gray-background {
+  background-color: #e3e3e3;
+}
+
+.scheduler-list {
+  width: 100%;
+  margin: 0 auto;
+  border-spacing: 0 1px;
+  box-shadow: 0 0 20px #00000026;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.scheduler-list thead {
+  position: sticky;
+  top: 0;
+}
+
+.scheduler {
+  border-bottom: 1px solid #bbb;
+  transition: background-color 0.3s ease-in-out;
+  text-align: center;
+}
+
+.scheduler td {
+  padding: 10px 10px;
+}
+
+.scheduler-name {
+  overflow-wrap: break-word;
+  max-width: 45ch;
+}
+
+.scheduler-days-number,
+.scheduler-create-date,
+.scheduler-modify-date {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scheduler-list thead th {
+  padding: 10px 10px;
+}
+
+.scheduler-list thead tr {
+  background-color: #009879;
+  color: #ffffff;
+}
+
+.filters {
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #009879;
+  border-radius: 5px;
+  display: grid;
+  gap: 10px 50px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-label {
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.filter-input {
+  padding: 5px 10px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.reset-filters {
+  grid-column: 3;
+  grid-row: 2;
+  padding: 10px 10px;
+  font-size: 16px;
+  background-color: #0dc79c;
+  width: 60%;
+  align-self: end;
+  border-radius: 20px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.reset-filters:hover {
+  cursor: pointer;
+  background-color: #0e37ab;
+  color: white;
+}
+
+.scheduler-action-buttons button {
+  font-size: 16px;
+  padding: 5px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.scheduler-action-buttons button:hover {
+  background-color: #54b3d6;
+  cursor: pointer;
+}

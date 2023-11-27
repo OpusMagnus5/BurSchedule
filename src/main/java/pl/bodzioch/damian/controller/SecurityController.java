@@ -24,6 +24,8 @@ import pl.bodzioch.damian.dto.client.LoginResponseViewDTO;
 import pl.bodzioch.damian.dto.client.UserRolesViewDTO;
 import pl.bodzioch.damian.exception.AppException;
 import pl.bodzioch.damian.mapper.ClientMapper;
+import pl.bodzioch.damian.service.UserService;
+import pl.bodzioch.damian.session.SessionBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +40,8 @@ public class SecurityController {
     private final ClientMapper clientMapper;
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+    private final SessionBean sessionBean;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseViewDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest, HttpServletRequest request,
@@ -60,7 +64,9 @@ public class SecurityController {
         List<String> roles = authenticationResponse.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseViewDTO(roles));
+
+        sessionBean.setUser(userService.getUser(loginRequest.getUsername()));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseViewDTO(roles, loginRequest.getUsername()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

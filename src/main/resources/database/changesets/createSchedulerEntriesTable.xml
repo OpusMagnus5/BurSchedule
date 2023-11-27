@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="5" author="Damian Bodzioch">
+        <createTable tableName="scheduler_entries">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="pk_scheduler_entries_id"
+                             nullable="false" notNullConstraintName="nn_scheduler_entries_id" />
+            </column>
+            <column name="scheduler_id" type="uuid">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_id"/>
+            </column>
+            <column name="subject" type="varchar">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_subject"/>
+            </column>
+            <column name="email" type="varchar">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_email"/>
+            </column>
+            <column name="start_time" type="time">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_start_time"/>
+            </column>
+            <column name="end_time" type="time">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_end_time"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false" notNullConstraintName="nn_scheduler_entries_date"/>
+            </column>
+            <column name="create_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="modify_date" type="timestamp"/>
+        </createTable>
+        <createIndex tableName="scheduler_entries" indexName="idx_scheduler_entries_id">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="scheduler_entries" indexName="idx_scheduler_entries_scheduler_id">
+            <column name="scheduler_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="scheduler_entries" baseColumnNames="scheduler_id"
+                                 constraintName="fk_schedulers_entries_schedulers_id"
+                                 referencedTableName="schedulers" referencedColumnNames="id" />
+    </changeSet>
+</databaseChangeLog>

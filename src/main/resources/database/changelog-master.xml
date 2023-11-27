@@ -8,4 +8,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="changesets/createServiceTable.xml" id="1" relativeToChangelogFile="true"/>
     <include file="changesets/createUserTable.xml" id="2" relativeToChangelogFile="true"/>
     <include file="changesets/createUsersRolesTable.xml" id="3" relativeToChangelogFile="true"/>
+    <include file="changesets/createSchedulersTable.xml" id="4" relativeToChangelogFile="true" />
+    <include file="changesets/createSchedulerEntriesTable.xml" id="5" relativeToChangelogFile="true" />
+    <include file="changesets/addDaysNumberColumnToSchedulersTable.xml" id="6" relativeToChangelogFile="true" />
+    <include file="changesets/addUserIDColumnToSchedulersTable.xml" id="7" relativeToChangelogFile="true" />
 </databaseChangeLog>

@@ -22,7 +22,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import pl.bodzioch.damian.client.conf.CustomCsrfTokenRequestHandler;
 import pl.bodzioch.damian.dao.UserDAO;
 import pl.bodzioch.damian.model.UserModel;
 

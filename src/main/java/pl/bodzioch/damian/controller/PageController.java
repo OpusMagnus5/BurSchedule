@@ -47,4 +47,10 @@ public class PageController {
     public String admin() {
         return "admin/admin";
     }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/scheduler-list")
+    public String schedulerList() {
+        return "scheduler-list/scheduler-list";
+    }
 }
