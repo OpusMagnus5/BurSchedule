@@ -13,6 +13,7 @@ export const securityUrl = baseUrl + "security";
 export const loginUrl = securityUrl + "/login";
 export const rolesUrl = securityUrl + "/roles";
 export const userUrl = baseUrl + "user";
+export const userRolesUrl = userUrl + "/roles";
 export const logoutUrl = baseUrl + "logout";
 export const tokenUrl = securityUrl + "/token";
 
@@ -37,6 +38,7 @@ export const messages_pl = new Map([
   ["scheduler-email-checkbox", "Powiel email"],
   ["scheduler-time-checkbox", "Powiel czas rozpoczęcia"],
   ["scheduler-send-button", "Generuj harmonogram"],
+  ["scheduler-edit-button", "Edytuj całość"],
   ["synchronization", "Synchronizuj usługi"],
   ["menu-service-list", "Lista usług"],
   ["menu-scheduler-from-file", "Generowanie z pliku"],
@@ -271,7 +273,14 @@ export function hideLoader() {
 
 export function hasUserRole(role) {
   let roles = sessionStorage.getItem("userRoles");
-  if (roles !== "undefined" && roles.includes(role)) {
+  if (roles === "undefined" || !roles) {
+    getFromApi(userRolesUrl).then((response) => {
+      if (response !== "undefined" && response) {
+        sessionStorage.setItem("userRoles", JSON.stringify(response.roles));
+        roles = response.roles;
+      }
+    });
+  } else if (roles.includes(role)) {
     return true;
   }
   return false;
