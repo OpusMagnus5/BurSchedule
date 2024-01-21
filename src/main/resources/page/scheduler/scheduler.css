@@ -56,17 +56,23 @@ input.scheduler-option-input {
   height: 18px;
 }
 
-.send-button:hover {
+.buttons {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+  gap: 50px;
+}
+
+.send-button:hover,
+.edit-button:hover {
   cursor: pointer;
   background-color: #0e37ab;
   color: white;
 }
 
-.send-button {
-  display: block;
-  width: 15%;
-  margin: 0 auto;
-  padding: 10px 10px;
+.send-button,
+.edit-button {
+  padding: 15px 30px;
   background-color: #0dc79c;
   font-size: 18px;
   transition: background-color 0.3s ease-in-out;

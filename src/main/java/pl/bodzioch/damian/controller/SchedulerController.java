@@ -41,7 +41,9 @@ public class SchedulerController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SchedulerListViewDTO> getScheduler(@PathVariable String serviceId) {
         List<SchedulerViewDTO> scheduler = schedulerService.getSchedulerForService(serviceId);
-        return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
+        SchedulerModel sessionScheduler = sessionBean.getScheduler().orElseThrow(AppException::getGeneralInternalError);
+        GetSchedulerResponseViewDTO schedulerToEdit = clientMapper.mapToGetSchedulerResponse(sessionScheduler);
+        return ResponseEntity.ok(new SchedulerListViewDTO(scheduler, schedulerToEdit));
     }
 
     @PreAuthorize("hasAuthority('USER')")
@@ -63,7 +65,7 @@ public class SchedulerController {
         } catch (IOException ex) {
             throw new AppException("scheduler.file.processing.error", Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-        return ResponseEntity.ok(new SchedulerListViewDTO(scheduler));
+        return ResponseEntity.ok(new SchedulerListViewDTO(scheduler, null));
     }
 
     @PreAuthorize("hasAuthority('USER')")
