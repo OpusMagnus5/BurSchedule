@@ -17,7 +17,7 @@ services:
       - db
     restart: 'no'
     ports:
-      - '8080:8080'
+      - '80:8080'
     env_file:
       - 'env/env_app.txt'
     volumes:
