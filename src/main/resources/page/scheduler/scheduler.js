@@ -4,7 +4,7 @@ import { setMenu } from "../templates/menu.js";
 document.addEventListener("DOMContentLoaded", setScheduler);
 
 function setScheduler() {
-  let schedulerEntries = JSON.parse(sessionStorage.getItem("scheduler")).schedulerEntries;
+  let schedulerEntries = JSON.parse(sessionStorage.getItem("scheduler"));
   let scheduler = document.querySelector(".scheduler");
   let emptyDayElement = document.querySelector(".day");
 
@@ -29,7 +29,9 @@ function setScheduler() {
   setOptions();
 
   document.querySelector(".send-button").textContent = getMessage("scheduler-send-button");
+  document.querySelector(".edit-button").textContent = getMessage("scheduler-edit-button");
   addSendButtonListener();
+  addEditButtonListener();
   setMenu();
 }
 
@@ -134,5 +136,11 @@ function addSendButtonListener() {
 
     postToApi(generateUrl, request);
     hideLoader();
+  });
+}
+
+function addEditButtonListener() {
+  document.querySelector(".edit-button").addEventListener("click", function () {
+    window.location.href = "scheduler-create";
   });
 }
